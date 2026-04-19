@@ -1,0 +1,35 @@
+using System;
+using Game.Application.UI;
+using Game.Application.UI.Core.Abstractions;
+using UnityEngine;
+using UnityEngine.AddressableAssets;
+namespace Game.Presentation.UI.Data
+{
+    [Serializable]
+    public sealed class UIManifestEntry
+    {
+        public string Id;
+
+        public string AssetKey;
+
+        public Type ViewType;
+        public Type ViewModelType;
+        public Type PresenterType;
+
+        public EUILayer Layer;
+        public UILifetime Lifetime;
+
+        
+        public UIReusePolicy ReusePolicy;
+        public int CachePriority;
+
+        // ✔ RETENTION CONTROL
+        public int RetainDepth = 1;
+
+        // ✔ POOL CONTROL
+        public int PoolWarmupSize = 1;
+
+        
+        
+    }
+}

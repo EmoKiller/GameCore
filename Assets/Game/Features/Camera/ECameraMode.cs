@@ -1,0 +1,6 @@
+
+
+public enum ECameraMode 
+{
+    Normal
+}

@@ -1,0 +1,224 @@
+fileFormatVersion: 2
+guid: 0bb32a574d6bf76488d0562380c1151e
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Body
+    100002: Cloth
+    100004: Eye
+    100006: Eye Base
+    100008: //RootNode
+    100010: Hair
+    100012: Hair Clipped
+    100014: Hat
+    100016: Pants
+    100018: Plane001
+    100020: 'Rig '
+    100022: Rig BSkirt
+    100024: Rig FSkirt
+    100026: Rig Head
+    100028: Rig LCalf
+    100030: Rig LFoot
+    100032: Rig LForearm
+    100034: Rig LPlatform
+    100036: Rig LThigh
+    100038: Rig LUpperarm
+    100040: Rig Neck
+    100042: Rig Pelvis
+    100044: Rig RCalf
+    100046: Rig RFoot
+    100048: Rig RForearm
+    100050: Rig Ribcage
+    100052: Rig RPlatform
+    100054: Rig RThigh
+    100056: Rig RUpperarm
+    100058: Rig Spine1
+    100060: Rig Spine2
+    100062: Shoes
+    100064: Skirt
+    100066: Socks
+    400000: Body
+    400002: Cloth
+    400004: Eye
+    400006: Eye Base
+    400008: //RootNode
+    400010: Hair
+    400012: Hair Clipped
+    400014: Hat
+    400016: Pants
+    400018: Plane001
+    400020: 'Rig '
+    400022: Rig BSkirt
+    400024: Rig FSkirt
+    400026: Rig Head
+    400028: Rig LCalf
+    400030: Rig LFoot
+    400032: Rig LForearm
+    400034: Rig LPlatform
+    400036: Rig LThigh
+    400038: Rig LUpperarm
+    400040: Rig Neck
+    400042: Rig Pelvis
+    400044: Rig RCalf
+    400046: Rig RFoot
+    400048: Rig RForearm
+    400050: Rig Ribcage
+    400052: Rig RPlatform
+    400054: Rig RThigh
+    400056: Rig RUpperarm
+    400058: Rig Spine1
+    400060: Rig Spine2
+    400062: Shoes
+    400064: Skirt
+    400066: Socks
+    2100000: Character
+    2100002: Body
+    2100004: Hat
+    2100006: Eye Base
+    2100008: Eye
+    2100010: Hair
+    2100012: Cloth
+    2100014: Pants
+    2100016: Shoes
+    2100018: Socks
+    2300000: Plane001
+    3300000: Plane001
+    4300000: Plane001
+    4300002: Body
+    4300004: Hat
+    4300006: Eye Base
+    4300008: Eye
+    4300010: Hair
+    4300012: Hair Clipped
+    4300014: Cloth
+    4300016: Pants
+    4300018: Shoes
+    4300020: Socks
+    4300022: Skirt
+    7400000: Pixel Character - Die
+    9500000: //RootNode
+    13700000: Body
+    13700002: Cloth
+    13700004: Eye
+    13700006: Eye Base
+    13700008: Hair
+    13700010: Hair Clipped
+    13700012: Hat
+    13700014: Pants
+    13700016: Shoes
+    13700018: Skirt
+    13700020: Socks
+  externalObjects: {}
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 0
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Pixel Character - Die
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 60
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 0
+      loopBlend: 0
+      loopBlendOrientation: 0
+      loopBlendPositionY: 0
+      loopBlendPositionXZ: 0
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask: []
+      maskType: 3
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

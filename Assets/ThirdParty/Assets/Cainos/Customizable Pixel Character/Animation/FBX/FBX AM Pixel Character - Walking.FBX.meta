@@ -1,0 +1,491 @@
+fileFormatVersion: 2
+guid: 603d3cc788163e749ba5c862497de2ca
+ModelImporter:
+  serializedVersion: 23
+  fileIDToRecycleName:
+    100000: Arm L
+    100002: Arm R
+    100004: Body
+    100006: //RootNode
+    100008: Head
+    100010: Leg L
+    100012: Leg R
+    100014: 'Rig '
+    100016: Rig Head
+    100018: Rig LCalf
+    100020: Rig LFoot
+    100022: Rig LForearm
+    100024: Rig LHand
+    100026: Rig LPlatform
+    100028: Rig LShoulder
+    100030: Rig LThigh
+    100032: Rig LUpperarm
+    100034: Rig Neck
+    100036: Rig Pelvis
+    100038: Rig RCalf
+    100040: Rig RFoot
+    100042: Rig RForearm
+    100044: Rig RHand
+    100046: Rig Ribcage
+    100048: Rig RPlatform
+    100050: Rig RShoulder
+    100052: Rig RThigh
+    100054: Rig RUpperarm
+    100056: Rig Spine1
+    100058: Rig Spine2
+    100060: Eye
+    100062: Hair
+    100064: Rig BSkirt
+    100066: Rig FSkirt
+    100068: Cloth
+    100070: Eye Base
+    100072: Hair Clipped
+    100074: Hat
+    100076: Pants
+    100078: Shoes
+    100080: Skirt
+    100082: Socks
+    100084: Back
+    100086: Expression
+    100088: Eye Closed
+    100090: Facewear
+    100092: Rig MSkirt
+    100094: Rig Weapon
+    400000: Arm L
+    400002: Arm R
+    400004: Body
+    400006: //RootNode
+    400008: Head
+    400010: Leg L
+    400012: Leg R
+    400014: 'Rig '
+    400016: Rig Head
+    400018: Rig LCalf
+    400020: Rig LFoot
+    400022: Rig LForearm
+    400024: Rig LHand
+    400026: Rig LPlatform
+    400028: Rig LShoulder
+    400030: Rig LThigh
+    400032: Rig LUpperarm
+    400034: Rig Neck
+    400036: Rig Pelvis
+    400038: Rig RCalf
+    400040: Rig RFoot
+    400042: Rig RForearm
+    400044: Rig RHand
+    400046: Rig Ribcage
+    400048: Rig RPlatform
+    400050: Rig RShoulder
+    400052: Rig RThigh
+    400054: Rig RUpperarm
+    400056: Rig Spine1
+    400058: Rig Spine2
+    400060: Eye
+    400062: Hair
+    400064: Rig BSkirt
+    400066: Rig FSkirt
+    400068: Cloth
+    400070: Eye Base
+    400072: Hair Clipped
+    400074: Hat
+    400076: Pants
+    400078: Shoes
+    400080: Skirt
+    400082: Socks
+    400084: Back
+    400086: Expression
+    400088: Eye Closed
+    400090: Facewear
+    400092: Rig MSkirt
+    400094: Rig Weapon
+    2100000: 01 - Default
+    2100002: Body
+    2100004: Hat
+    2100006: Eye Base
+    2100008: Eye
+    2100010: Hair
+    2100012: Cloth
+    2100014: Pants
+    2100016: Shoes
+    2100018: Socks
+    2100020: Expression
+    2100022: 12 - Default
+    2100024: Eye Closed
+    4300000: Head
+    4300002: Body
+    4300004: Arm R
+    4300006: Leg R
+    4300008: Arm L
+    4300010: Leg L
+    4300012: Hair
+    4300014: Eye
+    4300016: Hat
+    4300018: Eye Base
+    4300020: Hair Clipped
+    4300022: Cloth
+    4300024: Pants
+    4300026: Shoes
+    4300028: Socks
+    4300030: Skirt
+    4300032: Expression
+    4300034: Back
+    4300036: Eye Closed
+    4300038: Facewear
+    7400000: Pixel Character - Walking
+    9500000: //RootNode
+    13700000: Arm L
+    13700002: Arm R
+    13700004: Body
+    13700006: Head
+    13700008: Leg L
+    13700010: Leg R
+    13700012: Eye
+    13700014: Hair
+    13700016: Cloth
+    13700018: Eye Base
+    13700020: Hair Clipped
+    13700022: Hat
+    13700024: Pants
+    13700026: Shoes
+    13700028: Skirt
+    13700030: Socks
+    13700032: Back
+    13700034: Expression
+    13700036: Eye Closed
+    13700038: Facewear
+    2186277476908879412: ImportLogs
+  externalObjects: {}
+  materials:
+    importMaterials: 0
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 0
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths:
+    - Arm L
+    extraUserProperties: []
+    clipAnimations:
+    - serializedVersion: 16
+      name: Pixel Character - Walking
+      takeName: Take 001
+      firstFrame: 0
+      lastFrame: 30
+      wrapMode: 0
+      orientationOffsetY: 0
+      level: 0
+      cycleOffset: 0
+      loop: 0
+      hasAdditiveReferencePose: 0
+      loopTime: 1
+      loopBlend: 0
+      loopBlendOrientation: 1
+      loopBlendPositionY: 1
+      loopBlendPositionXZ: 1
+      keepOriginalOrientation: 0
+      keepOriginalPositionY: 1
+      keepOriginalPositionXZ: 0
+      heightFromFeet: 0
+      mirror: 0
+      bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
+      curves: []
+      events: []
+      transformMask:
+      - path: 
+        weight: 1
+      - path: Body
+        weight: 0
+      - path: Cloth
+        weight: 1
+      - path: Eye
+        weight: 1
+      - path: Eye Base
+        weight: 1
+      - path: Hair
+        weight: 1
+      - path: Hair Clipped
+        weight: 1
+      - path: Hat
+        weight: 1
+      - path: Pants
+        weight: 1
+      - path: 'Rig '
+        weight: 1
+      - path: Rig /Rig LPlatform
+        weight: 0
+      - path: Rig /Rig Pelvis
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig BSkirt
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig FSkirt
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig LThigh
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig LThigh/Rig LCalf
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig LThigh/Rig LCalf/Rig LFoot
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig RThigh
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig RThigh/Rig RCalf
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig RThigh/Rig RCalf/Rig RFoot
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig Spine1
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig Spine1/Rig Spine2
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig Spine1/Rig Spine2/Rig Ribcage
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig Spine1/Rig Spine2/Rig Ribcage/Rig LUpperarm
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig Spine1/Rig Spine2/Rig Ribcage/Rig LUpperarm/Rig
+          LForearm
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig Spine1/Rig Spine2/Rig Ribcage/Rig Neck
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig Spine1/Rig Spine2/Rig Ribcage/Rig Neck/Rig Head
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig Spine1/Rig Spine2/Rig Ribcage/Rig RUpperarm
+        weight: 1
+      - path: Rig /Rig Pelvis/Rig Spine1/Rig Spine2/Rig Ribcage/Rig RUpperarm/Rig
+          RForearm
+        weight: 1
+      - path: Rig /Rig RPlatform
+        weight: 0
+      - path: Shoes
+        weight: 1
+      - path: Skirt
+        weight: 1
+      - path: Socks
+        weight: 1
+      maskType: 0
+      maskSource: {instanceID: 0}
+      additiveReferencePoseFrame: 0
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+    previousCalculatedGlobalScale: 0.01
+    hasPreviousCalculatedGlobalScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton:
+    - name: FBX AM Walking(Clone)
+      parentName: 
+      position: {x: 0, y: 0, z: 0}
+      rotation: {x: 0, y: 0, z: 0, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Arm L
+      parentName: FBX AM Walking(Clone)
+      position: {x: -0.1880432, y: 1.1233983, z: 0.10337739}
+      rotation: {x: -2.1648906e-17, y: 0.7071067, z: 2.1648903e-17, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Arm R
+      parentName: FBX AM Walking(Clone)
+      position: {x: 0.14623462, y: 1.1233983, z: -0.008534995}
+      rotation: {x: -2.1648906e-17, y: 0.7071067, z: 2.1648903e-17, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Body
+      parentName: FBX AM Walking(Clone)
+      position: {x: -0, y: 1.0386579, z: -0.04405927}
+      rotation: {x: -2.1648906e-17, y: 0.7071067, z: 2.1648903e-17, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Head
+      parentName: FBX AM Walking(Clone)
+      position: {x: -0, y: 1.5789465, z: -0.0269951}
+      rotation: {x: -2.1648906e-17, y: 0.7071067, z: 2.1648903e-17, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Leg L
+      parentName: FBX AM Walking(Clone)
+      position: {x: -0.11946676, y: 0.71369666, z: -0.018681915}
+      rotation: {x: -2.1648906e-17, y: 0.7071067, z: 2.1648903e-17, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Leg R
+      parentName: FBX AM Walking(Clone)
+      position: {x: 0.11783513, y: 0.71369666, z: -0.114914164}
+      rotation: {x: -2.1648906e-17, y: 0.7071067, z: 2.1648903e-17, w: 0.7071068}
+      scale: {x: 1, y: 1, z: 1}
+    - name: 'Rig '
+      parentName: FBX AM Walking(Clone)
+      position: {x: -0, y: 0, z: 0}
+      rotation: {x: 0.5000001, y: -0.50000006, z: -0.4999999, w: 0.49999997}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rig LPlatform
+      parentName: 'Rig '
+      position: {x: 0.000000028493018, y: 0.13048989, z: 0.17264096}
+      rotation: {x: 2.1622136e-21, y: -1.9421662e-14, z: -1.4210855e-14, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rig RPlatform
+      parentName: 'Rig '
+      position: {x: 0.00000000861693, y: 0.03429912, z: -0.172641}
+      rotation: {x: 2.1622136e-21, y: -1.9421662e-14, z: -1.4210855e-14, w: 1}
+      scale: {x: 1, y: 1, z: 1}
+    - name: Rig Pelvis
+      parentName: 'Rig '
+      position: {x: -0.67580193, y: -0.08338225, z: -0.01457987}
+      rotation: {x: -0.0000001937151, y: 0.000000029802322, z: -0.000000029802322,
+        w: 1}
+      scale: {x: 1.0000005, y: 1.0000004, z: 1.0000007}
+    - name: Rig Spine1
+      parentName: Rig Pelvis
+      position: {x: -0.03723053, y: 0.03712293, z: -0.000000016195571}
+      rotation: {x: -0.00015953183, y: -0.00000008944974, z: 0.0001962781, w: 1}
+      scale: {x: 1.0000015, y: 1.0000012, z: 1.0000013}
+    - name: Rig Spine2
+      parentName: Rig Spine1
+      position: {x: -0.21634254, y: -0.0000000047683715, z: -4.5474734e-15}
+      rotation: {x: -0.00015913161, y: -0.000011195592, z: 0.070569016, w: -0.9975069}
+      scale: {x: 1.0000012, y: 1.0000018, z: 1.0000005}
+    - name: Rig Ribcage
+      parentName: Rig Spine2
+      position: {x: -0.25847206, y: 0, z: -9.094947e-15}
+      rotation: {x: 0.000000081578044, y: 0.00000044256106, z: 0.5741325, w: 0.8187625}
+      scale: {x: 0.99999976, y: 0.99999976, z: 1.0000001}
+    - name: Rig LShoulder
+      parentName: Rig Ribcage
+      position: {x: -0, y: 0, z: -0.05537}
+      rotation: {x: -0.053307623, y: 0.8020623, z: -0.16972038, w: 0.570131}
+      scale: {x: 1.0000001, y: 0.99999976, z: 0.99999976}
+    - name: Rig LUpperarm
+      parentName: Rig LShoulder
+      position: {x: -0.22309817, y: 0, z: -0.000000076293944}
+      rotation: {x: -0.27579364, y: -0.63011575, z: -0.41657916, w: -0.5944358}
+      scale: {x: 1.0000002, y: 1.0000004, z: 1.0000005}
+    - name: Rig LForearm
+      parentName: Rig LUpperarm
+      position: {x: -0.21268669, y: 0.0000000047683715, z: 0}
+      rotation: {x: 0.9999915, y: -0.0041241203, z: 0.00000092387205, w: 0.00023259224}
+      scale: {x: 0.9999996, y: 0.99999976, z: 1.0000012}
+    - name: Rig LHand
+      parentName: Rig LForearm
+      position: {x: -0.20409332, y: 0, z: -0.000000009536743}
+      rotation: {x: 1.08074744e-10, y: 0.000000058714463, z: -2.328804e-10, w: 1}
+      scale: {x: 0.99999994, y: 1.0000018, z: 0.9999983}
+    - name: Rig RShoulder
+      parentName: Rig Ribcage
+      position: {x: -0, y: 0, z: 0.05537}
+      rotation: {x: -0.032370947, y: -0.778432, z: 0.020589754, w: 0.6265554}
+      scale: {x: 1, y: 1, z: 0.99999994}
+    - name: Rig RUpperarm
+      parentName: Rig RShoulder
+      position: {x: -0.21237606, y: 5.9604643e-10, z: 0}
+      rotation: {x: -0.27815434, y: -0.43699118, z: 0.48850465, w: 0.70216244}
+      scale: {x: 1.0000005, y: 1, z: 1.0000006}
+    - name: Rig RForearm
+      parentName: Rig RUpperarm
+      position: {x: -0.21269569, y: 0.0000000011920929, z: 0}
+      rotation: {x: -0.9999811, y: 0.0061512743, z: -0.0000001192093, w: -0.0000023394825}
+      scale: {x: 0.9999995, y: 1.0000011, z: 0.99999917}
+    - name: Rig RHand
+      parentName: Rig RForearm
+      position: {x: -0.20409332, y: 0, z: 0}
+      rotation: {x: 1.6184018e-10, y: 0.000000014259219, z: -7.107737e-15, w: 1}
+      scale: {x: 0.99999964, y: 0.99999976, z: 1}
+    - name: Rig Neck
+      parentName: Rig Ribcage
+      position: {x: 0.0009967041, y: 0.011377056, z: -0.000000012099763}
+      rotation: {x: 0.00000007593825, y: 0.00000042005652, z: 0.5188826, w: -0.85484546}
+      scale: {x: 1.0000017, y: 1.0000011, z: 1.0000014}
+    - name: Rig Head
+      parentName: Rig Neck
+      position: {x: -0.11815635, y: 0, z: 0}
+      rotation: {x: 0.00000011898071, y: 0.00000010404568, z: 0.0044305623, w: 0.9999902}
+      scale: {x: 1.0000007, y: 1.0000011, z: 1.0000004}
+    - name: Rig LThigh
+      parentName: Rig Pelvis
+      position: {x: 0.060465544, y: 0.09217627, z: 0.11755031}
+      rotation: {x: -0.00006559484, y: 0.9999616, z: -0.008736268, w: 0.00070378184}
+      scale: {x: 1.000001, y: 1.0000005, z: 1.0000012}
+    - name: Rig LCalf
+      parentName: Rig LThigh
+      position: {x: -0.2813211, y: -0.000000019073486, z: -0.00000022888183}
+      rotation: {x: 0.0007969439, y: 0.000878796, z: 0.065632194, w: 0.9978432}
+      scale: {x: 1.0000001, y: 1.0000001, z: 1.0000004}
+    - name: Rig LFoot
+      parentName: Rig LCalf
+      position: {x: -0.28309718, y: 0, z: -0.000000009536743}
+      rotation: {x: -0.0074498057, y: -0.006829411, z: -0.7518812, w: 0.6592211}
+      scale: {x: 0.99999964, y: 0.9999993, z: 0.9999999}
+    - name: Rig RThigh
+      parentName: Rig Pelvis
+      position: {x: 0.060465544, y: -0.004014492, z: -0.11755034}
+      rotation: {x: -0.00006216764, y: 0.99996126, z: 0.008751719, w: -0.0009180902}
+      scale: {x: 1.0000002, y: 1.0000002, z: 1}
+    - name: Rig RCalf
+      parentName: Rig RThigh
+      position: {x: -0.28132105, y: -0.000000019073486, z: 0.00000014305114}
+      rotation: {x: -0.00077745324, y: -0.0011462868, z: 0.06549425, w: 0.997852}
+      scale: {x: 1.0000006, y: 1.000001, z: 1.0000007}
+    - name: Rig RFoot
+      parentName: Rig RCalf
+      position: {x: -0.28309715, y: 0.000000009536743, z: 0.000000009536743}
+      rotation: {x: 0.0072991243, y: 0.0067662885, z: -0.7517549, w: 0.6593675}
+      scale: {x: 1.0000011, y: 0.99999976, z: 1.0000011}
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 'Rig '
+    hasTranslationDoF: 0
+    hasExtraRoot: 1
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
