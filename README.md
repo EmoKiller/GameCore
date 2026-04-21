@@ -121,7 +121,6 @@ public class GameBootstrap : MonoBehaviour
 - Kết hợp InitializationOrder để phân nhóm thứ tự nạp.
 
 3. Điều phối trung tâm (GameApplication & Lifecycle)
-4. 
    -GameApplication đóng vai trò là "Trái tim" của hệ thống, chịu trách nhiệm quản lý vòng đời và điều phối luồng thực thi tập trung thông qua ApplicationLifecycle
   
    -Centralized Update: GameApplication đóng vai trò là "Trái tim" của hệ thống, chịu trách nhiệm quản lý vòng đời và điều phối luồng thực thi tập trung thông qua ApplicationLifecycle.
@@ -129,7 +128,7 @@ public class GameBootstrap : MonoBehaviour
    
    
    
-6. Điều khiển luồng Game (GameFlow Module)
+4. Điều khiển luồng Game (GameFlow Module)
 - Luồng chính của Game không nằm trong Core mà được tách ra thành một GameFlow Module riêng biệt.
 
 - Vai trò: Đóng vai trò là "Đạo diễn", được cấu hình để khởi tạo cuối cùng sau khi tất cả các Module khác đã sẵn sàng.
