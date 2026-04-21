@@ -124,6 +124,7 @@ public class GameBootstrap : MonoBehaviour
    -GameApplication đóng vai trò là "Trái tim" của hệ thống, chịu trách nhiệm quản lý vòng đời và điều phối luồng thực thi tập trung thông qua ApplicationLifecycle
   
    -Centralized Update: GameApplication đóng vai trò là "Trái tim" của hệ thống, chịu trách nhiệm quản lý vòng đời và điều phối luồng thực thi tập trung thông qua ApplicationLifecycle.
+   
    -Hiện tại hệ thống đang sử dụng Action-based cho Lifecycle. Mà hiện tại ModuleLoader đang sử dụng thêm lưu trữ các module thực thi update theo list<>. Nên sẽ tinh chỉnh lại sau .
    
    
