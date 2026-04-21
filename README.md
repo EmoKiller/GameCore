@@ -116,9 +116,8 @@ public class GameBootstrap : MonoBehaviour
         }
 ```
 2. Module Loader đảm nhiệm việc nạp tất cả các Module theo trình tự an toàn thông qua thuật toán đệ quy:
-- Trước khi khởi tạo, hệ thống truy xuất GetDependencies(). Nếu phụ thuộc chưa được nạp, hệ thống sẽ ưu tiên nạp chúng trước.
+- Trước khi khởi tạo hệ thống truy xuất InitializationOrder để phân nhóm thứ tự nạp và GetDependencies(). Nếu phụ thuộc chưa được nạp, hệ thống sẽ ưu tiên nạp chúng trước.
 - Tích hợp UniTask giúp việc nạp tài nguyên nặng (Assets/Data) không gây block luồng chính.
-- Kết hợp InitializationOrder để phân nhóm thứ tự nạp.
 
 3. Điều phối trung tâm (GameApplication & Lifecycle)
    -GameApplication đóng vai trò là "Trái tim" của hệ thống, chịu trách nhiệm quản lý vòng đời và điều phối luồng thực thi tập trung thông qua ApplicationLifecycle
