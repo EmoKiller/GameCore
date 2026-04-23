@@ -7,19 +7,19 @@ using UnityEngine;
 
 public interface IPresenterFactory
 {
-    UIViewPresenter Create( Type presenterType, IUIView view, ViewModelBase viewModel);
+    UIViewPresenter Create( Type presenterType, IUIView view, IViewModel viewModel);
 }
 
 public sealed class PresenterFactory : IPresenterFactory
 {
-    private readonly Dictionary<Type, Func<IUIView, ViewModelBase, UIViewPresenter>> _map
+    private readonly Dictionary<Type, Func<IUIView, IViewModel, UIViewPresenter>> _map
     = new();
 
     public void Register<TPresenter, TView, TViewModel>(
         Func<TView, TViewModel, TPresenter> factory)
         where TPresenter : UIViewPresenter
         where TView : class, IUIView
-        where TViewModel : ViewModelBase
+        where TViewModel : IViewModel
     {
         _map[typeof(TPresenter)] = (view, vm) =>
             factory((TView)view, (TViewModel)vm);
@@ -28,7 +28,7 @@ public sealed class PresenterFactory : IPresenterFactory
     public UIViewPresenter Create(
         Type presenterType,
         IUIView view,
-        ViewModelBase viewModel)
+        IViewModel viewModel)
     {
         if (!_map.TryGetValue(presenterType, out var factory))
             throw new Exception($"Presenter not registered: {presenterType.Name}");

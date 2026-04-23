@@ -15,7 +15,7 @@ namespace Game.Presentation.UI.View
         public int Priority => EventPriority.Normal;
         public EventChannel Channel => EventChannel.UI;
 
-        public override void Bind(IUIView view,ViewModelBase viewModel)
+        public override void Bind(IUIView view,IViewModel viewModel)
         {
             ViewModel = (LoadingViewModel)viewModel;
             View = (LoadingView)view;

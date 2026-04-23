@@ -4,12 +4,12 @@ using Game.Application.UI.Core.Abstractions;
 public sealed class UIInstance
 {
     public IUIView View { get; }
-    public ViewModelBase ViewModel { get; }
+    public IViewModel ViewModel { get; }
     public UIViewPresenter Presenter { get; }
 
     public UIInstance(
         IUIView view,
-        ViewModelBase viewModel,
+        IViewModel viewModel,
         UIViewPresenter presenter)
     {
         View = view;

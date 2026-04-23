@@ -42,13 +42,13 @@ public sealed class UICompositionService : IUICompositionService
         return new UIInstance(view, vm, presenter);
     }
 
-    private ViewModelBase CreateViewModel(Type type)
+    private IViewModel CreateViewModel(Type type)
     {
         if (type == null) return null;
         return _vmFactory.Create(type);
     }
 
-    private UIViewPresenter CreatePresenter(Type type , IUIView view, ViewModelBase viewModel)
+    private UIViewPresenter CreatePresenter(Type type , IUIView view, IViewModel viewModel)
     {
         if (type == null) 
             return null;

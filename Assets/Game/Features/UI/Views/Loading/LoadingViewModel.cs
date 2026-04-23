@@ -4,7 +4,7 @@ using Game.Application.UI;
 
 namespace Game.Presentation.UI.View
 {
-    public sealed class LoadingViewModel : ViewModelBase 
+    public sealed class LoadingViewModel : IViewModel 
     {
         public ReactiveProperty<float> Progress { get; } = new(0f);
 

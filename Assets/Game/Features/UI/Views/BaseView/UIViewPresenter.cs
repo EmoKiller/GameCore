@@ -7,5 +7,5 @@ using Game.Shared.Lifecycle;
 
 public abstract class UIViewPresenter : DisposableObject 
 {
-    public abstract void Bind(IUIView view,ViewModelBase viewModel);
+    public abstract void Bind(IUIView view,IViewModel viewModel);
 }

@@ -10,7 +10,7 @@ public class MainMenuScreenPresenter : UIViewPresenter
 {
     private MainMenuScreenViewModel ViewModel;
     private MainMenuScreen View;
-    public override void Bind(IUIView view, ViewModelBase viewModel)
+    public override void Bind(IUIView view, IViewModel viewModel)
     {
         ViewModel = (MainMenuScreenViewModel)viewModel;
         View = (MainMenuScreen)view;

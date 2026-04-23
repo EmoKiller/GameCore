@@ -4,7 +4,7 @@ using Game.Application.UI;
 using Game.Application.UI.Commands;
 using UnityEngine;
 
-public class MainMenuScreenViewModel : ViewModelBase 
+public class MainMenuScreenViewModel : IViewModel 
 {
     public RelayCommand PlayCommand { get; private set;}
     public RelayCommand OpenSettingsCommand { get; private set;}

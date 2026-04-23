@@ -8,7 +8,7 @@ namespace Game.Presentation.UI.View
     {
         public PlayerHUDViewModel ViewModel;
 
-        public override void Bind(IUIView view,ViewModelBase viewModel)
+        public override void Bind(IUIView view,IViewModel viewModel)
         {
             ViewModel = (PlayerHUDViewModel)viewModel;
         }
