@@ -9,23 +9,22 @@ public sealed class PlayerFactory
     {
         _prefabAsset = prefabAsset;
     }
-    public PlayerController2D CreateAsync()
+    public ICharacterView Create()
     {
 
         var go = Object.Instantiate(_prefabAsset);
 
-        var controller = go.GetComponent<PlayerController2D>();
+        var characterView = go.GetComponent<ICharacterView>();
 
-        return controller;
+        return characterView;
     }
-    public PlayerController2D CreateAsync(
-        Transform parent)
+    public ICharacterView Create(Transform parent)
     {
 
         var go = Object.Instantiate(_prefabAsset, parent);
 
-        var controller = go.GetComponent<PlayerController2D>();
+        var characterView = go.GetComponent<ICharacterView>();
 
-        return controller;
+        return characterView;
     }
 }

@@ -107,6 +107,7 @@ namespace Game.Bootstrap
             // Register the TimeService as a singleton
             var timeService = new TimeService();
             _app.RegisterService<ITimeService>(timeService);
+            _app.SetTimeService(timeService);
 
             var lifecycle = _app.Lifecycle;
             timeService.Initialize(lifecycle);
@@ -153,10 +154,17 @@ namespace Game.Bootstrap
             {
                 _bootstrapCts.Cancel();
                 _bootstrapCts.Dispose();
+                _bootstrapCts = null;
             }
             // Shutdown is handled by GameApplication on quit
             // But you can manually shutdown if needed:
-            _app.ShutdownApplication();
+            if (_app != null)
+            {
+                _app.ShutdownApplication();
+                _app = null;
+                _logger = null;
+            }
+            
         }
         
     }

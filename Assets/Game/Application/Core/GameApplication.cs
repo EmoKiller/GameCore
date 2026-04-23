@@ -5,6 +5,7 @@ using CustomLogger = Game.Application.Core.Logging.ICustomLogger;
 using UnityEngine;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using Game.Application.Core.TimeService;
 
 namespace Game.Application.Core
 {
@@ -36,9 +37,10 @@ namespace Game.Application.Core
     {
         [SerializeField] private bool _logDebugInfo = true;
 
-        private IServiceContainer _services;
+        private ServiceContainer _services;
         private ModuleLoader _moduleLoader;
         private ApplicationLifecycle _lifecycle;
+        private ITimeService _timeService;
         private CustomLogger _logger;
         private bool _initialized = false;
         private bool _shuttingDown = false;
@@ -200,7 +202,9 @@ namespace Game.Application.Core
             {
                 _lifecycle.PublishPreInitialize();
 
+                ct.ThrowIfCancellationRequested();
                 await _moduleLoader.LoadModules(ct);
+                ct.ThrowIfCancellationRequested();
 
                 _lifecycle.PublishPostInitialize();
 
@@ -208,6 +212,12 @@ namespace Game.Application.Core
 
                 if (_logDebugInfo)
                     _logger?.Log("Initialization complete.");
+            }
+            catch (OperationCanceledException)
+            {
+                // Log dạng Warning hoặc im lặng vì đây là hành vi bình thường
+                Debug.LogWarning("[CancellationRequested] Application was canceled.");
+                throw; // Ném ngược ra để phía gọi (Caller) biết là task đã dừng
             }
             catch (Exception ex)
             {
@@ -233,6 +243,11 @@ namespace Game.Application.Core
         /// Use to query modules after load.
         /// </summary>
         public ModuleLoader Modules => _moduleLoader;
+
+        public void SetTimeService(ITimeService timeService)
+        {
+            _timeService = timeService;
+        }
 
         /// <summary>
         /// Check if application is initialized and running.
@@ -267,19 +282,8 @@ namespace Game.Application.Core
             if (!_initialized || _shuttingDown)
                 return;
             
-            float dt = Time.deltaTime;
-
-            try
-            {
-                _lifecycle.PublishUpdate(dt);
-
-            }
-            catch (Exception ex)
-            {
-                _logger?.LogError($"Error during update: {ex}");
-            }
-
-            _moduleLoader.UpdateModules(dt);
+            float dt = _timeService.GetTimeInfo().DeltaTime;
+            _lifecycle.PublishUpdate(dt);
         }
 
         private void FixedUpdate()
@@ -287,18 +291,8 @@ namespace Game.Application.Core
             if (!_initialized || _shuttingDown)
                 return;
             
-            float dt = Time.fixedDeltaTime;
-
-            try
-            {
-                _lifecycle.PublishFixedUpdate(dt);
-            }
-            catch (Exception ex)
-            {
-                _logger?.LogError($"Error during update: {ex}");
-            }
-
-            _moduleLoader.FixUpdateModules(dt);
+            float dt = _timeService.GetFixedTimeInfo().DeltaTime;
+            _lifecycle.PublishFixedUpdate(dt);
         }
 
         private void LateUpdate()
@@ -306,8 +300,8 @@ namespace Game.Application.Core
             if (!_initialized || _shuttingDown)
                 return;
             
-            float dt = Time.deltaTime;
-            _moduleLoader.LateUpdateModules(dt);
+            float dt = _timeService.GetTimeInfo().DeltaTime;
+            _lifecycle.PublishLateUpdate(dt);
         }
         private void OnDestroy()
         {
@@ -342,6 +336,12 @@ namespace Game.Application.Core
                 }
 
                 _lifecycle.PublishPostShutdown();
+
+                _services.Dispose();
+                
+                _services = null;
+                _lifecycle = null;
+                _timeService = null;
 
                 if (_logDebugInfo)
                     _logger?.Log("Shutdown complete.");

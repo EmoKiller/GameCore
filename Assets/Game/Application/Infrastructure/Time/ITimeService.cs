@@ -16,8 +16,15 @@ namespace Game.Application.Core.TimeService
         /// <summary>Game speed multiplier (0 = paused, 1 = normal, 2 = 2x).</summary>
         float TimeScale { set; get; }
 
-        /// <summary>Get time info.</summary>
+        /// <summary>
+        /// Lấy thông tin thời gian cho Update (Frame-based)
+        /// </summary>
         GameTimeInfo GetTimeInfo();
+
+        /// <summary>
+        /// Lấy thông tin thời gian cho FixedUpdate (Physics-based)
+        /// </summary>
+        GameTimeInfo GetFixedTimeInfo();
     }
 
     /// <summary>
@@ -26,15 +33,32 @@ namespace Game.Application.Core.TimeService
     /// </summary>
     public readonly struct GameTimeInfo
     {
-        public float CurrentTime { get; }
+        /// <summary>
+        /// Tổng thời gian đã trôi qua (scaled)
+        /// </summary>
+        public float CurrentTime { get; } 
+        /// <summary>
+        /// Thời gian khung hình hiện tại (scaled)
+        /// </summary>
         public float DeltaTime { get; }
+        /// <summary>
+        /// Thời gian khung hình gốc từ Unity
+        /// </summary>
+        public float RawDeltaTime { get; }
+        /// <summary>
+        /// Tỉ lệ thời gian hiện tại
+        /// </summary>
         public float TimeScale { get; }
+        /// <summary>
+        /// Số thứ tự khung hình
+        /// </summary>
         public uint Frame { get; }
 
-        public GameTimeInfo(float currentTime, float deltaTime, float timeScale, uint frame)
+        public GameTimeInfo(float currentTime, float deltaTime, float rawDeltaTime, float timeScale, uint frame)
         {
             CurrentTime = currentTime;
             DeltaTime = deltaTime;
+            RawDeltaTime = rawDeltaTime;
             TimeScale = timeScale;
             Frame = frame;
         }

@@ -1,5 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Game.Application.Core;
+using Game.Application.Core.Input;
+using Game.Character.Core;
 using UnityEngine;
 public interface IPlayerService : IService
 {
@@ -8,57 +10,70 @@ public interface IPlayerService : IService
     void Spawn();
     
 }
-public sealed class PlayerService : IPlayerService
+public sealed class PlayerService : IPlayerService, IUpdatable
 {
     private readonly PlayerFactory _playerFactory;
-    private PlayerController2D _playerController;
+    private PlayerPresenter _playerPresenter;
+    private ICharacterView _characterView;
+    private IInputService _inputService;
+    private CharacterStatsConfig _characterStatsConfig;
 
-    private PlayerContext _playerContext;
-    private PlayerStateSystem _playerStateSystem;
-    
-
-    public PlayerService( PlayerFactory playerFactory )
+    public PlayerService( 
+        PlayerFactory playerFactory,
+        IInputService inputService,
+        CharacterStatsConfig characterStatsConfig
+    )
     {
         _playerFactory = playerFactory;
+        _inputService = inputService;
+        _characterStatsConfig = characterStatsConfig;
     }
-    
-    public void Update(float deltaTime)
-    {
-        _playerStateSystem.Tick(deltaTime);
-    }
-
-
-
     public Transform GetTransform()
     {
-        return _playerController.transform;
+        return _characterView.GetTransform();
     }
     public void Spawn()
     {
-        _playerController = _playerFactory.CreateAsync();
+        _characterView = _playerFactory.Create();
         Initialize();
+        _playerPresenter.SetView(_characterView);
+        
     }
     private void Initialize()
     {
-        var playerInputAdapter = _playerController.GetComponentInChildren<PlayerInputAdapter>();
+        // input
+        var playerInputAdapter = _inputService.GetPlayerInput();
         playerInputAdapter.Initialize();
 
-        _playerContext = new PlayerContext(
-            _playerController.CharacterContext,
+        // CharacterModel
+        var characterModel = new CharacterModel(_characterStatsConfig);
+
+        // PlayerContext
+        var _playerContext = new PlayerContext(
+            _characterView.CharacterContext,
             playerInputAdapter,
-            _playerController.GetComponentInChildren<CharacterSensor>(),
-            new FlipCharacter2D(_playerController.gameObject)
+            new FlipCharacter2D(_characterView.GetGameObject())
         );
 
-        _playerStateSystem = new PlayerStateSystem(_playerContext);
-        _playerContext.StateMachine = _playerStateSystem.StateMachine;
+        // PlayerStateSystem
+        var playerStateSystem = new PlayerStateSystem(_playerContext);
+        _playerContext.StateMachine = playerStateSystem.StateMachine;
 
+        _playerPresenter = new PlayerPresenter(
+            characterModel,
+            _playerContext,
+            playerStateSystem
+        );
         //test sẽ chỉnh sửa logic lại APP
-        GameApplication.Instance.Lifecycle.OnUpdate += Update;
+        GameApplication.Instance.Lifecycle.Register(this);
     }
     public void SetInputEnabled(bool enabled)
     {
         //_context.InputEnabled = enabled;
     }
 
+    public void OnUpdate(float deltaTime)
+    {
+        _playerPresenter.Update(deltaTime);
+    }
 }

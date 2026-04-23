@@ -17,12 +17,18 @@ namespace Game.Application.Core.TimeService
     /// - Listens to lifecycle events for updates
     /// - Stateless except for time tracking
     /// </summary>
-    public class TimeService : ITimeService
+    public class TimeService : ITimeService, IPriority , IUpdatable, IFixedUpdatable 
     {
+        public int Priority => -100;
+
+        
         private float _currentTime = 0f;
+        private float _currentFixedTime = 0f;
         private float _timeScale = 1f;
         private uint _frameCount = 0;
-        private float _lastDeltaTime = 0f;
+        
+        private float _lastRawDeltaTime = 0f;
+        private float _lastFixedRawDeltaTime = 0f;
 
         public float CurrentTime => _currentTime;
         public float TimeScale 
@@ -31,31 +37,51 @@ namespace Game.Application.Core.TimeService
             set => _timeScale = Mathf.Max(0f, value);
         }
 
-        /// <summary>
-        /// Subscribe to lifecycle for updates.
-        /// Called during Initialize() by modules/bootstrap code.
-        /// </summary>
+        
+
         public void Initialize(IApplicationLifecycle lifecycle)
         {
-            lifecycle.OnUpdate += OnLifecycleUpdate;
-            Debug.Log("TimeService: Initialized and subscribed to OnUpdate.");
+            // Đăng ký cả Update và FixedUpdate
+            lifecycle.Register(this);
+            Debug.Log("[TimeService] Initialized and subscribed to lifecycle updates.");
         }
 
         public GameTimeInfo GetTimeInfo()
         {
             return new GameTimeInfo(
                 currentTime: _currentTime,
-                deltaTime: _lastDeltaTime * _timeScale,
+                deltaTime: _lastRawDeltaTime * _timeScale,
+                rawDeltaTime: _lastRawDeltaTime,
                 timeScale: _timeScale,
                 frame: _frameCount
             );
         }
 
-        private void OnLifecycleUpdate(float deltaTime)
+        public GameTimeInfo GetFixedTimeInfo()
         {
-            _lastDeltaTime = deltaTime;
+            return new GameTimeInfo(
+                currentTime: _currentFixedTime, // Hoặc dùng Time.fixedTime nếu cần chính xác tuyệt đối cho physics
+                deltaTime: _lastFixedRawDeltaTime * _timeScale,
+                rawDeltaTime: _lastFixedRawDeltaTime,
+                timeScale: _timeScale,
+                frame: _frameCount
+            );
+        }
+
+        // Được gọi từ ApplicationLifecycle qua IUpdatable
+        public void OnUpdate(float deltaTime)
+        {
+            _lastRawDeltaTime = deltaTime;
             _currentTime += deltaTime * _timeScale;
             _frameCount++;
         }
+
+        // Được gọi từ ApplicationLifecycle qua IFixedUpdatable
+        public void OnFixedUpdatable(float fixedDeltaTime)
+        {
+            _lastFixedRawDeltaTime = fixedDeltaTime;
+            _currentFixedTime += fixedDeltaTime * _timeScale;
+        }
     }
+
 }

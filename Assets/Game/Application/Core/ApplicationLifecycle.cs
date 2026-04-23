@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
 namespace Game.Application.Core
 {
@@ -14,64 +16,175 @@ namespace Game.Application.Core
     public class ApplicationLifecycle : IApplicationLifecycle
     {
         private ApplicationState _currentState = ApplicationState.PreInitialization;
-
         public ApplicationState CurrentState => _currentState;
 
-        public event Action OnPreInitialize;
-        public event Action OnPostInitialize;
-        public event Action<float> OnUpdate;
-        public event Action<float> OnFixedUpdate;
-        public event Action OnPreShutdown;
-        public event Action OnPostShutdown;
+        // Các danh sách Subscribers
+        private readonly List<IOnPreInitialize> _onPreInitializes = new();
+        private readonly List<IOnPostInitialize> _onPostInitializes = new();
+        private readonly List<IUpdatable> _updatables = new();
+        private readonly List<IFixedUpdatable> _fixedUpdatables = new();
+        private readonly List<ILateUpdatable> _lateUpdatables = new();
+        private readonly List<IOnPreShutdown> _onPreShutdowns = new();
+        private readonly List<IOnPostShutdown> _onPostShutdowns = new();
 
-        /// <summary>
-        /// Được GameApplication gọi trong giai đoạn khởi tạo 1.
-        /// </summary>
+        #region Registration Logic
+
+        public void Register(object subscriber)
+        {
+            if (subscriber == null) return;
+
+            if (subscriber is IOnPreInitialize preInit) RegisterAndSort(_onPreInitializes, preInit);
+            if (subscriber is IOnPostInitialize postInit) RegisterAndSort(_onPostInitializes, postInit);
+            if (subscriber is IUpdatable update) RegisterAndSort(_updatables, update);
+            if (subscriber is IFixedUpdatable fixedUpdate) RegisterAndSort(_fixedUpdatables, fixedUpdate);
+            if (subscriber is ILateUpdatable lateUpdate) RegisterAndSort(_lateUpdatables, lateUpdate);
+            if (subscriber is IOnPreShutdown preShut) RegisterAndSort(_onPreShutdowns, preShut);
+            if (subscriber is IOnPostShutdown postShut) RegisterAndSort(_onPostShutdowns, postShut);
+        }
+
+        private void RegisterAndSort<T>(List<T> list, T item)
+        {
+            if (list.Contains(item)) return;
+            list.Add(item);
+            
+            // Sắp xếp dựa trên Priority mỗi khi có thành viên mới
+            list.Sort((a, b) =>
+            {
+                int p1 = (a is IPriority prioA) ? prioA.Priority : 0;
+                int p2 = (b is IPriority prioB) ? prioB.Priority : 0;
+                return p1.CompareTo(p2);
+            });
+        }
+
+        public void Unregister(object subscriber)
+        {
+            if (subscriber == null) return;
+
+            if (subscriber is IOnPreInitialize preInit) _onPreInitializes.Remove(preInit);
+            if (subscriber is IOnPostInitialize postInit) _onPostInitializes.Remove(postInit);
+            if (subscriber is IUpdatable update) _updatables.Remove(update);
+            if (subscriber is IFixedUpdatable fixedUpdate) _fixedUpdatables.Remove(fixedUpdate);
+            if (subscriber is ILateUpdatable lateUpdate) _lateUpdatables.Remove(lateUpdate);
+            if (subscriber is IOnPreShutdown preShut) _onPreShutdowns.Remove(preShut);
+            if (subscriber is IOnPostShutdown postShut) _onPostShutdowns.Remove(postShut);
+        }
+
+        #endregion
+
+        #region Internal Publish Methods
+
         internal void PublishPreInitialize()
         {
             _currentState = ApplicationState.Initializing;
-            OnPreInitialize?.Invoke();
+            ExecuteList(_onPreInitializes, m => m.OnPreInitialize());
         }
 
-        /// <summary>
-        /// Được GameApplication gọi sau khi các modules được khởi tạo.
-        /// </summary>
         internal void PublishPostInitialize()
         {
             _currentState = ApplicationState.Running;
-            OnPostInitialize?.Invoke();
+            ExecuteList(_onPostInitializes, m => m.OnPostInitialize());
         }
 
-        /// <summary>
-        /// Được GameApplication gọi trong mỗi khung hình.
-        /// </summary>
         internal void PublishUpdate(float deltaTime)
         {
-            if (_currentState == ApplicationState.Running)
-                OnUpdate?.Invoke(deltaTime);
+            if (_currentState != ApplicationState.Running) return;
+            ExecuteList(_updatables, m => m.OnUpdate(deltaTime));
         }
 
         internal void PublishFixedUpdate(float fixedDeltaTime)
         {
-            if (_currentState == ApplicationState.Running)
-                OnFixedUpdate?.Invoke(fixedDeltaTime);
+            if (_currentState != ApplicationState.Running) return;
+            ExecuteList(_fixedUpdatables, m => m.OnFixedUpdatable(fixedDeltaTime));
         }
-        /// <summary>
-        /// Được gọi bởi GameApplication trong giai đoạn tắt máy 1.
-        /// </summary>
+
+        internal void PublishLateUpdate(float deltaTime)
+        {
+            if (_currentState != ApplicationState.Running) return;
+            ExecuteList(_lateUpdatables, m => m.OnLateUpdatable(deltaTime));
+        }
+
         internal void PublishPreShutdown()
         {
             _currentState = ApplicationState.ShuttingDown;
-            OnPreShutdown?.Invoke();
+            // Shutdown thường nên chạy ngược lại Priority (Service quan trọng tắt cuối cùng)
+            ExecuteListReversed(_onPreShutdowns, m => m.OnPreShutdown());
+
+            _updatables.Clear();
+            _fixedUpdatables.Clear();
+            _lateUpdatables.Clear();
         }
 
-        /// <summary>
-        /// Được gọi bởi GameApplication sau khi tắt máy hoàn tất.
-        /// </summary>
         internal void PublishPostShutdown()
         {
             _currentState = ApplicationState.Shutdown;
-            OnPostShutdown?.Invoke();
+            ExecuteListReversed(_onPostShutdowns, m => m.OnPostShutdown());
+            ClearAllSubscribers();
         }
+
+        #endregion
+
+        #region Execution Logic (Snapshot & Safety)
+
+        /// <summary>
+        /// Duyệt xuôi (theo Priority) và dùng Snapshot để an toàn tuyệt đối.
+        /// </summary>
+        private void ExecuteList<T>(List<T> list, Action<T> action)
+        {
+            int count = list.Count;
+            if (count == 0) return;
+
+            // Cách 1: Tạo snapshot nhanh bằng cách sao chép list
+            // Điều này đảm bảo nếu trong lúc chạy action() có ai đó Register/Unregister, 
+            // vòng lặp hiện tại không bị ảnh hưởng.
+            T[] snapshot = list.ToArray();
+
+            for (int i = 0; i < snapshot.Length; i++)
+            {
+                var item = snapshot[i];
+                if (item == null) continue;
+
+                try
+                {
+                    action(item);
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"[Lifecycle] Error in {item.GetType().Name}: {ex.Message}");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Duyệt ngược cho giai đoạn Shutdown (Service quan trọng tắt sau cùng)
+        /// </summary>
+        private void ExecuteListReversed<T>(List<T> list, Action<T> action)
+        {
+            int count = list.Count;
+            if (count == 0) return;
+
+            T[] snapshot = list.ToArray();
+            for (int i = snapshot.Length - 1; i >= 0; i--)
+            {
+                var item = snapshot[i];
+                if (item == null) continue;
+
+                try { action(item); }
+                catch (Exception ex) { Debug.LogError($"[Lifecycle] Shutdown Error: {ex.Message}"); }
+            }
+        }
+
+        private void ClearAllSubscribers()
+        {
+            _onPreInitializes.Clear();
+            _onPostInitializes.Clear();
+            _onPreShutdowns.Clear();
+            _onPostShutdowns.Clear();
+            _updatables.Clear();
+            _fixedUpdatables.Clear();
+            _lateUpdatables.Clear();
+        }
+
+        #endregion
     }
+
 }

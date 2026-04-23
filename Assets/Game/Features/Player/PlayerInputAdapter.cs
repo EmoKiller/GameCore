@@ -2,13 +2,13 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInputAdapter : MonoBehaviour , ICharacterInput
+public class PlayerInputAdapter : ICharacterInput
 {
     /// <summary>
     /// PlayerInput component được attach vào Player prefab, reference đến Input System action map,
     /// được sử dụng để lấy các InputAction cụ thể và đăng ký callback.
     /// </summary>
-    [SerializeField] private PlayerInput playerInput;
+    [SerializeField] private PlayerInput _playerInput;
 
     /// <summary>
     /// InputBuffer component để lưu trữ trạng thái input hiện tại, được attach vào Player prefab,
@@ -47,21 +47,26 @@ public class PlayerInputAdapter : MonoBehaviour , ICharacterInput
     /// </summary>
     public event System.Action OnJump;
     public event System.Action OnAttack;
+    public PlayerInputAdapter(PlayerInput playerInput)
+    {
+        _playerInput = playerInput;
+    }
+
 
     public void Initialize()
     {
-        playerInput = FindAnyObjectByType<PlayerInput>();
-        if (playerInput == null)
+        
+        if (_playerInput == null)
         {
-            Debug.LogError("Player Input component not found on " + gameObject.name);
+            Debug.LogError("Player Input null");
             return;
         }
         
         // Lấy các action cụ thể
-        moveAction = playerInput.actions["Move"];
-        attackAction = playerInput.actions["Attack"];
-        jumpAction = playerInput.actions["Jump"];
-        sprintAction = playerInput.actions["Sprint"];
+        moveAction = _playerInput.actions["Move"];
+        attackAction = _playerInput.actions["Attack"];
+        jumpAction = _playerInput.actions["Jump"];
+        sprintAction = _playerInput.actions["Sprint"];
 
         if (moveAction == null || attackAction == null || jumpAction == null || sprintAction == null)
         {

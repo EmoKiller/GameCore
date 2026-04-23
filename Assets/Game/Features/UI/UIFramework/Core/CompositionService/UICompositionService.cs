@@ -29,30 +29,12 @@ public sealed class UICompositionService : IUICompositionService
         UILifetimeScope lifetime)
     {
         var entry = _manifest.Get(viewType);
-
-        // =========================
-        // VIEWMODEL
-        // =========================
         var vm = CreateViewModel(entry.ViewModelType);
-
-        if (vm != null)
-        {
-            view.SetViewModel(vm);
-
-            // 👇 QUAN TRỌNG
-            if (vm is IDisposable d)
-                lifetime.AddDisposable(d);
-        }
-
-        // =========================
-        // PRESENTER
-        // =========================
         var presenter = CreatePresenter(entry.PresenterType, view, vm);
         if (presenter != null)
         {
-            presenter.Bind(vm);
+            presenter.Bind(view,vm);
 
-            // 👇 QUAN TRỌNG
             if (presenter is IDisposable d)
                 lifetime.AddDisposable(d);
         }

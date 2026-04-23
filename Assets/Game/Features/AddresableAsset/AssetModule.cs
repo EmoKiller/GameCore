@@ -39,17 +39,14 @@ namespace Game.Application.Modules.Assets
 
             Debug.Log($"[{ModuleName}] System is fully ready.");
 
-            // 3. LOAD CÁC TÀI NGUYÊN CƠ BẢN (Mở đầu/Global)
-            // Ví dụ: Load các Label bắt buộc phải có để Game chạy được (Config, Atlas dùng chung...)
-            // await assetProvider.LoadByLabelAsync<TextAsset>("GlobalConfig", ct);
-            // await assetProvider.LoadByLabelAsync<SpriteAtlas>("MainUI_Atlas", ct);
-
             Debug.Log($"[{ModuleName}] Core assets loaded. Ready for other modules.");
 
         }
 
         public override void Shutdown()
         {
+            _globalScope.Dispose();
+            _assetProvider.ReleaseAll();
         }
     }
 }

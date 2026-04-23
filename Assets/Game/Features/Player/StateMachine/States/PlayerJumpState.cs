@@ -14,7 +14,7 @@ public class PlayerJumpState : CharacterState<PlayerContext>
         Context.Core.Animator.SetMoveSpeed(Context.Core.Movement.TargetVelocityX);
         
         if (Context.Core.Movement.ActualVelocity.y <= 0.1 && 
-            Context.PlayerCharacterSensor.IsGrounded &&
+            Context.Core.Sensor.IsGrounded &&
              Context.CharacterInput.MoveInput.x >= 0.2
             )
         {
@@ -26,7 +26,7 @@ public class PlayerJumpState : CharacterState<PlayerContext>
 
 
         if (Context.Core.Movement.ActualVelocity.y <= 0.1 &&
-            Context.PlayerCharacterSensor.IsGrounded &&
+            Context.Core.Sensor.IsGrounded &&
              Context.CharacterInput.MoveInput.x <= 0.1)
         {
             Context.Core.Animator.SetGrounded(true);

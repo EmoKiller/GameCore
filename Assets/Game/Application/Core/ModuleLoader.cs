@@ -27,9 +27,7 @@ namespace Game.Application.Core
         private readonly IServiceContainer _services;
         private readonly List<IGameModule> _allModules = new();
         private readonly Dictionary<string, IGameModule> _modulesByName = new();
-        private readonly List<IUpdatable> _UpdateModules = new();
-        private readonly List<IFixedUpdatable> _FixUpdateModules = new();
-        private readonly List<ILateUpdatable> _LateUpdateModules = new();
+        
         
         private CustomLogger _logger;
 
@@ -66,13 +64,6 @@ namespace Game.Application.Core
             _allModules.Add(module);
             _modulesByName[module.ModuleName] = module;
 
-            // Pattern Matching để phân loại vào các danh sách thực thi
-            if(module is IUpdatable updatable) _UpdateModules.Add(updatable);
-
-            if(module is IFixedUpdatable fixedUpdatable) _FixUpdateModules.Add(fixedUpdatable);
-
-            if(module is ILateUpdatable lateUpdatable) _LateUpdateModules.Add(lateUpdatable);
-
         }
 
         /// <summary>
@@ -96,10 +87,17 @@ namespace Game.Application.Core
                 // Hàm ResolveAndInitialize sẽ tự lo việc nạp "cha" trước "con".
                 foreach (var module in _allModules)
                 {
+                    ct.ThrowIfCancellationRequested();
                     await ResolveAndInitializeAsync(module, ct);
                 }
 
                 _logger?.Log("[Success] Hệ thống Module đã khởi tạo an toàn.");
+            }
+            catch (OperationCanceledException)
+            {
+                // Log dạng Warning hoặc im lặng vì đây là hành vi bình thường
+                Debug.LogWarning("[CancellationRequested] LoadModules was canceled.");
+                throw; // Ném ngược ra để phía gọi (Caller) biết là task đã dừng
             }
             catch (Exception ex)
             {
@@ -133,65 +131,8 @@ namespace Game.Application.Core
             }
 
             _allModules.Clear();
-            _UpdateModules.Clear();
-            _FixUpdateModules.Clear();
-            _LateUpdateModules.Clear();
+            
             _logger?.Log("All modules shutdown.");
-        }
-
-        /// <summary>
-        /// Update all currently loaded modules.
-        /// </summary>
-        public void UpdateModules(float deltaTime)
-        {
-            int count = _UpdateModules.Count;
-            if (count == 0) return;
-
-            for (int i = 0; i < count; i++)
-            {
-                try
-                {
-                    _UpdateModules[i].OnUpdate(deltaTime);
-                }
-                catch (Exception ex)
-                {
-                    _logger?.LogError($"Error in Module {_UpdateModules[i].GetType().Name}: {ex.Message}");
-                }
-            }
-        }
-        public void FixUpdateModules(float deltaTime)
-        {
-            int count = _FixUpdateModules.Count;
-            if (count == 0) return;
-
-            for (int i = 0; i < count; i++)
-            {
-                try
-                {
-                    _FixUpdateModules[i].OnFixedUpdatable(deltaTime);
-                }
-                catch (Exception ex)
-                {
-                    _logger?.LogError($"Error in Module {_FixUpdateModules[i].GetType().Name}: {ex.Message}");
-                }
-            }
-        }
-        public void LateUpdateModules(float deltaTime)
-        {
-            int count = _LateUpdateModules.Count;
-            if (count == 0) return;
-
-            for (int i = 0; i < count; i++)
-            {
-                try
-                {
-                    _LateUpdateModules[i].OnLateUpdatable(deltaTime);
-                }
-                catch (Exception ex)
-                {
-                    _logger?.LogError($"Error in Module {_LateUpdateModules[i].GetType().Name}: {ex.Message}");
-                }
-            }
         }
 
         /// <summary>

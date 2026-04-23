@@ -4,16 +4,13 @@ using UnityEngine.UI;
 using Game.Presentation.UI;
 using Game.Presentation.UI.Binding;
 
-public class MainMenuScreen : UIView<MainMenuScreenViewModel>
+public class MainMenuScreen : UIView
 {
     [SerializeField] private Button playButton;
+    public Button PlayButton => playButton;
     [SerializeField] private Button settingsButton;
+    public Button SettingsButton => settingsButton;
     [SerializeField] private Button quitButton;
-    protected override void OnBind(MainMenuScreenViewModel viewModel)
-        {
-            // View -> ViewModel (Command binding)
-            viewModel.AddDisposable(playButton.Command(ViewModel.PlayCommand));
-            viewModel.AddDisposable(settingsButton.Command(ViewModel.OpenSettingsCommand));
-            viewModel.AddDisposable(quitButton.Command(ViewModel.QuitCommand));
-        }
+    public Button QuitButton => quitButton;
+    
 }

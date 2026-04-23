@@ -6,30 +6,22 @@ using UnityEngine;
 
 public class MainMenuScreenViewModel : ViewModelBase 
 {
-    public RelayCommand PlayCommand { get; }
-    public RelayCommand OpenSettingsCommand { get; }
-    public RelayCommand QuitCommand { get; }
+    public RelayCommand PlayCommand { get; private set;}
+    public RelayCommand OpenSettingsCommand { get; private set;}
+    public RelayCommand QuitCommand { get; private set;}
 
-    public MainMenuScreenViewModel()
+    public void SetPlayCommand(RelayCommand playCommand)
     {
-        PlayCommand = new RelayCommand(Play);
-        OpenSettingsCommand = new RelayCommand(OpenSettings);
-        QuitCommand = new RelayCommand(Quit);
+        PlayCommand = playCommand;
+    }
+    public void SetOpenSettingsCommand(RelayCommand openSettingsCommand)
+    {
+        OpenSettingsCommand = openSettingsCommand;
+    }
+    public void SetQuitCommand(RelayCommand quitCommand)
+    {
+        QuitCommand = quitCommand;
     }
 
-    private void Play()
-    {
-        Debug.Log("Play");
-        GameApplication.Instance.Services.Resolve<IEventBus>().Publish(new RequestStateChangeEvent(EGameState.Gameplay),EventChannel.System);
-    }
-
-    private void OpenSettings()
-    {
-        Debug.Log("Setting");
-    }
-
-    private void Quit()
-    {
-        UnityEngine.Application.Quit();
-    }
+    
 }

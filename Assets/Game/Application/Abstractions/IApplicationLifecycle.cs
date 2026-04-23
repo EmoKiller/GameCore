@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Game.Application.Core
 {
@@ -11,44 +12,14 @@ namespace Game.Application.Core
     /// </summary>
     public interface IApplicationLifecycle : IService
     {
-        /// <summary>
-        /// Sự kiện này được báo cáo sau khi các dịch vụ được đăng ký nhưng trước khi các mô-đun được khởi tạo.
-        /// </summary>
-        event Action OnPreInitialize;
-
-        /// <summary>
-        /// Sự kiện này được báo cáo sau khi tất cả các mô-đun được khởi tạo thành công.
-        /// Sử dụng sự kiện này để thiết lập giữa các mô-đun.
-        /// </summary>
-        event Action OnPostInitialize;
-
-        /// <summary>
-        /// Raised every frame. Subscribe to this instead of using Update() in loose services.
-        /// </summary>
-        event Action<float> OnUpdate;
-
-        /// <summary>
-        /// Raised at fixed intervals for physics updates. Subscribe to this instead of using FixedUpdate() in loose services.
-        /// </summary>
-        event Action<float> OnFixedUpdate;
-
-        /// <summary>
-        /// Raised before shutdown begins. Save state, stop long-running operations, etc.
-        /// </summary>
-        event Action OnPreShutdown;
-
-        /// <summary>
-        /// Raised after all shutdown is complete.
-        /// Final cleanup and logging.
-        /// </summary>
-        event Action OnPostShutdown;
-
-        /// <summary>
         /// Current lifecycle state of the application.
         /// </summary>
         ApplicationState CurrentState { get; }
-    }
 
+        void Register(object module);
+        void Unregister(object module);
+        
+    }
     /// <summary>
     /// Current application state in its lifecycle.
     /// </summary>

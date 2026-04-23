@@ -2047,10 +2047,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7248837218465948660}
-  - component: {fileID: 921094487700302949}
+  - component: {fileID: 6364096655077643364}
   - component: {fileID: 1548546586729328419}
   - component: {fileID: 4872881344100908231}
-  - component: {fileID: 522680748537807179}
   - component: {fileID: 4936169110095000308}
   - component: {fileID: 5060376870696233874}
   - component: {fileID: 1594351561324183452}
@@ -2078,7 +2077,7 @@ Transform:
   - {fileID: 5488662864331680622}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &921094487700302949
+--- !u!114 &6364096655077643364
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2087,9 +2086,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 8967833742742415028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbde3d853117f064ea541cb32c07d2d1, type: 3}
+  m_Script: {fileID: 11500000, guid: 5a4cbfc80c438f949ac1505f97c2a7c2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Game.Player::PlayerController
+  m_EditorClassIdentifier: ProjectFeatures::CharacterView
 --- !u!114 &1548546586729328419
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2118,19 +2117,6 @@ MonoBehaviour:
   deceleration: 25
   maxWalkSpeed: 3
   maxRunSpeed: 6
---- !u!114 &522680748537807179
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8967833742742415028}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed6d70158d4dbbe49a0a11c63533ff03, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: ProjectFeatures::PlayerInputAdapter
-  playerInput: {fileID: 0}
 --- !u!114 &4936169110095000308
 MonoBehaviour:
   m_ObjectHideFlags: 0

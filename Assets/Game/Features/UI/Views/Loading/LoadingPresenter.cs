@@ -1,21 +1,29 @@
+using System.Collections;
 
 using Game.Application.Core;
 using Game.Application.Events;
 using Game.Application.UI;
+using Game.Application.UI.Core.Abstractions;
+using Game.Presentation.UI.Binding;
 namespace Game.Presentation.UI.View
 {
     public sealed class LoadingPresenter : UIViewPresenter ,
         IEventHandler<LoadingProgressEvent>
     {
-        public LoadingViewModel ViewModel;
-        public override int Priority => EventPriority.Normal;
-        public override EventChannel Channel => EventChannel.UI;
+        private LoadingViewModel ViewModel;
+        private LoadingView View;
+        public int Priority => EventPriority.Normal;
+        public EventChannel Channel => EventChannel.UI;
 
-        public override void Bind(ViewModelBase viewModel)
+        public override void Bind(IUIView view,ViewModelBase viewModel)
         {
             ViewModel = (LoadingViewModel)viewModel;
+            View = (LoadingView)view;
 
             GameApplication.Instance.Services.Resolve<IEventBus>().Subscribe(this);
+
+            AddDisposable(View.ProgressBar.To(ViewModel.Progress));
+            AddDisposable(View.ProgressText.To(ViewModel.ProgressText));
         }
 
         public void Handle(LoadingProgressEvent evt)

@@ -14,7 +14,7 @@ namespace Game.Application.Core
     /// - Clear ownership of lifetimes
     /// - No service locator anti-pattern (exists for bootstrapping only)
     /// </summary>
-    public class ServiceContainer : IServiceContainer
+    public class ServiceContainer : IServiceContainer , IDisposable
     {
         private class ServiceDescriptor
         {
@@ -202,6 +202,33 @@ namespace Game.Application.Core
             {
                 _resolving.Remove(type);
             }
+        }
+
+        public void Dispose()
+        {
+            foreach (var descriptor in _services.Values)
+            {
+                // Chỉ Dispose những instance là Singleton và thực thi IDisposable
+                if (descriptor.IsSingleton && descriptor.Instance is IDisposable disposable)
+                {
+                    try
+                    {
+                        disposable.Dispose();
+                    }
+                    catch (Exception ex)
+                    {
+                        // Đảm bảo một Service lỗi không làm dừng quá trình dọn dẹp các Service khác
+                        UnityEngine.Debug.LogError($"[ServiceContainer] Error disposing {descriptor.InterfaceType.Name}: {ex.Message}");
+                    }
+                }
+            }
+
+            // Xóa sạch Dictionary và giải phóng bộ nhớ
+            _services.Clear();
+            _resolving.Clear();
+            
+            UnityEngine.Debug.Log("[ServiceContainer] All services have been disposed and cleared.");
+        
         }
     }
 }

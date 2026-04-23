@@ -154,7 +154,7 @@ namespace Game.Application.Modules.UIModules
                     AssetKey = "MainMenuScreen",
                     ViewType = typeof(MainMenuScreen),
                     ViewModelType = typeof(MainMenuScreenViewModel),
-                    PresenterType = null,
+                    PresenterType = typeof(MainMenuScreenPresenter),
                     Layer = EUILayer.Screen,
                     Lifetime = UILifetime.Screen,
                     ReusePolicy = UIReusePolicy.Cache

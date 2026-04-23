@@ -34,6 +34,12 @@ MonoBehaviour:
     - mainmenu
     - ui
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 9d25df72d7ed9fe46b73e7eae9682948
+    m_Address: PlayerConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - staticglobal
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 3e673466b3ca3ef449facbb044418450, type: 2}
   m_SchemaSet:

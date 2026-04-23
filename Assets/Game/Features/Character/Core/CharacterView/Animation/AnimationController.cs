@@ -4,11 +4,22 @@ using UnityEngine;
 
 public enum AnimationEventType
 {
-    AttackStart = 0, // enable hitbox
-    AttackHit = 1,   // apply damage
-    AttackEnd = 2,   // disable hitbox
+    /// <summary>
+    /// enable hitbox
+    /// </summary>
+    AttackStart = 0, 
+
+    /// <summary>
+    /// apply damage
+    /// </summary>
+    AttackHit = 1,
+     
+    /// <summary>
+    /// disable hitbox  
+    /// </summary>
+    AttackEnd = 2,   
 }
-public class AnimationController2D : MonoBehaviour , ICharacterAnimator
+public class AnimationController : MonoBehaviour , ICharacterAnimator
 {
     
     private Animator animator;

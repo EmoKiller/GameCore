@@ -6,13 +6,6 @@ using UnityEngine;
 /// </summary>
 public interface ICharacterMovement
 {
-    // ===== CONFIG =====
-    // /// <summary>Lấy tốc độ di chuyển tối đa</summary>
-    // float MaxSpeed { get; }
-
-
-    // ===== RUNTIME (READ ONLY) =====
-
     /// <summary>Vận tốc hiện tại (physics)</summary>
     Vector3 ActualVelocity  { get; }
 

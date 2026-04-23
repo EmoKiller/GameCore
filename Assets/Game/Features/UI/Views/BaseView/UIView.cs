@@ -8,13 +8,8 @@ using UnityEngine;
 
 namespace Game.Presentation.UI
 {
-    public abstract class UIView<TViewModel> : MonoBehaviour , IUIView
-        where TViewModel : ViewModelBase
+    public abstract class UIView: MonoBehaviour , IUIView
     {
-        protected TViewModel ViewModel { get; private set; }
-
-        
-        #region LIFECYCLE
         public UniTask ShowAsync(CancellationToken ct)
         {
             ct.ThrowIfCancellationRequested();
@@ -28,27 +23,5 @@ namespace Game.Presentation.UI
             return UniTask.CompletedTask;
         }
         
-
-        #endregion
-
-        #region VIEWMODEL BINDING
-
-        public void SetViewModel(ViewModelBase vm)
-        {
-            if (vm is not TViewModel typedVm)
-                throw new InvalidOperationException($"Invalid ViewModel type for {GetType().Name}");
-            ViewModel = typedVm;
-            OnBind(ViewModel);
-        }
-        protected void AddBinding(IDisposable disposable)
-        {
-            ViewModel.AddDisposable(disposable);
-        }
-
-        protected virtual void OnBind(TViewModel vm) { }
-
-        #endregion
-
-
     }
 }

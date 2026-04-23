@@ -14,6 +14,8 @@ namespace Game.Application.Core.Input
 
         public override Type[] GetDependencies()=> Type.EmptyTypes;
 
+        public IInputService _inputService;
+
         protected override async UniTask OnInitializeAsync(IServiceContainer services, CancellationToken ct)
         {
             var playerInput = GameObject.FindFirstObjectByType<PlayerInput>();
@@ -21,14 +23,16 @@ namespace Game.Application.Core.Input
             if (playerInput == null)
                 throw new Exception("PlayerInput not found in scene");
 
-            var inputDeviceDetector = new InputDeviceDetector();      
+            var inputDeviceDetector = new InputDeviceDetector(); 
+            var playerInputAdapter = new PlayerInputAdapter(playerInput);     
 
             var inputService = new InputService(
                 playerInput,
+                playerInputAdapter,
                 inputDeviceDetector
                 );
-
-            services.Register<IInputService>(inputService);
+            _inputService = inputService;
+            services.Register(_inputService);
 
             await UniTask.CompletedTask;
         }
