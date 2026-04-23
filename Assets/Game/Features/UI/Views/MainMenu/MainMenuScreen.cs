@@ -4,7 +4,7 @@ using UnityEngine.UI;
 using Game.Presentation.UI;
 using Game.Presentation.UI.Binding;
 
-public class MainMenuScreen : UIView
+public class MainMenuScreen : UIView 
 {
     [SerializeField] private Button playButton;
     public Button PlayButton => playButton;
@@ -12,5 +12,5 @@ public class MainMenuScreen : UIView
     public Button SettingsButton => settingsButton;
     [SerializeField] private Button quitButton;
     public Button QuitButton => quitButton;
-    
+
 }

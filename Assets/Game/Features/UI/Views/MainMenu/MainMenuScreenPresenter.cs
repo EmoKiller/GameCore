@@ -6,14 +6,10 @@ using Game.Application.UI.Core.Abstractions;
 using Game.Presentation.UI.Binding;
 using UnityEngine;
 
-public class MainMenuScreenPresenter : UIViewPresenter
+public class MainMenuScreenPresenter : UIViewPresenter<MainMenuScreen,MainMenuScreenViewModel>
 {
-    private MainMenuScreenViewModel ViewModel;
-    private MainMenuScreen View;
-    public override void Bind(IUIView view, IViewModel viewModel)
+    protected override void OnBind()
     {
-        ViewModel = (MainMenuScreenViewModel)viewModel;
-        View = (MainMenuScreen)view;
 
         ViewModel.SetPlayCommand(new RelayCommand(Play)); 
         ViewModel.SetOpenSettingsCommand(new RelayCommand(OpenSettings)); 

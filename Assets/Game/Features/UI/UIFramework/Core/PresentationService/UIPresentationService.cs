@@ -7,6 +7,7 @@ public interface IUIPresentationService
     UniTask<UIHandle> PresentAsync(Type viewType, CancellationToken ct);
 
     UniTask DismissAsync(UIHandle handle, CancellationToken ct);
+    UniTask DestroyAsync(UIHandle handle, CancellationToken ct);
 }
 public sealed class UIPresentationService : IUIPresentationService
 {
@@ -46,17 +47,17 @@ public sealed class UIPresentationService : IUIPresentationService
         
         var entry = _manifest.Get(viewType);
 
-        await _preload.PreloadAsync(viewType, ct);
+        await _preload.PreloadAsync(viewType,entry.PoolWarmupSize, ct);
 
         var view = await _pool.GetAsync(viewType, ct) ?? throw new InvalidOperationException($"Failed to create view: {viewType.Name}");
 
-        // 👇 TẠO LIFETIME TRƯỚC
-        var lifetime = new UILifetimeScope(entry.Lifetime);
+        //  TẠO CompositionScope 
+        var scope  = new UICompositionScope();
 
-        // 👇 PASS vào composition
-        var instance = _composer.Compose(viewType, view, lifetime);
+        //  PASS vào composition
+        var instance = _composer.Compose(viewType, view, scope );
 
-        var handle = new UIHandle(instance, lifetime);
+        var handle = new UIHandle(instance, scope );
 
         await _transition.EnterAsync(handle, ct);
 
@@ -83,10 +84,15 @@ public sealed class UIPresentationService : IUIPresentationService
         var viewType = view.GetType();
 
         var entry = _manifest.Get(viewType);
+        var type = entry.ViewType;
 
-        if (entry.ReusePolicy == UIReusePolicy.Cache && view is not IReusableView)
+        var willReuse = entry.ReusePolicy == UIReusePolicy.Cache ||
+                        entry.ReusePolicy == UIReusePolicy.Release;
+
+        if (willReuse && view is not IReusableView)
         {
-            throw new InvalidOperationException( $"{viewType.Name} must implement IReusableView for caching");
+            throw new InvalidOperationException(
+                $"{viewType.Name} must implement IReusableView");
         }
 
         // ================================
@@ -109,14 +115,14 @@ public sealed class UIPresentationService : IUIPresentationService
         // handle.Instance.ViewModel.Dispose();
         // handle.Instance.Presenter.Dispose();
 
-        handle.Lifetime.Dispose();
+        handle.CompositionScope.Dispose();
 
         _validator.ValidateBeforeDispose(handle);
 
         // ================================
         // 3. RELEASE TO POOL
         // ================================
-        _pool.Release(viewType, view);
+        _pool.Release(type, view);
 
         _profiler.Record(new UIProfilerEvent(
             UIProfilerEventType.ReleaseToPool,
@@ -124,21 +130,27 @@ public sealed class UIPresentationService : IUIPresentationService
             Time.time));
 
     }
+    public async UniTask DestroyAsync(UIHandle handle, CancellationToken ct)
+    {
+        if (handle == null)
+            return;
 
-    //"force cleanup / debug / shutdown only"
-    // public void Destroy(UIHandle handle)
-    // {
-    //     if (handle?.Instance?.View is not Component c)
-    //         return;
+        var instance = handle.Instance;
+        var view = instance.View;
+        var viewType = view.GetType();
 
-    //     handle.Lifetime.Dispose();
+        // 1. exit animation (optional)
+        await _transition.ExitAsync(handle, ct);
 
-    //     UnityEngine.Object.Destroy(c.gameObject);
+        // 2. cleanup logic
+        handle.CompositionScope.Dispose();
 
-    //     _profiler.Record(new UIProfilerEvent(
-    //         UIProfilerEventType.Destroy,
-    //         c.GetType(),
-    //         Time.time));
+        // 3. destroy thật
+        UnityEngine.Object.Destroy(((Component)view).gameObject);
 
-    // }
+        _profiler.Record(new UIProfilerEvent(
+            UIProfilerEventType.Destroy,
+            viewType,
+            Time.time));
+    }
 }

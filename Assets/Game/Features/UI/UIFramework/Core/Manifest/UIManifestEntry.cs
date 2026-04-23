@@ -17,7 +17,6 @@ namespace Game.Presentation.UI.Data
         public Type PresenterType;
 
         public EUILayer Layer;
-        public UILifetime Lifetime;
 
         
         public UIReusePolicy ReusePolicy;
@@ -28,6 +27,7 @@ namespace Game.Presentation.UI.Data
 
         // ✔ POOL CONTROL
         public int PoolWarmupSize = 1;
+        public int PoolCapacity = 2;
 
         
         

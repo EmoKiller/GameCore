@@ -63,7 +63,10 @@ namespace Game.Application.Modules.UIModules
             // =========================
             // Pool
             // =========================
-            var pool = new UIViewPool( view, profiler);  
+            var pool = new UIViewPool( view, profiler);
+
+            // SetCapacity
+            SetCapacity(manifest,pool);
 
             // =========================
             // BUILD CONFIG PreloadSystem
@@ -132,7 +135,7 @@ namespace Game.Application.Modules.UIModules
 
         private UIManifest BuildManifest()
         {
-
+            // luôn PoolWarmupSize <= PoolCapacity    // nếu PoolWarmupSize > PoolCapacity bug
             var manifest = new UIManifest(new[]
             {
                 new UIManifestEntry
@@ -143,29 +146,30 @@ namespace Game.Application.Modules.UIModules
                     ViewModelType = typeof(LoadingViewModel),
                     PresenterType = typeof(LoadingPresenter),
                     Layer = EUILayer.Overlay,
-                    Lifetime = UILifetime.Overlay,
-                    ReusePolicy = UIReusePolicy.Retain
+                    ReusePolicy = UIReusePolicy.Destroy,
 
                 },
 
                 new UIManifestEntry
                 {
-                    Id = "LoadingView",
+                    Id = "MainMenuScreen",
                     AssetKey = "MainMenuScreen",
                     ViewType = typeof(MainMenuScreen),
                     ViewModelType = typeof(MainMenuScreenViewModel),
                     PresenterType = typeof(MainMenuScreenPresenter),
                     Layer = EUILayer.Screen,
-                    Lifetime = UILifetime.Screen,
-                    ReusePolicy = UIReusePolicy.Cache
+                    ReusePolicy = UIReusePolicy.Destroy,
                 },
-
-                
             });
-
-            
-
             return manifest;
+        }
+        public void SetCapacity(UIManifest manifest, UIViewPool pool)
+        {
+            foreach (var entry in manifest.Entries)
+            {
+                pool.SetCapacity(entry.ViewType, entry.PoolCapacity);
+                Debug.Log($"POOL CAP {entry.ViewType} = {entry.PoolCapacity}");
+            }  
         }
         private UIFlowGraph BuildFlowGraph()
         {

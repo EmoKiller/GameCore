@@ -4,5 +4,7 @@ public enum UIHandleState
     Active,
     Hidden,
     Cached,
-    Released
+    Released,
+    Destroy,
+    PendingDispose
 }

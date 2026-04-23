@@ -33,25 +33,29 @@ public sealed class UIViewPool : IUIViewPool
     {
         if (_pool.TryGetValue(viewType, out var stack) && stack.Count > 0)
         {
-            var view = stack.Pop();
+            while (stack.Count > 0)
+            {
+                var view = stack.Pop();
 
-            if (view is IReusableView reusable)
-                reusable.OnBeforeReuse();
+                if (view == null || ((Component)view) == null)
+                    continue;
 
-            ((Component)view).gameObject.SetActive(true);
+                ((Component)view).gameObject.SetActive(true);
 
-            _profiler.Record(new UIProfilerEvent(
-                UIProfilerEventType.ReuseFromPool,
-                viewType,
-                Time.time)); 
+                _profiler.Record(new UIProfilerEvent(
+                    UIProfilerEventType.ReuseFromPool,
+                    viewType,
+                    Time.time));
 
-            return view;
+                return view;
+            }
         }
         return await _factory.CreateAsync(viewType, ct);
     }
 
     public void Release(Type viewType, IUIView view)
     {
+        
         if (!_pool.TryGetValue(viewType, out var stack))
         {
             stack = new Stack<IUIView>();
@@ -59,9 +63,15 @@ public sealed class UIViewPool : IUIViewPool
         }
         
         var cap = _capacity.TryGetValue(viewType, out var c) ? c : 2; 
+        if (stack.Contains(view))
+        {
+            Debug.LogError("DOUBLE RELEASE DETECTED");
+            return;
+        }
         if (stack.Count >= cap) 
         { 
             UnityEngine.Object.Destroy(((Component)view).gameObject);
+            
             _profiler.Record(new UIProfilerEvent(
                 UIProfilerEventType.Destroy,
                 viewType,

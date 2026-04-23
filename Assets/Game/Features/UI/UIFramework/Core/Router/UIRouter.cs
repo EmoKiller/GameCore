@@ -321,15 +321,7 @@ public sealed class UIRouter : IUIRouter
         handle.State = UIHandleState.Active;
     }
 
-    private async UniTask RemoveOverlayInternalAsync(
-        Type type,
-        UIHandle handle,
-        CancellationToken ct)
-    {
-        var entry = _manifest.Get(type);
-
-        await ProcessReusePolicy(handle, entry, ct);
-    }
+    
     public async UniTask RemoveOverlayAsync(
         Type viewType,
         CancellationToken ct)
@@ -339,6 +331,15 @@ public sealed class UIRouter : IUIRouter
 
             await RemoveOverlayInternalAsync(viewType, handle, ct);
             _overlays.Remove(viewType);
+    }
+    private async UniTask RemoveOverlayInternalAsync(
+        Type type,
+        UIHandle handle,
+        CancellationToken ct)
+    {
+        var entry = _manifest.Get(type);
+
+        await ProcessReusePolicy(handle, entry, ct);
     }
     // =====================================================
     // REUSE POLICY CORE
@@ -372,6 +373,12 @@ public sealed class UIRouter : IUIRouter
                 await _presentation.DismissAsync(handle, ct);
                 handle.State = UIHandleState.Released;
                 break;
+            case UIReusePolicy.Destroy:
+            {
+                await _presentation.DestroyAsync(handle, ct);
+                handle.State = UIHandleState.Destroy;
+                break;
+            }    
         }
     }
 

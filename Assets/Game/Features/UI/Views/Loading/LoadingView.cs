@@ -4,7 +4,7 @@ using Game.Presentation.UI.Binding;
 
 namespace Game.Presentation.UI.View
 {   
-    public sealed class LoadingView : UIView
+    public sealed class LoadingView : UIView 
     {
         [SerializeField] private Slider progressBar;
         public Slider ProgressBar => progressBar;

@@ -5,7 +5,7 @@ using UI.Core.ViewModel;
 using UnityEngine;
 public interface IUICompositionService
 {
-    UIInstance Compose( Type viewType, IUIView view, UILifetimeScope lifetime);
+    UIInstance Compose( Type viewType, IUIView view, UICompositionScope compositionScope);
 }
 public sealed class UICompositionService : IUICompositionService
 {
@@ -26,7 +26,7 @@ public sealed class UICompositionService : IUICompositionService
     public UIInstance Compose(
         Type viewType,
         IUIView view,
-        UILifetimeScope lifetime)
+        UICompositionScope compositionScope)
     {
         var entry = _manifest.Get(viewType);
         var vm = CreateViewModel(entry.ViewModelType);
@@ -36,7 +36,7 @@ public sealed class UICompositionService : IUICompositionService
             presenter.Bind(view,vm);
 
             if (presenter is IDisposable d)
-                lifetime.AddDisposable(d);
+                compositionScope.AddDisposable(d);
         }
 
         return new UIInstance(view, vm, presenter);

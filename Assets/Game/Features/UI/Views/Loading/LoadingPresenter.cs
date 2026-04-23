@@ -7,18 +7,15 @@ using Game.Application.UI.Core.Abstractions;
 using Game.Presentation.UI.Binding;
 namespace Game.Presentation.UI.View
 {
-    public sealed class LoadingPresenter : UIViewPresenter ,
+    public sealed class LoadingPresenter : UIViewPresenter<LoadingView,LoadingViewModel> ,
         IEventHandler<LoadingProgressEvent>
     {
-        private LoadingViewModel ViewModel;
-        private LoadingView View;
         public int Priority => EventPriority.Normal;
         public EventChannel Channel => EventChannel.UI;
+        
 
-        public override void Bind(IUIView view,IViewModel viewModel)
+        protected override void OnBind()
         {
-            ViewModel = (LoadingViewModel)viewModel;
-            View = (LoadingView)view;
 
             GameApplication.Instance.Services.Resolve<IEventBus>().Subscribe(this);
 

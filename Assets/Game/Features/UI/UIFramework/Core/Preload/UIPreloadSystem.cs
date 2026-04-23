@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 
 public interface IUIPreloadSystem
 {
-    UniTask PreloadAsync(Type viewType, CancellationToken ct);
+    UniTask PreloadAsync(Type viewType,int poolWarmupSize, CancellationToken ct);
 }
 
 public sealed class UIPreloadSystem : IUIPreloadSystem
@@ -24,7 +24,7 @@ public sealed class UIPreloadSystem : IUIPreloadSystem
         _pool = pool;
     }
 
-    public async UniTask PreloadAsync(Type viewType, CancellationToken ct)
+    public async UniTask PreloadAsync(Type viewType,int poolWarmupSize, CancellationToken ct)
     {
         if (_loaded.Contains(viewType))
             return;
@@ -41,11 +41,11 @@ public sealed class UIPreloadSystem : IUIPreloadSystem
         {
             foreach (var dep in node.Dependencies)
             {
-                await PreloadAsync(dep, ct);
+                await PreloadAsync(dep,poolWarmupSize, ct);
             }
         }
 
-        await _pool.WarmupAsync(viewType, 1, ct);
+        await _pool.WarmupAsync(viewType, poolWarmupSize, ct);
 
         _visiting.Remove(viewType);
         _loaded.Add(viewType);

@@ -4,13 +4,11 @@ using Game.Application.UI.Core.Abstractions;
 using UnityEngine;
 namespace Game.Presentation.UI.View
 { 
-    public class PlayerHUDPresenter : UIViewPresenter
+    public class PlayerHUDPresenter : UIViewPresenter<PlayerHUDView,PlayerHUDViewModel>
     {
-        public PlayerHUDViewModel ViewModel;
 
-        public override void Bind(IUIView view,IViewModel viewModel)
+        protected override void OnBind()
         {
-            ViewModel = (PlayerHUDViewModel)viewModel;
         }
     }
 }

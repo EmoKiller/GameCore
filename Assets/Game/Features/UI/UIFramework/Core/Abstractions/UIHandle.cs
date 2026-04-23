@@ -5,15 +5,14 @@ using Game.Application.UI.Core.Abstractions;
 public sealed class UIHandle 
 {
     public UIInstance Instance { get; }
-    public UILifetimeScope Lifetime { get; }
+    public UICompositionScope CompositionScope { get; }
     public UIHandleState State { get; set; }
 
-    public UIHandle(UIInstance instance, UILifetimeScope lifetime)
+    public UIHandle(UIInstance instance, UICompositionScope compositionScope)
     {
         Instance = instance;
-        Lifetime = lifetime;
+        CompositionScope = compositionScope;
         State = UIHandleState.Active;
     }
-
     
 }
