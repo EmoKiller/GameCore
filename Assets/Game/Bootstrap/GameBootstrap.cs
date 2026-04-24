@@ -81,7 +81,7 @@ namespace Game.Bootstrap
                 await _app.Initialize(ct);
 
                 //_app.Validate(); // fix sửa thêm kiểm tra có innit chưa
-                _logger.Log("=== Game Bootstrap Complete ===");
+                _logger?.Log("=== Game Bootstrap Complete ===");
                 await UniTask.Yield();
 
             }
@@ -101,8 +101,8 @@ namespace Game.Bootstrap
         private void RegisterCoreServices()
         {
             // Register ILogger FIRST - other services may depend on it
-            _logger = new UnityLogger();
-            _app.RegisterService(_logger);
+            // _logger = new UnityLogger();
+            // _app.RegisterService(_logger);
 
             // Register the TimeService as a singleton
             var timeService = new TimeService();
@@ -117,7 +117,7 @@ namespace Game.Bootstrap
             _app.RegisterService<ISceneLoader>(sceneLoader);
 
 
-            _logger.Log("Core installed");
+            _logger?.Log("Core installed");
         }
 
         // modules
@@ -143,7 +143,7 @@ namespace Game.Bootstrap
             // 100
             moduleFactory.AddModule<GameFlowModule>(_app);
 
-            _logger.Log("Modules registered successfully");
+            _logger?.Log("Modules registered successfully");
         }
 
         private void OnDestroy()

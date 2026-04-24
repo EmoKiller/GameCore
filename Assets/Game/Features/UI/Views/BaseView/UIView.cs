@@ -12,7 +12,6 @@ namespace Game.Presentation.UI
     {
         public UniTask ShowAsync(CancellationToken ct)
         {
-            ct.ThrowIfCancellationRequested();
             gameObject.SetActive(true);
             return UniTask.CompletedTask;
         }

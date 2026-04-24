@@ -465,7 +465,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &3717756120171751452
 RectTransform:
   m_ObjectHideFlags: 0
@@ -719,7 +719,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1acc3673fd800c248bbc93fbe463ff05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: ProjectFeatures::Game.Presentation.UI.LoadingView
-  root: {fileID: 8233945562814940552}
   progressBar: {fileID: 5435694811937058079}
   progressText: {fileID: 1363387730992673757}
 --- !u!114 &8153030687327890736

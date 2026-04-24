@@ -42,6 +42,7 @@ public interface IUIRouter
     UIHandle Peek();
 
     bool HasAny();
+    //bool TryGetHandle<TView>(out UIHandle handle);
 }
 
 public sealed class UIRouter : IUIRouter
@@ -502,6 +503,55 @@ public sealed class UIRouter : IUIRouter
             || _modalList.Count > 0
             || _overlays.Count > 0;
     }
+    // public bool TryGetHandle<TView>(out UIHandle handle)
+    // {
+    //     var viewType = typeof(TView);
+    //     var entry = _manifest.Get(viewType);
+
+    //     if (entry == null)
+    //     {
+    //         handle = null;
+    //         return false;
+    //     }
+
+    //     switch (entry.Layer)
+    //     {
+    //         case EUILayer.Overlay:
+    //             return _overlays.TryGetValue(viewType, out handle);
+
+    //         case EUILayer.Popup:
+    //             return TryFindFromTop<TView>(_modalList, out handle);
+
+    //         case EUILayer.Screen:
+    //             return TryFindFromTop<TView>(_screenList, out handle);
+
+    //         default:
+    //             handle = null;
+    //             return false;
+    //     }
+    // }
+    // private static bool TryFindFromTop<TView>(
+    //         LinkedList<UIHandle> list,
+    //         out UIHandle handle)
+    //     {
+    //         var node = list.Last;
+
+    //         while (node != null)
+    //         {
+    //             var current = node.Value;
+
+    //             if (current.Instance.View is TView)
+    //             {
+    //                 handle = current;
+    //                 return true;
+    //             }
+
+    //             node = node.Previous;
+    //         }
+
+    //         handle = null;
+    //         return false;
+    //     }
 }
 
     

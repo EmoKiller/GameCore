@@ -36,11 +36,6 @@ namespace Game.Application.Modules.Assets
                 _globalScope.Track(h);
             }
 
-
-            Debug.Log($"[{ModuleName}] System is fully ready.");
-
-            Debug.Log($"[{ModuleName}] Core assets loaded. Ready for other modules.");
-
         }
 
         public override void Shutdown()

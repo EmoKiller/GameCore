@@ -15,8 +15,14 @@ MonoBehaviour:
   m_GroupName: Static_Global
   m_GUID: d8e30a873735de44bb6378693b6bd523
   m_SerializeEntries:
+  - m_GUID: 27abeccda5ad7ef41a4f9303ca471815
+    m_Address: PlayerHUD
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - staticglobal
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3df667340b207044a81ed7d37492a402
-    m_Address: Player
+    m_Address: CharacterView
     m_ReadOnly: 0
     m_SerializedLabels:
     - staticglobal
@@ -31,8 +37,7 @@ MonoBehaviour:
     m_Address: MainMenuScreen
     m_ReadOnly: 0
     m_SerializedLabels:
-    - mainmenu
-    - ui
+    - staticglobal
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 9d25df72d7ed9fe46b73e7eae9682948
     m_Address: PlayerConfig

@@ -62,7 +62,7 @@ namespace Game.Application.Core
             var go = new GameObject("[GameApplication]");
             _instance = go.AddComponent<GameApplication>();
             DontDestroyOnLoad(go);
-
+            
             Debug.Log("GameApplication: Instance created and marked as DontDestroyOnLoad.");
             return _instance;
         }

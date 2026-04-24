@@ -13,10 +13,13 @@ public interface IPlayerService : IService
 public sealed class PlayerService : IPlayerService, IUpdatable
 {
     private readonly PlayerFactory _playerFactory;
+    private readonly IInputService _inputService;
+    private readonly CharacterStatsConfig _characterStatsConfig;
+
     private PlayerPresenter _playerPresenter;
     private ICharacterView _characterView;
-    private IInputService _inputService;
-    private CharacterStatsConfig _characterStatsConfig;
+    
+    
 
     public PlayerService( 
         PlayerFactory playerFactory,
@@ -75,5 +78,6 @@ public sealed class PlayerService : IPlayerService, IUpdatable
     public void OnUpdate(float deltaTime)
     {
         _playerPresenter.Update(deltaTime);
+        
     }
 }

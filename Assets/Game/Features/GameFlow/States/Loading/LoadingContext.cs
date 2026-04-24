@@ -1,9 +1,11 @@
 using System.Collections.Generic;
+using Game.Application.ReactiveProperty;
 
 public sealed class LoadingContext
 {
     public GameStateContext Game { get; }
     public LoadingProgressAggregator Progress { get; }
+    public readonly ReactiveProperty<float> TotalProgress = new(0f);
 
     public Dictionary<string, object> Items { get; } = new();
 

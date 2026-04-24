@@ -43,7 +43,7 @@ namespace Game.Application.Core.TimeService
         {
             // Đăng ký cả Update và FixedUpdate
             lifecycle.Register(this);
-            Debug.Log("[TimeService] Initialized and subscribed to lifecycle updates.");
+            //Debug.Log("[TimeService] Initialized and subscribed to lifecycle updates.");
         }
 
         public GameTimeInfo GetTimeInfo()
@@ -60,7 +60,7 @@ namespace Game.Application.Core.TimeService
         public GameTimeInfo GetFixedTimeInfo()
         {
             return new GameTimeInfo(
-                currentTime: _currentFixedTime, // Hoặc dùng Time.fixedTime nếu cần chính xác tuyệt đối cho physics
+                currentTime: _currentFixedTime, 
                 deltaTime: _lastFixedRawDeltaTime * _timeScale,
                 rawDeltaTime: _lastFixedRawDeltaTime,
                 timeScale: _timeScale,

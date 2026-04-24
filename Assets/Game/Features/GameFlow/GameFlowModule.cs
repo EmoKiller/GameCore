@@ -93,7 +93,7 @@ namespace Game.Application.Core
 
         public async void Handle(RequestStateChangeEvent evt)
         {
-            Debug.Log("GameFlowModule handle");
+            //Debug.Log("GameFlowModule handle");
             ResetStateCancellation();
             try
             {

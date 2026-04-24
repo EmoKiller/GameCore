@@ -1,5 +1,5 @@
 using System.Collections;
-
+using Cysharp.Threading.Tasks;
 using Game.Application.Core;
 using Game.Application.Events;
 using Game.Application.UI;
@@ -40,8 +40,8 @@ namespace Game.Presentation.UI.View
         public override void Dispose()
         {
             base.Dispose();
-            GameApplication.Instance.Services.Resolve<IEventBus>().Unsubscribe(this);
+            GameApplication.Instance.Services.Resolve<IEventBus>().Subscribe(this);
         }
-        
+
     }
 }

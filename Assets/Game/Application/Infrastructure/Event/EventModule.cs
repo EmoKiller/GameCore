@@ -21,15 +21,15 @@ public sealed class EventModule : BaseGameModule
     {
         var bus = new EventBus();
 
-        bus.AddMiddleware(new LoggingMiddleware());
-        bus.AddMiddleware(new ProfilingMiddleware());
-        bus.AddMiddleware(new RetryMiddleware(2));
+        //bus.AddMiddleware(new LoggingMiddleware());
+        //bus.AddMiddleware(new ProfilingMiddleware());
+        // bus.AddMiddleware(new RetryMiddleware(2));
 
-        bus.AddMiddleware(new CancellationMiddleware());
+        // bus.AddMiddleware(new CancellationMiddleware());
 
         //debug
-        var traceService = new EventTraceService();
-        bus.AddMiddleware(new EventTracingMiddleware(traceService));
+        // var traceService = new EventTraceService();
+        // bus.AddMiddleware(new EventTracingMiddleware(traceService));
 
         _eventBus = bus;
 

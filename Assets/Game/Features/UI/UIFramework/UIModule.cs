@@ -140,7 +140,6 @@ namespace Game.Application.Modules.UIModules
             {
                 new UIManifestEntry
                 {
-                    Id = "LoadingView",
                     AssetKey = "LoadingView",
                     ViewType = typeof(LoadingView),
                     ViewModelType = typeof(LoadingViewModel),
@@ -152,7 +151,6 @@ namespace Game.Application.Modules.UIModules
 
                 new UIManifestEntry
                 {
-                    Id = "MainMenuScreen",
                     AssetKey = "MainMenuScreen",
                     ViewType = typeof(MainMenuScreen),
                     ViewModelType = typeof(MainMenuScreenViewModel),
@@ -160,6 +158,17 @@ namespace Game.Application.Modules.UIModules
                     Layer = EUILayer.Screen,
                     ReusePolicy = UIReusePolicy.Destroy,
                 },
+                
+                new UIManifestEntry
+                {
+                    AssetKey = "PlayerHUD",
+                    ViewType = typeof(PlayerHUDView),
+                    ViewModelType = typeof(PlayerHUDViewModel),
+                    PresenterType = typeof(PlayerHUDPresenter),
+                    Layer = EUILayer.Screen,
+                    ReusePolicy = UIReusePolicy.Release,
+                },
+                
             });
             return manifest;
         }
@@ -168,7 +177,7 @@ namespace Game.Application.Modules.UIModules
             foreach (var entry in manifest.Entries)
             {
                 pool.SetCapacity(entry.ViewType, entry.PoolCapacity);
-                Debug.Log($"POOL CAP {entry.ViewType} = {entry.PoolCapacity}");
+                //Debug.Log($"POOL CAP {entry.ViewType} = {entry.PoolCapacity}");
             }  
         }
         private UIFlowGraph BuildFlowGraph()

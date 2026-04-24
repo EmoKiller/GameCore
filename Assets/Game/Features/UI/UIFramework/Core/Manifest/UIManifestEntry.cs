@@ -27,7 +27,7 @@ namespace Game.Presentation.UI.Data
 
         // ✔ POOL CONTROL
         public int PoolWarmupSize = 1;
-        public int PoolCapacity = 2;
+        public int PoolCapacity = 1;
 
         
         

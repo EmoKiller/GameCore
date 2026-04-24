@@ -47,7 +47,7 @@ namespace Game.Application.Core
             if (list.Contains(item)) return;
             list.Add(item);
             
-            // Sắp xếp dựa trên Priority mỗi khi có thành viên mới
+            // Sắp xếp theo Priority (Nhỏ chạy trước)
             list.Sort((a, b) =>
             {
                 int p1 = (a is IPriority prioA) ? prioA.Priority : 0;
@@ -76,101 +76,66 @@ namespace Game.Application.Core
         internal void PublishPreInitialize()
         {
             _currentState = ApplicationState.Initializing;
-            ExecuteList(_onPreInitializes, m => m.OnPreInitialize());
+            for (int i = 0; i < _onPreInitializes.Count; i++)
+                try { _onPreInitializes[i].OnPreInitialize(); } catch (Exception e) { LogError(_onPreInitializes[i], e); }
         }
 
         internal void PublishPostInitialize()
         {
             _currentState = ApplicationState.Running;
-            ExecuteList(_onPostInitializes, m => m.OnPostInitialize());
+            for (int i = 0; i < _onPostInitializes.Count; i++)
+                try { _onPostInitializes[i].OnPostInitialize(); } catch (Exception e) { LogError(_onPostInitializes[i], e); }
         }
 
         internal void PublishUpdate(float deltaTime)
         {
             if (_currentState != ApplicationState.Running) return;
-            ExecuteList(_updatables, m => m.OnUpdate(deltaTime));
+            for (int i = 0; i < _updatables.Count; i++)
+                try { _updatables[i].OnUpdate(deltaTime); } catch (Exception e) { LogError(_updatables[i], e); }
         }
 
         internal void PublishFixedUpdate(float fixedDeltaTime)
         {
             if (_currentState != ApplicationState.Running) return;
-            ExecuteList(_fixedUpdatables, m => m.OnFixedUpdatable(fixedDeltaTime));
+            for (int i = 0; i < _fixedUpdatables.Count; i++)
+                try { _fixedUpdatables[i].OnFixedUpdatable(fixedDeltaTime); } catch (Exception e) { LogError(_fixedUpdatables[i], e); }
         }
 
         internal void PublishLateUpdate(float deltaTime)
         {
             if (_currentState != ApplicationState.Running) return;
-            ExecuteList(_lateUpdatables, m => m.OnLateUpdatable(deltaTime));
+            for (int i = 0; i < _lateUpdatables.Count; i++)
+                try { _lateUpdatables[i].OnLateUpdatable(deltaTime); } catch (Exception e) { LogError(_lateUpdatables[i], e); }
         }
 
         internal void PublishPreShutdown()
         {
             _currentState = ApplicationState.ShuttingDown;
-            // Shutdown thường nên chạy ngược lại Priority (Service quan trọng tắt cuối cùng)
-            ExecuteListReversed(_onPreShutdowns, m => m.OnPreShutdown());
+            // Shutdown duyệt ngược (Reverse) để dọn dẹp các module phụ thuộc trước
+            for (int i = _onPreShutdowns.Count - 1; i >= 0; i--)
+                try { _onPreShutdowns[i].OnPreShutdown(); } catch (Exception e) { LogError(_onPreShutdowns[i], e); }
 
-            _updatables.Clear();
-            _fixedUpdatables.Clear();
-            _lateUpdatables.Clear();
+            ClearUpdateLists();
         }
 
         internal void PublishPostShutdown()
         {
             _currentState = ApplicationState.Shutdown;
-            ExecuteListReversed(_onPostShutdowns, m => m.OnPostShutdown());
+            for (int i = _onPostShutdowns.Count - 1; i >= 0; i--)
+                try { _onPostShutdowns[i].OnPostShutdown(); } catch (Exception e) { LogError(_onPostShutdowns[i], e); }
+
             ClearAllSubscribers();
         }
 
         #endregion
 
-        #region Execution Logic (Snapshot & Safety)
+        #region Helpers
 
-        /// <summary>
-        /// Duyệt xuôi (theo Priority) và dùng Snapshot để an toàn tuyệt đối.
-        /// </summary>
-        private void ExecuteList<T>(List<T> list, Action<T> action)
+        private void ClearUpdateLists()
         {
-            int count = list.Count;
-            if (count == 0) return;
-
-            // Cách 1: Tạo snapshot nhanh bằng cách sao chép list
-            // Điều này đảm bảo nếu trong lúc chạy action() có ai đó Register/Unregister, 
-            // vòng lặp hiện tại không bị ảnh hưởng.
-            T[] snapshot = list.ToArray();
-
-            for (int i = 0; i < snapshot.Length; i++)
-            {
-                var item = snapshot[i];
-                if (item == null) continue;
-
-                try
-                {
-                    action(item);
-                }
-                catch (Exception ex)
-                {
-                    Debug.LogError($"[Lifecycle] Error in {item.GetType().Name}: {ex.Message}");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Duyệt ngược cho giai đoạn Shutdown (Service quan trọng tắt sau cùng)
-        /// </summary>
-        private void ExecuteListReversed<T>(List<T> list, Action<T> action)
-        {
-            int count = list.Count;
-            if (count == 0) return;
-
-            T[] snapshot = list.ToArray();
-            for (int i = snapshot.Length - 1; i >= 0; i--)
-            {
-                var item = snapshot[i];
-                if (item == null) continue;
-
-                try { action(item); }
-                catch (Exception ex) { Debug.LogError($"[Lifecycle] Shutdown Error: {ex.Message}"); }
-            }
+            _updatables.Clear();
+            _fixedUpdatables.Clear();
+            _lateUpdatables.Clear();
         }
 
         private void ClearAllSubscribers()
@@ -179,9 +144,12 @@ namespace Game.Application.Core
             _onPostInitializes.Clear();
             _onPreShutdowns.Clear();
             _onPostShutdowns.Clear();
-            _updatables.Clear();
-            _fixedUpdatables.Clear();
-            _lateUpdatables.Clear();
+            ClearUpdateLists();
+        }
+
+        private void LogError(object item, Exception ex)
+        {
+            Debug.LogError($"[Lifecycle] Error in {item.GetType().Name}: {ex.Message}\n{ex.StackTrace}");
         }
 
         #endregion

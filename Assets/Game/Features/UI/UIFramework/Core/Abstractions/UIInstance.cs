@@ -16,4 +16,16 @@ public sealed class UIInstance
         ViewModel = viewModel;
         Presenter = presenter;
     }
+    // public bool TryGetModel<TModel>(out TModel model)
+    //     where TModel : class
+    // {
+    //     if (ViewModel is TModel casted)
+    //     {
+    //         model = casted;
+    //         return true;
+    //     }
+
+    //     model = null;
+    //     return false;
+    // }
 }

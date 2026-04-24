@@ -77,7 +77,6 @@ public class PlayerInputAdapter : ICharacterInput
     private void OnEnable()
     {
         if (moveAction == null) return;
-        Debug.Log("OnEnable");
         moveAction.performed += HandleMove;
         moveAction.canceled += HandleMove;
 

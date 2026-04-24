@@ -6,14 +6,12 @@ namespace Game.Presentation.UI.View
 { 
     public class PlayerHUDView : UIView
     {
-        [SerializeField] private Slider HPBar;
-        [SerializeField] private Slider ManaBar;
-        [SerializeField] private Slider StaminaBar;
-        // protected override void OnBind(PlayerHUDViewModel viewModel)
-        // {
-        //     AddBinding(HPBar.To(ViewModel.HP));
-        //     AddBinding(ManaBar.To(ViewModel.Mana));
-        //     AddBinding(StaminaBar.To(ViewModel.Stamina));
-        // }
+        [SerializeField] private Slider hPBar;
+        public Slider HPBar => hPBar;
+        [SerializeField] private Slider manaBar;
+        public Slider ManaBar => manaBar;
+        [SerializeField] private Slider staminaBar;
+        public Slider StaminaBar => staminaBar;
+        
     }
 }

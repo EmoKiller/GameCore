@@ -14,5 +14,10 @@ public sealed class UIHandle
         CompositionScope = compositionScope;
         State = UIHandleState.Active;
     }
+    // public bool TryGetModel<TModel>(out TModel model)
+    //     where TModel : class
+    // {
+    //     return Instance.TryGetModel(out model);
+    // }
     
 }

@@ -23,13 +23,13 @@ public class MainMenuScreenPresenter : UIViewPresenter<MainMenuScreen,MainMenuSc
 
     private void Play()
     {
-        Debug.Log("Play");
+        //Debug.Log("Play");
         GameApplication.Instance.Services.Resolve<IEventBus>().Publish(new RequestStateChangeEvent(EGameState.Gameplay),EventChannel.System);
     }
 
     private void OpenSettings()
     {
-        Debug.Log("Setting");
+        //Debug.Log("Setting");
     }
 
     private void Quit()

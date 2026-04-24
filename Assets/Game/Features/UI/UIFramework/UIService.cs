@@ -17,6 +17,7 @@ public interface IUIService : IService
     UniTask BackAsync(CancellationToken ct = default);
 
     UniTask ResetAsync(CancellationToken ct = default);
+    //bool TryGetHandle<TView>(out UIHandle handle);
 }
 
 public sealed class UIService : IUIService
@@ -64,5 +65,9 @@ public sealed class UIService : IUIService
             await _router.PopTopAsync(ct);
         }
     }
+    // public bool TryGetHandle<TView>(out UIHandle handle)
+    // {
+    //     return _router.TryGetHandle<TView>(out handle);
+    // }
 
 }

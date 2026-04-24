@@ -260,7 +260,7 @@ MonoBehaviour:
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
   m_Interactable: 0
-  m_TargetGraphic: {fileID: 0}
+  m_TargetGraphic: {fileID: 6991159570659507496}
   m_FillRect: {fileID: 1091212183949181039}
   m_HandleRect: {fileID: 0}
   m_Direction: 0
@@ -1059,6 +1059,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6862008284671913244}
+  - component: {fileID: 7235272917857380721}
   m_Layer: 0
   m_Name: PlayerHUD
   m_TagString: Untagged
@@ -1086,3 +1087,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &7235272917857380721
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7846270490872388570}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee3a339c77deb47449e019a20d05c68b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: ProjectFeatures::Game.Presentation.UI.View.PlayerHUDView
+  hPBar: {fileID: 6708469299834852188}
+  manaBar: {fileID: 2264160787019886572}
+  staminaBar: {fileID: 6631563220152419438}

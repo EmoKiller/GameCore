@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Application.Events;
+using Game.Presentation.UI.View;
 using UnityEngine;
 
 public interface ILoadingMiddleware
@@ -47,7 +48,7 @@ public sealed class LoadSceneMiddleware : IWeightedLoadingMiddleware
 {
     private readonly string _sceneName;
 
-    public LoadSceneMiddleware(string sceneName)
+    public LoadSceneMiddleware( string sceneName)
     {
         _sceneName = sceneName;
     }
@@ -63,9 +64,8 @@ public sealed class LoadSceneMiddleware : IWeightedLoadingMiddleware
         {
             ctx.Progress.Report(0, p);
 
-            ctx.Game.EventBus.Publish(
-                new LoadingProgressEvent(ctx.Progress.GetTotalProgress()),
-                EventChannel.UI);
+            //ctx.TotalProgress.Value = ctx.Progress.GetTotalProgress();
+            ctx.Game.EventBus.Publish(new LoadingProgressEvent(ctx.Progress.GetTotalProgress()),EventChannel.UI);
         });
 
         await ctx.Game.SceneLoader.LoadScene(_sceneName, progress, ct);
@@ -96,10 +96,8 @@ public sealed class LoadAssetsMiddleware : IWeightedLoadingMiddleware
             await ctx.Game.AssetProvider.LoadAllByLabelAsync(labels[i], ct);
 
             ctx.Progress.Report(1, (i + 1) / (float)labels.Count);
-
-            ctx.Game.EventBus.Publish(
-                new LoadingProgressEvent(ctx.Progress.GetTotalProgress()),
-                EventChannel.UI);
+            //ctx.TotalProgress.Value = ctx.Progress.GetTotalProgress();
+            ctx.Game.EventBus.Publish(new LoadingProgressEvent(ctx.Progress.GetTotalProgress()),EventChannel.UI);
         }
 
         await next();
