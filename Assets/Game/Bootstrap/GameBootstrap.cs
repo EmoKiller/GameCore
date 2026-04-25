@@ -106,9 +106,6 @@ namespace Game.Bootstrap
             _app.RegisterService<ITimeService>(timeService);
             _app.SetTimeService(timeService);
 
-            var lifecycle = _app.Lifecycle;
-            timeService.Initialize(lifecycle);
-
             // Register the SceneLoader
             var sceneLoader = new SceneLoader();
             _app.RegisterService<ISceneLoader>(sceneLoader);
@@ -127,11 +124,11 @@ namespace Game.Bootstrap
             moduleFactory.AddModule<EventModule>(_app);
             moduleFactory.AddModule<AssetModule>(_app);
             moduleFactory.AddModule<InputModule>(_app);
-            moduleFactory.AddModule<CemeraModule>(_app);
+            
 
             // 1
             moduleFactory.AddModule<UIModule>(_app);
-
+            moduleFactory.AddModule<CemeraModule>(_app);
             // 10
             moduleFactory.AddModule<PlayerModule>(_app);
 

@@ -17,11 +17,8 @@ namespace Game.Application.Core.TimeService
     /// - Listens to lifecycle events for updates
     /// - Stateless except for time tracking
     /// </summary>
-    public class TimeService : ITimeService, IPriority , IUpdatable, IFixedUpdatable 
+    public class TimeService : ITimeServiceController 
     {
-        public int Priority => -100;
-
-        
         private float _currentTime = 0f;
         private float _currentFixedTime = 0f;
         private float _timeScale = 1f;
@@ -35,15 +32,6 @@ namespace Game.Application.Core.TimeService
         { 
             get => _timeScale;
             set => _timeScale = Mathf.Max(0f, value);
-        }
-
-        
-
-        public void Initialize(IApplicationLifecycle lifecycle)
-        {
-            // Đăng ký cả Update và FixedUpdate
-            lifecycle.Register(this);
-            //Debug.Log("[TimeService] Initialized and subscribed to lifecycle updates.");
         }
 
         public GameTimeInfo GetTimeInfo()

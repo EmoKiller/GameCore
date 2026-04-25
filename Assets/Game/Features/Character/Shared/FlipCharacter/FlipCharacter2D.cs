@@ -1,5 +1,8 @@
 using UnityEngine;
-
+public interface IFlipCharacter 
+{
+    void HandleFacing(Vector2 dir);
+}
 public class FlipCharacter2D : IFlipCharacter
 {
     private GameObject _target;

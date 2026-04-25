@@ -62,7 +62,6 @@ public sealed class PlayerService : IPlayerService, IUpdatable
 
         // PlayerStateSystem
         var playerStateSystem = new PlayerStateSystem(_playerContext);
-        // _playerContext.StateMachine = playerStateSystem.StateMachine;
 
         _playerPresenter = new PlayerPresenter(
             _playerContext,

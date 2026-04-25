@@ -1,35 +1,29 @@
 using System;
 using UnityEngine;
 [Serializable]
-public sealed class CameraController
+public sealed class CameraPresenter
 {
-    private Transform _cameraTransform;
+    private readonly IcameraView _view; 
     private Transform _target;
-
     private readonly float _smoothSpeed;
     private Vector3 _velocity;
 
-    public CameraController(
-        Transform cameraTransform,
-        float smoothSpeed)
+    public CameraPresenter(IcameraView view, float smoothSpeed)
     {
-        _cameraTransform = cameraTransform;
+        _view = view;
         _smoothSpeed = smoothSpeed;
     }
 
-    public void SetTarget(Transform target)
-    {
-        _target = target;
-    }
+    public void SetTarget(Transform target) => _target = target;
 
     public void Update(float deltaTime)
     {
-        if (_target == null) return;
+        if (_target == null || _view.Transform == null) return;
         
         var targetPosition = _target.position + new Vector3(0,3,0);
 
         var newPosition = Vector3.SmoothDamp(
-            _cameraTransform.position,
+            _view.Transform.position,
             targetPosition,
             ref _velocity,
             _smoothSpeed,
@@ -37,10 +31,10 @@ public sealed class CameraController
             deltaTime
         );
 
-        _cameraTransform.position = new Vector3(
+        _view.Transform.position = new Vector3(
             newPosition.x,
             newPosition.y,
-            _cameraTransform.position.z // giữ z
+            _view.Transform.position.z 
         );
     }
 }

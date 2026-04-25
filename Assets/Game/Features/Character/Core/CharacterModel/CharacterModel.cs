@@ -31,7 +31,7 @@ namespace Game.Character.Core
                 throw new ArgumentNullException(nameof(stats));
 
             
-            Resources.Get(EResourceType.Health).OnEmpty += HandleDeath;
+            // Resources.Get(EResourceType.Health).OnEmpty += HandleDeath;
         }
 
         /// <summary>

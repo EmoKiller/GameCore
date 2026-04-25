@@ -40,7 +40,7 @@ namespace Game.Application.Core
         private ServiceContainer _services;
         private ModuleLoader _moduleLoader;
         private ApplicationLifecycle _lifecycle;
-        private ITimeService _timeService;
+        private ITimeServiceController _timeService;
         private CustomLogger _logger;
         private bool _initialized = false;
         private bool _shuttingDown = false;
@@ -244,7 +244,7 @@ namespace Game.Application.Core
         /// </summary>
         public ModuleLoader Modules => _moduleLoader;
 
-        public void SetTimeService(ITimeService timeService)
+        public void SetTimeService(ITimeServiceController timeService)
         {
             _timeService = timeService;
         }
@@ -281,8 +281,11 @@ namespace Game.Application.Core
         {   
             if (!_initialized || _shuttingDown)
                 return;
-            
+
+            _timeService.OnUpdate(Time.deltaTime);
+
             float dt = _timeService.GetTimeInfo().DeltaTime;
+
             _lifecycle.PublishUpdate(dt);
         }
 
@@ -290,7 +293,8 @@ namespace Game.Application.Core
         {
             if (!_initialized || _shuttingDown)
                 return;
-            
+            _timeService.OnFixedUpdatable(Time.fixedDeltaTime);
+
             float dt = _timeService.GetFixedTimeInfo().DeltaTime;
             _lifecycle.PublishFixedUpdate(dt);
         }

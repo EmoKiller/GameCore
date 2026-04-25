@@ -26,6 +26,11 @@ namespace Game.Application.Core.TimeService
         /// </summary>
         GameTimeInfo GetFixedTimeInfo();
     }
+    public interface ITimeServiceController : ITimeService
+    {
+        void OnUpdate(float deltaTime);
+        void OnFixedUpdatable(float fixedDeltaTime);
+    }
 
     /// <summary>
     /// Data structure for time information.

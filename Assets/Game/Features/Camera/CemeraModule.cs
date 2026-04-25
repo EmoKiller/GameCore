@@ -14,17 +14,18 @@ public class CemeraModule : BaseGameModule
 
     protected override async UniTask OnInitializeAsync(IServiceContainer services, CancellationToken ct)
     {
-        var camera = Camera.main;
-        var adapter = camera.GetComponent<CameraAdapter>();
+        var assetProvider = services.Resolve<IAssetProvider>();
 
-        var _controller = new CameraController(
-            camera.transform,
-            0.2f
-        );
+        var handle = await assetProvider.LoadAsync<GameObject>("MainCamera", ct);
+        
+        var cameraObj = UnityEngine.Object.Instantiate(handle.Asset);
+        var cameraView = cameraObj.GetComponent<CameraView>();
 
-        adapter.Initialize(_controller);
+        var presenter = new CameraPresenter(cameraView, 0.2f);
+        var cameraService = new CameraService(presenter, cameraView);
 
-        var cameraService = new CameraService(_controller);
+        
+        GameApplication.Instance.Lifecycle.Register(cameraService);
         services.Register<ICameraService>(cameraService);
 
         await UniTask.CompletedTask;
