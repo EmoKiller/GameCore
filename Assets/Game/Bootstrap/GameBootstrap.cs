@@ -32,9 +32,6 @@ namespace Game.Bootstrap
     /// - Just sets up the application infrastructure
     /// - Uses dependency injection for loose coupling
     /// </summary>
-    /// 
-    /// NOTE : Hiện tại ApplicationLifecycle sẽ phải sửa lại cách thức hoạt động
-    /// class ModuleLoader đang làm nhiều việc đang trở thành Update trá hình sẽ fix sau
     
 
     

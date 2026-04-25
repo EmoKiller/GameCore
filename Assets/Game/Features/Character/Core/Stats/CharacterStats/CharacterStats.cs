@@ -6,7 +6,7 @@ namespace Game.Character.Core.Stats
     /// Represents the complete stat container of a character.
     /// 
     /// This class owns all primary attributes and resources such as
-    /// Strength, Defense, Agility, Health, and Stamina.
+    /// Strength, Defense, Agility,
     /// 
     /// It acts as the main access point for all stat-related data
     /// used by gameplay systems.
@@ -25,11 +25,11 @@ namespace Game.Character.Core.Stats
         /// <summary>
         /// Maximum resource stats.
         /// </summary>
-        public StatValue MaxHealth { get; }
+        // public StatValue MaxHealth { get; }
 
-        public StatValue MaxStamina { get; }
+        // public StatValue MaxStamina { get; }
 
-        public StatValue MaxMana { get; }
+        // public StatValue MaxMana { get; }
 
         
 
@@ -50,8 +50,6 @@ namespace Game.Character.Core.Stats
             // Defense = new StatValue(config.Defense);
             // Agility = new StatValue(config.Agility);
 
-            MaxHealth = new StatValue(config.MaxHealth);
-            // MaxStamina = new StatValue(config.MaxStamina);
         }
 
         /// <summary>
@@ -61,22 +59,5 @@ namespace Game.Character.Core.Stats
         {
             
         }
-
-        /// <summary>
-        /// Returns a read-only snapshot of current stat values.
-        /// Useful for UI or network synchronization.
-        /// </summary>
-        // public CharacterStatSnapshot CreateSnapshot()
-        // {
-        //     return new CharacterStatSnapshot(
-        //         Strength.FinalValue,
-        //         Defense.FinalValue,
-        //         Agility.FinalValue,
-        //         Health.Current,
-        //         Health.Max,
-        //         Stamina.Current,
-        //         Stamina.Max
-        //     );
-        // }
     }
 }

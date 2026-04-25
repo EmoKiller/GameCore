@@ -6,16 +6,11 @@ namespace Game.Character.Core
 {
     /// <summary>
     /// CharacterModel đóng vai trò "Data Container" cho Character, chứa các thuộc tính và logic liên quan đến trạng thái của Character.
-    /// Tách biệt phần dữ liệu và logic của Character khỏi phần hiển thị (View) và phần điều khiển (Controller).
+    /// Tách biệt phần dữ liệu và logic của Character khỏi phần hiển thị (View) và phần điều khiển (Presenter).
     /// Single Responsibility Principle - chỉ chịu trách nhiệm quản lý dữ liệu và logic liên quan đến trạng thái của Character.
     /// </summary>
     public sealed class CharacterModel 
     {
-        /// <summary>
-        /// Gets the stat container of this character.
-        /// </summary>
-        public CharacterStats CharacterStats { get; }
-
         /// <summary>
         /// Gets the health resource of this character.
         /// </summary>
@@ -35,12 +30,7 @@ namespace Game.Character.Core
             if (stats == null)
                 throw new ArgumentNullException(nameof(stats));
 
-            CharacterStats = new CharacterStats(stats);
-            Resources = new ResourceContainer
-            {
-                { EResourceType.Health, new Health(CharacterStats.MaxHealth) }
-                
-            };
+            
             Resources.Get(EResourceType.Health).OnEmpty += HandleDeath;
         }
 

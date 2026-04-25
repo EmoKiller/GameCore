@@ -5,6 +5,23 @@ using UnityEngine;
 
 namespace Game.Share.StateMachine
 {
+    internal struct StateTransitions<TStateId, TContext>
+    {
+        public TransitionGroup<TStateId, TContext> Interrupt;
+        public TransitionGroup<TStateId, TContext> Main;
+        public TransitionGroup<TStateId, TContext> Fallback;
+    } 
+    public enum TransitionPhase : byte
+    {
+        Interrupt = 0, // dead, hit
+        Main = 1,      // combat, move
+        Fallback = 2   // idle
+    }
+    public struct TransitionGroup<TStateId, TContext>
+    {
+        public ITransition<TStateId, TContext>[] Items;
+        public int Count;
+    }
     public interface ITransition<TStateId, TContext>
     {
         TStateId From { get; }

@@ -54,16 +54,17 @@ public sealed class PlayerService : IPlayerService, IUpdatable
         // PlayerContext
         var _playerContext = new PlayerContext(
             _characterView.CharacterContext,
+            characterModel,
+            null,
             playerInputAdapter,
             new FlipCharacter2D(_characterView.GetGameObject())
         );
 
         // PlayerStateSystem
         var playerStateSystem = new PlayerStateSystem(_playerContext);
-        _playerContext.StateMachine = playerStateSystem.StateMachine;
+        // _playerContext.StateMachine = playerStateSystem.StateMachine;
 
         _playerPresenter = new PlayerPresenter(
-            characterModel,
             _playerContext,
             playerStateSystem
         );

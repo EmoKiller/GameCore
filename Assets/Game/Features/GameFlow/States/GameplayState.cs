@@ -8,7 +8,7 @@ public sealed class GameplayState : IAsyncState<GameStateContext>
 {
     public async UniTask EnterAsync(GameStateContext ctx, CancellationToken ct)
     {
-        Debug.Log("Enter GamePlay");
+        //Debug.Log("Enter GamePlay");
         
         ctx.CameraService.SetFollowTarget(ctx.PlayerService.GetTransform());
         await ctx.UIService.ShowAsync<PlayerHUDView>(ct);
@@ -18,7 +18,7 @@ public sealed class GameplayState : IAsyncState<GameStateContext>
 
     public async UniTask ExitAsync(GameStateContext ctx, CancellationToken ct)
     {
-        Debug.Log("Exit GamePlay");
+        //Debug.Log("Exit GamePlay");
         await ctx.UIService.HideAsync<PlayerHUDView>(ct);
         await UniTask.CompletedTask;
     }

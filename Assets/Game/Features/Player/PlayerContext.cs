@@ -1,20 +1,28 @@
 
-using Game.Share.StateMachine;
+
+using Game.Character.Core;
+using Game.Character.Core.Stats;
 
 public class PlayerContext 
 {
-    public StateMachine<ECharacterStateId, PlayerContext> StateMachine;
-    public CharacterContext Core;
-    public ICharacterInput CharacterInput {get ;}
+    public CharacterContext Core{get ;}
+    public CharacterModel Model{get ;}
+    public CharacterStats Stats{get ;}
+    public ICharacterInput Input {get ;}
     public FlipCharacter2D FlipCharacter{get ;}
 
     public PlayerContext(
         CharacterContext core,
-        ICharacterInput characterInput,
+        CharacterModel model,
+        CharacterStats stats,
+        ICharacterInput input,
         FlipCharacter2D flipCharacter)
     {
         Core = core;    
-        CharacterInput = characterInput;
+        Model = model;
+        Stats = stats;
+
+        Input = input;
         FlipCharacter = flipCharacter;
         
     }
