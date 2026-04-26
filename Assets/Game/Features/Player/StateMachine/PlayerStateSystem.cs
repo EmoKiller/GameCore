@@ -12,7 +12,6 @@ public enum ECharacterStateId
 public sealed class PlayerStateSystem
 {
     private readonly TransitionStateMachine<ECharacterStateId, PlayerContext> _stateMachine;
-    public TransitionStateMachine<ECharacterStateId, PlayerContext> StateMachine => _stateMachine;
 
     public PlayerStateSystem(PlayerContext context)
     {
@@ -23,7 +22,7 @@ public sealed class PlayerStateSystem
 
         _stateMachine.ChangeState(ECharacterStateId.Idle);
     }
-     private void RegisterStates()
+    private void RegisterStates()
     {
         _stateMachine.RegisterState(ECharacterStateId.Idle, new PlayerIdleState());
         _stateMachine.RegisterState(ECharacterStateId.Walk, new PlayerWalkState());

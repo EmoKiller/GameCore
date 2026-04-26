@@ -6,14 +6,12 @@ public class PlayerPresenter
 {
     private ICharacterView _characterView;
     private PlayerContext _playerContext;
-    private PlayerStateSystem _playerStateSystem;
+    
     public PlayerPresenter(
-        PlayerContext playerContext,
-        PlayerStateSystem playerStateSystem
+        PlayerContext playerContext
     )
     {
         _playerContext = playerContext;
-        _playerStateSystem = playerStateSystem;
 
     }
     public void Init()
@@ -26,7 +24,7 @@ public class PlayerPresenter
     }
     public void Update(float deltaTime)
     {
-        _playerStateSystem.Tick(deltaTime);
+        
     }
 
 }

@@ -17,21 +17,30 @@ public class PlayerModule : BaseGameModule
     protected override async UniTask OnInitializeAsync(IServiceContainer services, CancellationToken ct)
     {   
         var assetProvider = services.Resolve<IAssetProvider>();
-        // Create GameObject Player 
-        var playerGO = await assetProvider.LoadAsync<GameObject>("CharacterView", ct);
-        var playerInput = services.Resolve<IInputService>();
+        var inputService = services.Resolve<IInputService>();
 
-        var playerFactory = new PlayerFactory(playerGO.Asset);
+        var playerPrefab = await assetProvider.LoadAsync<GameObject>("CharacterView", ct);
 
+        var resource = new ResourceFactory();
+        // Stats
+        var statsFactory = new CharacterStatsFactory(resource);
+        var stats = statsFactory.Create(CharacterConfig());
+
+        // Facade
+        var statsFacade = new CharacterStatsFacade(stats.Read, stats.Write);
+
+        // Factory
+        var characterFactory = new CharacterRuntimeFactory(assetProvider,resource);
+
+        var playerFactory = new PlayerFactory();
+        // Service
         var playerService = new PlayerService(
             playerFactory,
-            playerInput
+            inputService,
+            statsFacade
         );
- 
 
         services.Register<IPlayerService>(playerService);
-
-        await UniTask.CompletedTask;
     }
     public override void Shutdown()
     {

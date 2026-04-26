@@ -6,13 +6,13 @@ using Game.Character.Core.Stats;
 public class PlayerContext 
 {
     public ICharacterActions Actions {get ;}
-    public IReadOnlyCharacterStats Stats {get ;}
+    public ICharacterStatsFacade Stats {get ;}
     public ICharacterInput Input {get ;}
     public FlipCharacter2D FlipCharacter {get ;}
 
     public PlayerContext(
         ICharacterActions actions,
-        IReadOnlyCharacterStats stats,
+        ICharacterStatsFacade stats,
         ICharacterInput input,
         FlipCharacter2D flipCharacter)
     {
