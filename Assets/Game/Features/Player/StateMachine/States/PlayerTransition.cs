@@ -58,7 +58,7 @@ public sealed class JumpToFallTransition  : ITransition<ECharacterStateId, Playe
 
     public bool CanTransition(PlayerContext ctx)
     {
-        return ctx.Core.Movement.ActualVelocity.y <= 0f;
+        return ctx.Actions.ActualVelocity().y <= 0f;
     }
 }
 
@@ -69,7 +69,7 @@ public sealed class FallToIdleTransition  : ITransition<ECharacterStateId, Playe
 
     public bool CanTransition(PlayerContext ctx)
     {
-        return ctx.Core.Sensor.IsGrounded &&
+        return ctx.Actions.IsGrouned() &&
                Mathf.Abs(ctx.Input.MoveInput.x) <= 0.01f;
     }
 }
@@ -80,7 +80,7 @@ public sealed class FallToWalkTransition  : ITransition<ECharacterStateId, Playe
 
     public bool CanTransition(PlayerContext ctx)
     {
-        return ctx.Core.Sensor.IsGrounded &&
+        return ctx.Actions.IsGrouned() &&
                Mathf.Abs(ctx.Input.MoveInput.x) > 0.01f;
     }
 }

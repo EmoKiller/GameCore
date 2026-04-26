@@ -1,17 +1,19 @@
+using Game.Character.Core.Stats;
 using UnityEngine;
 
 public abstract class PlayerLocomotionState : CharacterState<PlayerContext>
 {
-    protected override void OnUpdate(PlayerContext Context ,float dt)
+    protected override void OnUpdate(PlayerContext context ,float dt)
     {
-        
-        Context.Core.Movement.Move(Context.Input.MoveInput);
+        // Movement
+        var speed = context.Stats.GetStat(EStatType.MoveSpeed).FinalValue;
+        context.Actions.Move(context.Input.MoveInput * speed);
 
         // Animation
-        Context.Core.Animator.SetMoveSpeed(Context.Core.Movement.TargetVelocityX);
-
+        context.Actions.SetAnimatorSpeed();
+        
         // Facing
-        Context.FlipCharacter.HandleFacing(Context.Input.MoveInput);
+        context.FlipCharacter.HandleFacing(context.Input.MoveInput);
 
     }
 

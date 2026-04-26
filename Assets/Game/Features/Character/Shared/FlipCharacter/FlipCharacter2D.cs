@@ -5,16 +5,18 @@ public interface IFlipCharacter
 }
 public class FlipCharacter2D : IFlipCharacter
 {
-    private GameObject _target;
+    private Transform _target;
     protected bool facingRight = true;
 
-    public FlipCharacter2D(GameObject target)
+    public FlipCharacter2D(Transform target)
     {
         _target = target;
     }
 
     public virtual void HandleFacing(Vector2 dir)
     {
+        if (_target == null) return;
+
         if (dir.x > 0 && !facingRight)
         {
             SetFacing(true);
@@ -29,7 +31,7 @@ public class FlipCharacter2D : IFlipCharacter
     {
         facingRight = right;
 
-        _target.transform.localScale = new Vector3(right ? 1 : -1, 1, 1);
+        _target.localScale = new Vector3(right ? 1 : -1, 1, 1);
     }
 
 }

@@ -3,6 +3,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Application.Core;
 using Game.Application.Core.Input;
+using Game.Character.Core.Stats;
 using UnityEngine;
 
 public class PlayerModule : BaseGameModule
@@ -19,14 +20,12 @@ public class PlayerModule : BaseGameModule
         // Create GameObject Player 
         var playerGO = await assetProvider.LoadAsync<GameObject>("CharacterView", ct);
         var playerInput = services.Resolve<IInputService>();
-        var handleConfig = await assetProvider.LoadAsync<CharacterStatsConfig>("PlayerConfig", ct);
 
         var playerFactory = new PlayerFactory(playerGO.Asset);
 
         var playerService = new PlayerService(
             playerFactory,
-            playerInput,
-            handleConfig.Asset
+            playerInput
         );
  
 
@@ -39,5 +38,36 @@ public class PlayerModule : BaseGameModule
         
     }
 
-    
+    private CharacterStatsConfig CharacterConfig()
+    {
+        var config = new CharacterStatsConfig(
+            stats: new[]
+            {
+                new StatConfig(EStatType.MaxHealth, 100),
+                new StatConfig(EStatType.Attack, 10),
+                new StatConfig(EStatType.Defense, 5),
+                new StatConfig(EStatType.MoveSpeed, 5),
+                new StatConfig(EStatType.JumpForce, 10),
+            },
+            resources: new[]
+            {
+                new ResourceConfig(
+                    EResourceType.Health,
+                    EStatType.MaxHealth,
+                    1f,
+                    EResourceBehaviorFlags.Regenerates,
+                    new ResourceRegenConfig(5f, 2f)
+                ),
+                new ResourceConfig(
+                    EResourceType.Mana,
+                    EStatType.MaxHealth,
+                    0.5f,
+                    EResourceBehaviorFlags.Regenerates,
+                    new ResourceRegenConfig(5f, 2f)
+                )
+            }
+
+        );
+        return config;
+    }
 }

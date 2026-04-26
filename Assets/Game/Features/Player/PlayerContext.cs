@@ -5,25 +5,20 @@ using Game.Character.Core.Stats;
 
 public class PlayerContext 
 {
-    public CharacterContext Core{get ;}
-    public CharacterModel Model{get ;}
-    public CharacterStats Stats{get ;}
+    public ICharacterActions Actions {get ;}
+    public IReadOnlyCharacterStats Stats {get ;}
     public ICharacterInput Input {get ;}
-    public FlipCharacter2D FlipCharacter{get ;}
+    public FlipCharacter2D FlipCharacter {get ;}
 
     public PlayerContext(
-        CharacterContext core,
-        CharacterModel model,
-        CharacterStats stats,
+        ICharacterActions actions,
+        IReadOnlyCharacterStats stats,
         ICharacterInput input,
         FlipCharacter2D flipCharacter)
     {
-        Core = core;    
-        Model = model;
+        Actions  = actions;    
         Stats = stats;
-
         Input = input;
         FlipCharacter = flipCharacter;
-        
     }
 }

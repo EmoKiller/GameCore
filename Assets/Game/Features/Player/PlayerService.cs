@@ -14,7 +14,6 @@ public sealed class PlayerService : IPlayerService, IUpdatable
 {
     private readonly PlayerFactory _playerFactory;
     private readonly IInputService _inputService;
-    private readonly CharacterStatsConfig _characterStatsConfig;
 
     private PlayerPresenter _playerPresenter;
     private ICharacterView _characterView;
@@ -23,13 +22,11 @@ public sealed class PlayerService : IPlayerService, IUpdatable
 
     public PlayerService( 
         PlayerFactory playerFactory,
-        IInputService inputService,
-        CharacterStatsConfig characterStatsConfig
+        IInputService inputService
     )
     {
         _playerFactory = playerFactory;
         _inputService = inputService;
-        _characterStatsConfig = characterStatsConfig;
     }
     public Transform GetTransform()
     {
@@ -49,15 +46,15 @@ public sealed class PlayerService : IPlayerService, IUpdatable
         playerInputAdapter.Initialize();
 
         // CharacterModel
-        var characterModel = new CharacterModel(_characterStatsConfig);
+        // var characterModel = new CharacterModel();
 
         // PlayerContext
         var _playerContext = new PlayerContext(
-            _characterView.CharacterContext,
-            characterModel,
+            null,
+            //_characterView.CharacterContext,
             null,
             playerInputAdapter,
-            new FlipCharacter2D(_characterView.GetGameObject())
+            new FlipCharacter2D(_characterView.GetTransform())
         );
 
         // PlayerStateSystem

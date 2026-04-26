@@ -2,19 +2,18 @@ using UnityEngine;
 
 public class PlayerJumpState : CharacterState<PlayerContext>
 {
-    protected override void OnEnter(PlayerContext Context )
+    protected override void OnEnter(PlayerContext context )
     {
-        //Debug.Log("Jump");
-        Context.Core.Movement.Jump();
-        Context.Core.Animator.SetGrounded(false);
+        context.Actions.Jump();
     }
-    protected override void OnUpdate(PlayerContext Context ,float dt)
+    protected override void OnUpdate(PlayerContext context ,float dt)
     {
-        Context.Core.Animator.SetSpeedVertical(Context.Core.Movement.ActualVelocity.y);
-        Context.Core.Animator.SetMoveSpeed(Context.Core.Movement.TargetVelocityX);
+        context.Actions.SetAnimatorSpeed();
+        context.Actions.SetSpeedVertical();
+        
     }
     protected override void OnExit(PlayerContext Context)
     {
-        Context.Core.Animator.SetSpeedVertical(0);
+        //Context.Core.Animator.SetSpeedVertical(0);
     }
 }
