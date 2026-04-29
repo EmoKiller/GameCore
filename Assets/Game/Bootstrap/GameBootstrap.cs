@@ -35,11 +35,10 @@ namespace Game.Bootstrap
     
 
     
-    public class GameBootstrap : MonoBehaviour
+    public abstract class GameBootstrap : MonoBehaviour
     {
-        private GameApplication _app;
-        public GameApplication App => _app;
-        private ICustomLogger _logger;
+        protected GameApplication App;
+        protected ICustomLogger Logger;
 
         private CancellationTokenSource _bootstrapCts;
 
@@ -57,88 +56,52 @@ namespace Game.Bootstrap
         {
             try
             {
-                // Tạo ứng dụng (đơn thể, tồn tại xuyên suốt các màn chơi)
-                _app = GameApplication.Create();
+                App = GameApplication.Create();
 
-                // =========================
-                // Install (SYNC)
-                // =========================
-
-                // CoreServices
                 RegisterCoreServices();
-
-                // Đăng ký các Modules (thông qua factory để tách rời khỏi các lớp cụ thể)
                 RegisterModules();
 
-                // =========================
-                // INITIALIZE (ASYNC)
-                // =========================
+                await App.Initialize(ct);
 
-                // Thao tác này gọi hàm Initialize() trên tất cả các Modules theo thứ tự. App Start
-                await _app.Initialize(ct);
-
-                //_app.Validate(); // fix sửa thêm kiểm tra có innit chưa
-                _logger?.Log("=== Game Bootstrap Complete ===");
+                Logger?.Log("=== Game Bootstrap Complete ===");
                 await UniTask.Yield();
-
             }
             catch (OperationCanceledException)
             {
-                // Bắt lỗi khi ứng dụng bị đóng giữa chừng (bình thường, không cần log error)
-                _logger?.Log("Bootstrap cancelled");
+                Logger?.Log("Bootstrap cancelled");
             }
             catch (Exception e)
             {
-                _logger?.LogError($"Bootstrap failed: {e.Message}");
+                Logger?.LogError($"Bootstrap failed: {e}");
                 Debug.LogException(e);
             }
         }
 
         // Service
-        private void RegisterCoreServices()
+        protected virtual void RegisterCoreServices()
         {
             // Register ILogger FIRST - other services may depend on it
-            // _logger = new UnityLogger();
-            // _app.RegisterService(_logger);
+            Logger = new UnityLogger();
+            App.RegisterService(Logger);
 
             // Register the TimeService as a singleton
             var timeService = new TimeService();
-            _app.RegisterService<ITimeService>(timeService);
-            _app.SetTimeService(timeService);
+            App.RegisterService<ITimeService>(timeService);
+            App.SetTimeService(timeService);
 
             // Register the SceneLoader
             var sceneLoader = new SceneLoader();
-            _app.RegisterService<ISceneLoader>(sceneLoader);
+            App.RegisterService<ISceneLoader>(sceneLoader);
 
+            var _assetProvider = new AddressableAssetProvider(); 
+            App.RegisterService<IAssetProvider>(_assetProvider);
 
-            _logger?.Log("Core installed");
-        }
-
-        // modules
-        private void RegisterModules()
-        {
-            // Use factory to decouple from concrete module classes
-            var moduleFactory = new ModuleFactory();
-
-            // 0
-            moduleFactory.AddModule<EventModule>(_app);
-            moduleFactory.AddModule<AssetModule>(_app);
-            moduleFactory.AddModule<InputModule>(_app);
+            var eventBus = new EventBus();
+            App.RegisterService<IEventBus>(eventBus);
             
-
-            // 1
-            moduleFactory.AddModule<UIModule>(_app);
-            moduleFactory.AddModule<CemeraModule>(_app);
-            // 10
-            moduleFactory.AddModule<PlayerModule>(_app);
-
-
-
-            // 100
-            moduleFactory.AddModule<GameFlowModule>(_app);
-
-            _logger?.Log("Modules registered successfully");
+            Logger?.Log("Core installed");
         }
+        protected abstract void RegisterModules();
 
         private void OnDestroy()
         {
@@ -152,11 +115,11 @@ namespace Game.Bootstrap
             }
             // Shutdown is handled by GameApplication on quit
             // But you can manually shutdown if needed:
-            if (_app != null)
+            if (App != null)
             {
-                _app.ShutdownApplication();
-                _app = null;
-                _logger = null;
+                App.ShutdownApplication();
+                App = null;
+                Logger = null;
             }
             
         }

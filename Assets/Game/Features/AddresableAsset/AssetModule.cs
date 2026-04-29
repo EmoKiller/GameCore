@@ -24,8 +24,7 @@ namespace Game.Application.Modules.Assets
         protected override async UniTask OnInitializeAsync(IServiceContainer services, CancellationToken ct)
         {   
             // Register Addressable Asset Provider
-            _assetProvider = new AddressableAssetProvider(); 
-            services.Register<IAssetProvider>(_assetProvider);
+            _assetProvider = services.Resolve<IAssetProvider>();
 
             await _assetProvider.InitializeAsync(ct);
 

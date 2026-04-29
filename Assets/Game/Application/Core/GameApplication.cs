@@ -41,6 +41,7 @@ namespace Game.Application.Core
         private ModuleLoader _moduleLoader;
         private ApplicationLifecycle _lifecycle;
         private ITimeServiceController _timeService;
+        private SystemManager _systemManager;
         private CustomLogger _logger;
         private bool _initialized = false;
         private bool _shuttingDown = false;
@@ -269,9 +270,10 @@ namespace Game.Application.Core
             _services = new ServiceContainer();
             _moduleLoader = new ModuleLoader(_services);
             _lifecycle = new ApplicationLifecycle();
-
+            _systemManager = new SystemManager();
             // Register lifecycle as a service
             _services.Register<IApplicationLifecycle>(_lifecycle);
+            _services.Register<ISystemManager>(_systemManager);
 
             // Logger will be registered by client in RegisterServices()  
             // and cached via the RegisterService method override
@@ -285,8 +287,7 @@ namespace Game.Application.Core
             _timeService.OnUpdate(Time.deltaTime);
 
             float dt = _timeService.GetTimeInfo().DeltaTime;
-
-            _lifecycle.PublishUpdate(dt);
+            _systemManager.Tick(dt);
         }
 
         private void FixedUpdate()
@@ -296,7 +297,7 @@ namespace Game.Application.Core
             _timeService.OnFixedUpdatable(Time.fixedDeltaTime);
 
             float dt = _timeService.GetFixedTimeInfo().DeltaTime;
-            _lifecycle.PublishFixedUpdate(dt);
+            _systemManager.FixedTick(dt);
         }
 
         private void LateUpdate()
@@ -305,7 +306,7 @@ namespace Game.Application.Core
                 return;
             
             float dt = _timeService.GetTimeInfo().DeltaTime;
-            _lifecycle.PublishLateUpdate(dt);
+            _systemManager.LateTick(dt);
         }
         private void OnDestroy()
         {
@@ -340,7 +341,7 @@ namespace Game.Application.Core
                 }
 
                 _lifecycle.PublishPostShutdown();
-
+                _systemManager.Shutdown();
                 _services.Dispose();
                 
                 _services = null;

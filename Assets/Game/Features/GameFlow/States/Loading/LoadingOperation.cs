@@ -5,7 +5,7 @@ using Cysharp.Threading.Tasks;
 using Game.Application.Loading;
 using Game.Application.Loading.Abstractions;
 
-public class MainMenuLoading : ILoadingOperation
+public class MainMenuLoading : ILoadingOperation<GameStateContext>
 {
     public EGameState TargetState => EGameState.MainMenu;
 
@@ -24,7 +24,7 @@ public class MainMenuLoading : ILoadingOperation
         await pipeline.ExecuteAsync(ctx, ct);
     }
 }
-public class GamePlayLoading : ILoadingOperation
+public class GamePlayLoading : ILoadingOperation<GameStateContext>
 {
     public EGameState TargetState => EGameState.Gameplay;
 

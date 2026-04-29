@@ -19,7 +19,7 @@ public sealed class EventModule : BaseGameModule
 
     protected override async UniTask OnInitializeAsync(IServiceContainer services, CancellationToken ct)
     {
-        var bus = new EventBus();
+        _eventBus = services.Resolve<IEventBus>();
 
         //bus.AddMiddleware(new LoggingMiddleware());
         //bus.AddMiddleware(new ProfilingMiddleware());
@@ -30,10 +30,6 @@ public sealed class EventModule : BaseGameModule
         //debug
         // var traceService = new EventTraceService();
         // bus.AddMiddleware(new EventTracingMiddleware(traceService));
-
-        _eventBus = bus;
-
-        services.Register(_eventBus);
 
         await UniTask.CompletedTask;
     }

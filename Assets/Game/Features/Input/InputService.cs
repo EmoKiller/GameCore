@@ -8,14 +8,13 @@ namespace Game.Application.Core.Input
 {
     public interface IInputService : IService
     {
-        PlayerInputAdapter GetPlayerInput();
         InputDeviceType GetCurrentDevice();
 
     }
     public sealed class InputService : IInputService , IDisposable
     {
         private readonly PlayerInput _playerInput;
-        private PlayerInputAdapter _playerInputAdapter;
+        private ICharacterInput _playerInputAdapter;
         private readonly InputDeviceDetector _inputDeviceDetector;
  
         public InputService(
@@ -33,10 +32,6 @@ namespace Game.Application.Core.Input
         private void HandleDeviceChanged(PlayerInput input)
         {
             _inputDeviceDetector.Detect(input.currentControlScheme);
-        }
-        public PlayerInputAdapter GetPlayerInput()
-        {
-            return _playerInputAdapter;
         }
         public InputDeviceType GetCurrentDevice()
         {

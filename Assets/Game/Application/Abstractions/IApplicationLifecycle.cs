@@ -16,8 +16,10 @@ namespace Game.Application.Core
         /// </summary>
         ApplicationState CurrentState { get; }
 
-        void Register(object module);
-        void Unregister(object module);
+        event Action OnPreInitialize;
+        event Action OnPostInitialize;
+        event Action OnPreShutdown;
+        event Action OnPostShutdown;
         
     }
     /// <summary>

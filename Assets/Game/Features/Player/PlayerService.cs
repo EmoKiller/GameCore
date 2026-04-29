@@ -38,7 +38,7 @@ public sealed class PlayerService : IPlayerService, IUpdatable
         //     _stats
         // );
 
-        GameApplication.Instance.Lifecycle.Register(this);
+        //GameApplication.Instance.Lifecycle.Register(this);
     }
 
     public Transform GetTransform()

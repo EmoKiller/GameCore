@@ -25,7 +25,7 @@ public class CemeraModule : BaseGameModule
         var cameraService = new CameraService(presenter, cameraView);
 
         
-        GameApplication.Instance.Lifecycle.Register(cameraService);
+        //GameApplication.Instance.Lifecycle.Register(cameraService);
         services.Register<ICameraService>(cameraService);
 
         await UniTask.CompletedTask;

@@ -1,0 +1,38 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ef5e1316b117deb48a34413befa778db, type: 3}
+  m_Name: AnimationConfig
+  m_EditorClassIdentifier: ProjectFeatures::AnimationConfig
+  States:
+  - State: 0
+    LayerIndex: 0
+    defaultStateName: Locomotion
+    variantStateNames: []
+    CrossFadeDuration: 0
+  - State: 1
+    LayerIndex: 0
+    defaultStateName: Jump
+    variantStateNames: []
+    CrossFadeDuration: 0
+  - State: 2
+    LayerIndex: 0
+    defaultStateName: Fall
+    variantStateNames: []
+    CrossFadeDuration: 0
+  - State: 3
+    LayerIndex: 0
+    defaultStateName: Attack_01
+    variantStateNames:
+    - 
+    - 
+    - 
+    CrossFadeDuration: 0
