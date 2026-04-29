@@ -4,7 +4,7 @@ public interface ICameraService : IService
 {
     void SetFollowTarget(Transform target);
 }
-public sealed class CameraService : ICameraService, ILateUpdatable
+public sealed class CameraService : ICameraService
 {
     private readonly CameraPresenter _presenter;
     private readonly IcameraView _view;

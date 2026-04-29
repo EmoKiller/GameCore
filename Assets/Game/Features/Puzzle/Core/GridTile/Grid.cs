@@ -1,9 +1,14 @@
-public interface IGrid
+
+public interface IReadOnlyGrid
 {
     int Width { get; }
     int Height { get; }
 
     Tile Get(int x, int y);
+}
+
+public interface IGrid : IReadOnlyGrid
+{
     void Set(int x, int y, Tile tile);
 
     void Swap(int x1, int y1, int x2, int y2);

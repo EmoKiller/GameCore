@@ -2,7 +2,7 @@ using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public interface ILoadingContext
+public interface ILoadingStateContext
 {
     EGameState NextGameState { get; }
     bool IsLoadingCompleted { get; }

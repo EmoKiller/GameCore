@@ -5,9 +5,9 @@ public sealed class BoardView : MonoBehaviour
     [SerializeField] private TileView _tilePrefab;
 
     private TileView[,] _tiles;
-    private IGrid _grid;
+    private IReadOnlyGrid _grid;
 
-    public void Initialize(IGrid grid)
+    public void Initialize(IReadOnlyGrid grid)
     {
         _grid = grid;
 

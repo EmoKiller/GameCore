@@ -1,5 +1,6 @@
 using Game.Application.Core.Modules;
 using Game.Application.Modules.Assets;
+using Game.Application.Modules.UIModules;
 
 namespace Game.Bootstrap
 {
@@ -11,10 +12,12 @@ namespace Game.Bootstrap
 
             factory.AddModule<AssetModule>(App);
             
+            factory.AddModule<UIModule>(App);
+
+
             factory.AddModule<PuzzleModule>(App);
 
-
-
+            factory.AddModule<PuzzleGameFlowModule>(App);
 
         }
     }

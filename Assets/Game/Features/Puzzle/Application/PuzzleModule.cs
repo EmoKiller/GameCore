@@ -1,30 +1,26 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Cysharp.Threading.Tasks;
 using Game.Application.Core;
 using UnityEngine;
 
-public class PuzzleModule : IGameModule
+public class PuzzleModule : BaseGameModule
 {
-    public string ModuleName => "PuzzleModule";
+    public override string ModuleName => "PuzzleModule";
 
-    public int InitializationOrder => 10;
+    public override int InitializationOrder => 10;
 
-    public Type[] GetDependencies()
+    public override Type[] GetDependencies() => Type.EmptyTypes;
+
+    
+
+    protected override async UniTask OnInitializeAsync(IServiceContainer services, CancellationToken ct)
     {
-        return new Type[]
-        {
-            
 
-        };
+        await UniTask.CompletedTask;
     }
-
-    public UniTask InitializeAsync(IServiceContainer services, CancellationToken ct = default)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Shutdown()
+    public override void Shutdown()
     {
         
     }

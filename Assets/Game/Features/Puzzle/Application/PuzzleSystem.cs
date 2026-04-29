@@ -4,11 +4,12 @@ using Game.Application.Events;
 public interface IPuzzleSystem 
 {
     void EnqueueSwap(SwapCommand command);
-    IGrid Grid { get; }
+    IReadOnlyGrid Grid { get; }
 }
 public sealed class PuzzleSystem : IPuzzleSystem
 {
     private readonly IGrid _grid;
+    
     private readonly ISwapValidator _swapValidator;
     private readonly IMatchResolutionSystem _resolution;
     private readonly IDeadBoardDetector _deadDetector;
@@ -17,7 +18,7 @@ public sealed class PuzzleSystem : IPuzzleSystem
 
     private readonly Queue<SwapCommand> _queue = new();
 
-    public IGrid Grid => _grid;
+    public IReadOnlyGrid Grid => _grid;
 
     public PuzzleSystem(
         IGrid grid,

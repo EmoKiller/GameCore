@@ -83,5 +83,5 @@ public sealed class MatchResolutionSystem : IMatchResolutionSystem
         }
     }
 
-    private bool IsEmpty(Tile tile) => tile.Equals(default);
+    private bool IsEmpty(Tile tile) => tile.IsEmpty;
 }
