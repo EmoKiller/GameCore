@@ -1,4 +1,6 @@
 
+using Game.Application.Core;
+
 public interface IRandomTileProvider
 {
     Tile GetRandom();

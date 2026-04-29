@@ -160,14 +160,25 @@ namespace Game.Application.Events
         public void Publish<TEvent>(TEvent evt, EventChannel channel)
             where TEvent : IEvent
         {
-            // var array = GetSyncArray(typeof(TEvent), channel);
-            // for (int i = 0; i < array.Length; i++)
-            // {
-            //     array[i].Invoke(evt);
-            // }
-            PublishAsync(evt, channel).Forget();
-        }
+            var context = new EventContext(evt, channel);
 
+            ExecuteSync(context);
+            // PublishAsync(evt, channel).Forget();
+        }
+        private void ExecuteSync(EventContext ctx)
+        {
+            if (ctx.IsCancelled)
+                return;
+
+            var type = ctx.Event.GetType();
+
+            var syncArray = GetSyncArray(type, ctx.Channel);
+
+            for (int i = 0; i < syncArray.Length; i++)
+            {
+                syncArray[i].Invoke(ctx.Event);
+            }
+        }
         #endregion
 
         #region Publish Async
@@ -312,11 +323,11 @@ namespace Game.Application.Events
         {
             return _handler.HandleAsync((TEvent)evt);
         }
-        public void Invoke(IEvent evt, EventTrace trace)
+        public async UniTask Invoke(IEvent evt, EventTrace trace)
         {
             var sw = Stopwatch.StartNew();
 
-            _handler.HandleAsync((TEvent)evt).Forget();
+            await _handler.HandleAsync((TEvent)evt);
 
             sw.Stop();
 

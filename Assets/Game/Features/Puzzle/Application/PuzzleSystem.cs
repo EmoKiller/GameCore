@@ -1,76 +1,52 @@
 using System.Collections.Generic;
+using Game.Application.Core;
 using Game.Application.Events;
 
-public interface IPuzzleSystem 
+public interface IPuzzleSystem : IService
 {
-    void EnqueueSwap(SwapCommand command);
     IReadOnlyGrid Grid { get; }
+
+    void Initialize(int width, int height);
+
+    void ExecuteSwap(in SwapCommand command);
 }
 public sealed class PuzzleSystem : IPuzzleSystem
 {
-    private readonly IGrid _grid;
-    
-    private readonly ISwapValidator _swapValidator;
-    private readonly IMatchResolutionSystem _resolution;
-    private readonly IDeadBoardDetector _deadDetector;
-    private readonly IShuffleSystem _shuffle;
-    private readonly IEventBus _events;
+    private readonly InitializeBoardUseCase _init;
+    private readonly SwapUseCase _swap;
+    private readonly ResolveMatchesUseCase _resolve;
+    private readonly EnsurePlayableUseCase _ensure;
 
-    private readonly Queue<SwapCommand> _queue = new();
+    private IGrid _grid;
 
     public IReadOnlyGrid Grid => _grid;
 
     public PuzzleSystem(
-        IGrid grid,
-        ISwapValidator swapValidator,
-        IMatchResolutionSystem resolution,
-        IDeadBoardDetector deadDetector,
-        IShuffleSystem shuffle,
-        IEventBus events)
+        InitializeBoardUseCase init,
+        SwapUseCase swap,
+        ResolveMatchesUseCase resolve,
+        EnsurePlayableUseCase ensure)
     {
-        _grid = grid;
-        _swapValidator = swapValidator;
-        _resolution = resolution;
-        _deadDetector = deadDetector;
-        _shuffle = shuffle;
-        _events = events;
+        _init = init;
+        _swap = swap;
+        _resolve = resolve;
+        _ensure = ensure;
     }
 
-    public void EnqueueSwap(SwapCommand command)
+    public void Initialize(int width, int height)
     {
-        _queue.Enqueue(command);
+        _grid = new Grid(width, height);
+
+        _init.Execute(_grid);
+        _ensure.Execute(_grid);
     }
 
-    public void Update(float deltaTime)
+    public void ExecuteSwap(in SwapCommand command)
     {
-        if (_queue.Count == 0)
+        if (!_swap.Execute(_grid, command))
             return;
 
-        var command = _queue.Dequeue();
-
-        ProcessSwap(command);
-    }
-
-    private void ProcessSwap(SwapCommand cmd)
-    {
-        if (!_swapValidator.CanSwap(_grid, cmd.X1, cmd.Y1, cmd.X2, cmd.Y2))
-            return;
-
-        _grid.Swap(cmd.X1, cmd.Y1, cmd.X2, cmd.Y2);
-
-        _events.Publish(new SwapPerformedEvent(cmd) , EventChannel.Gameplay);
-
-        var matches = _resolution.Resolve(_grid);
-
-        if (matches.Count > 0)
-        {
-            _events.Publish(new MatchesResolvedEvent(matches), EventChannel.Gameplay);
-        }
-
-        if (_deadDetector.IsDead(_grid))
-        {
-            _shuffle.Shuffle(_grid);
-            _events.Publish(new BoardShuffledEvent(), EventChannel.Gameplay);
-        }
+        _resolve.Execute(_grid);
+        _ensure.Execute(_grid);
     }
 }

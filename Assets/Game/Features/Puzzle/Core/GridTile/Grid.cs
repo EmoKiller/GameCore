@@ -10,8 +10,6 @@ public interface IReadOnlyGrid
 public interface IGrid : IReadOnlyGrid
 {
     void Set(int x, int y, Tile tile);
-
-    void Swap(int x1, int y1, int x2, int y2);
 }
 public sealed class Grid : IGrid
 {
@@ -32,12 +30,5 @@ public sealed class Grid : IGrid
     public void Set(int x, int y, Tile tile)
     {
         _tiles[x, y] = tile;
-    }
-
-    public void Swap(int x1, int y1, int x2, int y2)
-    {
-        var temp = _tiles[x1, y1];
-        _tiles[x1, y1] = _tiles[x2, y2];
-        _tiles[x2, y2] = temp;
     }
 }

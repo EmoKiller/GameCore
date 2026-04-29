@@ -9,7 +9,11 @@ public sealed class MatchResolutionSystem : IMatchResolutionSystem
     private readonly IMatchDetector _detector;
     private readonly IRandomTileProvider _tileProvider;
 
-    public MatchResolutionSystem(IMatchDetector detector, IRandomTileProvider tileProvider)
+    private const int MaxIterations = 50; // safety guard
+
+    public MatchResolutionSystem(
+        IMatchDetector detector,
+        IRandomTileProvider tileProvider)
     {
         _detector = detector;
         _tileProvider = tileProvider;
@@ -19,9 +23,10 @@ public sealed class MatchResolutionSystem : IMatchResolutionSystem
     {
         var allMatches = new List<Match>();
 
-        while (true)
+        for (int iteration = 0; iteration < MaxIterations; iteration++)
         {
             var matches = _detector.FindMatches(grid);
+
             if (matches.Count == 0)
                 break;
 
@@ -35,39 +40,52 @@ public sealed class MatchResolutionSystem : IMatchResolutionSystem
         return allMatches;
     }
 
+    // ------------------------------------------------
+    // STEP 1: CLEAR
+    // ------------------------------------------------
+
     private void Clear(IGrid grid, IReadOnlyList<Match> matches)
     {
         foreach (var match in matches)
         {
             foreach (var (x, y) in match.Positions)
             {
-                grid.Set(x, y, default); // empty tile
+                grid.Set(x, y, Tile.Empty); // ✅ FIX CRITICAL
             }
         }
     }
+
+    // ------------------------------------------------
+    // STEP 2: GRAVITY
+    // ------------------------------------------------
 
     private void ApplyGravity(IGrid grid)
     {
         for (int x = 0; x < grid.Width; x++)
         {
-            int emptyY = 0;
+            int writeY = 0;
 
             for (int y = 0; y < grid.Height; y++)
             {
                 var tile = grid.Get(x, y);
 
-                if (!IsEmpty(tile))
+                if (tile.IsEmpty)
+                    continue;
+
+                if (y != writeY)
                 {
-                    if (y != emptyY)
-                    {
-                        grid.Set(x, emptyY, tile);
-                        grid.Set(x, y, default);
-                    }
-                    emptyY++;
+                    grid.Set(x, writeY, tile);
+                    grid.Set(x, y, Tile.Empty);
                 }
+
+                writeY++;
             }
         }
     }
+
+    // ------------------------------------------------
+    // STEP 3: REFILL
+    // ------------------------------------------------
 
     private void Refill(IGrid grid)
     {
@@ -75,13 +93,11 @@ public sealed class MatchResolutionSystem : IMatchResolutionSystem
         {
             for (int y = 0; y < grid.Height; y++)
             {
-                if (IsEmpty(grid.Get(x, y)))
+                if (grid.Get(x, y).IsEmpty)
                 {
                     grid.Set(x, y, _tileProvider.GetRandom());
                 }
             }
         }
     }
-
-    private bool IsEmpty(Tile tile) => tile.IsEmpty;
 }

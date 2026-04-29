@@ -3,41 +3,35 @@ using System.Collections.Generic;
 
 public interface IMoveFinder
 {
-    IReadOnlyList<SwapMove> FindAllMoves(IGrid grid);
+    bool HasAnyMove(IReadOnlyGrid grid);
 }
 public sealed class MoveFinder : IMoveFinder
 {
-    private readonly ISwapValidator _validator;
+    private readonly ISwapSimulator _simulator;
 
-    public MoveFinder(ISwapValidator validator)
+    public MoveFinder(ISwapSimulator simulator)
     {
-        _validator = validator;
+        _simulator = simulator;
     }
 
-    public IReadOnlyList<SwapMove> FindAllMoves(IGrid grid)
+    public bool HasAnyMove(IReadOnlyGrid grid)
     {
-        var moves = new List<SwapMove>();
-
         for (int x = 0; x < grid.Width; x++)
         {
             for (int y = 0; y < grid.Height; y++)
             {
                 // check right
                 if (x + 1 < grid.Width &&
-                    _validator.CanSwap(grid, x, y, x + 1, y))
-                {
-                    moves.Add(new SwapMove(x, y, x + 1, y));
-                }
+                    _simulator.WouldCreateMatch(grid, x, y, x + 1, y))
+                    return true;
 
                 // check up
                 if (y + 1 < grid.Height &&
-                    _validator.CanSwap(grid, x, y, x, y + 1))
-                {
-                    moves.Add(new SwapMove(x, y, x, y + 1));
-                }
+                    _simulator.WouldCreateMatch(grid, x, y, x, y + 1))
+                    return true;
             }
         }
 
-        return moves;
+        return false;
     }
 }

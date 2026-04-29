@@ -29,7 +29,7 @@ public sealed class InputSystem
         {
             var from = _selected.Value;
 
-            _puzzle.EnqueueSwap(new SwapCommand(from.x, from.y, x, y));
+            //_puzzle.EnqueueSwap(new SwapCommand(from.x, from.y, x, y));
 
             _selected = null;
         }
