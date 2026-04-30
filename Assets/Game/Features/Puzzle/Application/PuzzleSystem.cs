@@ -16,7 +16,7 @@ public sealed class PuzzleSystem : IPuzzleSystem
     private readonly SwapUseCase _swap;
     private readonly ResolveMatchesUseCase _resolve;
     private readonly EnsurePlayableUseCase _ensure;
-
+    
     private IGrid _grid;
 
     public IReadOnlyGrid Grid => _grid;

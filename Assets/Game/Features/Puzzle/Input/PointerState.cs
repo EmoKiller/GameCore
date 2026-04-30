@@ -1,17 +1,23 @@
 using UnityEngine;
 
+
 public readonly struct PointerState
 {
-    public readonly bool Down;
-    public readonly bool Held;
-    public readonly bool Up;
-    public readonly Vector2 Position;
+    public readonly bool Pressed;
+    public readonly bool Holding;
+    public readonly bool Released;
 
-    public PointerState(bool down, bool held, bool up, Vector2 position)
+    public readonly Vector2 ScreenPosition;
+
+    public PointerState(
+        bool pressed,
+        bool holding,
+        bool released,
+        Vector2 screenPosition)
     {
-        Down = down;
-        Held = held;
-        Up = up;
-        Position = position;
+        Pressed = pressed;
+        Holding = holding;
+        Released = released;
+        ScreenPosition = screenPosition;
     }
 }

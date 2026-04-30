@@ -16,11 +16,8 @@ namespace Game.Application.Core
         /// </summary>
         ApplicationState CurrentState { get; }
 
-        event Action OnPreInitialize;
-        event Action OnPostInitialize;
-        event Action OnPreShutdown;
-        event Action OnPostShutdown;
-        
+        void Register(object subscriber);
+        void Unregister(object subscriber);
     }
     /// <summary>
     /// Current application state in its lifecycle.

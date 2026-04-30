@@ -11,14 +11,14 @@ namespace Game.Bootstrap
             var factory = new ModuleFactory();
 
             factory.AddModule<AssetModule>(App);
-            
             factory.AddModule<UIModule>(App);
 
 
             factory.AddModule<PuzzleModule>(App);
+            
+            factory.AddModule<PuzzleInputModule>(App);
 
             factory.AddModule<PuzzleGameFlowModule>(App);
-
         }
     }
 }

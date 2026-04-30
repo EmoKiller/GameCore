@@ -104,7 +104,7 @@ public class PuzzleModule : BaseGameModule
             eventBus
         );
 
-
+        var interactionLock = new PuzzleInteractionLock();    
         services.Register<IPuzzleSystem>(c =>
             new PuzzleSystem(
                 initializeBoardUseCase,

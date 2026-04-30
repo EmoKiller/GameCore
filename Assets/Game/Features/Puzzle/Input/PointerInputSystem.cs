@@ -1,7 +1,6 @@
 public interface IPointerInputSystem
 {
     PointerState Current { get; }
-    void Update();
 }
 public sealed class PointerInputSystem : IPointerInputSystem
 {
@@ -14,7 +13,7 @@ public sealed class PointerInputSystem : IPointerInputSystem
         _input = input;
     }
 
-    public void Update()
+    public void Tick()
     {
         Current = _input.GetPointer();
     }
