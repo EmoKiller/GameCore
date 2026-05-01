@@ -15,8 +15,9 @@ namespace Game.Bootstrap
 
 
             factory.AddModule<PuzzleModule>(App);
-            
+            factory.AddModule<PuzzleGameplayModule>(App);
             factory.AddModule<PuzzleInputModule>(App);
+            
 
             factory.AddModule<PuzzleGameFlowModule>(App);
         }

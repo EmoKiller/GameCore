@@ -98,6 +98,9 @@ namespace Game.Bootstrap
 
             var eventBus = new EventBus();
             App.RegisterService<IEventBus>(eventBus);
+
+            var random = new UnityRandomProvider();
+            App.RegisterService<IRandomProvider>(random);
             
             Logger?.Log("Core installed");
         }

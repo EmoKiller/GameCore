@@ -39,8 +39,20 @@ MonoBehaviour:
     m_SerializedLabels:
     - staticglobal
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: fd82ec9d630a04741b99c9d410ec97da
-    m_Address: BoardView
+  - m_GUID: 7c99153485ac46b41a72fcd9687b5828
+    m_Address: PuzzleBoardView
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - staticglobal
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aa27c660011d25443b68dafb7e4e8bde
+    m_Address: TileVisualDatabase
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - staticglobal
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: c37f2713bacf8cb48897b5f0c6a2eb9d
+    m_Address: TileView
     m_ReadOnly: 0
     m_SerializedLabels:
     - staticglobal

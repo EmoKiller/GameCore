@@ -25,8 +25,8 @@ public class PuzzleGameFlowModule : BaseGameFlowModule<PuzzleGameStateContext>
             services.Resolve<ISceneLoader>(),
             services.Resolve<IUIService>(),
             services.Resolve<IEventBus>(),
-            services.Resolve<IAssetProvider>(),
-            services.Resolve<IPuzzleSystem>()
+            services.Resolve<IAssetProvider>()
+            //services.Resolve<IPuzzleSystem>()
         );
     }
 
