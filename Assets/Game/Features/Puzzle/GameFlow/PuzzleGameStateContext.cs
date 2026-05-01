@@ -14,21 +14,21 @@ public class PuzzleGameStateContext : IGameFlowContext , ILoadingStateContext
     public ISceneLoader SceneLoader { get; }
     public IUIService UIService { get; }
     public IAssetProvider AssetProvider { get; }
-    // public IPuzzleSystem PuzzleSystem { get; }
+    public IPuzzleGameplayService PuzzleGameplayService { get; }
     
     public PuzzleGameStateContext(
         ISceneLoader sceneLoader,
         IUIService uiService,
         IEventBus eventBus,
-        IAssetProvider assetProvider
-        //IPuzzleSystem puzzleSystem
+        IAssetProvider assetProvider,
+        IPuzzleGameplayService puzzleGameplayService
     )
     {
         SceneLoader = sceneLoader;
         UIService = uiService;
         EventBus = eventBus;
         AssetProvider = assetProvider;
-        //PuzzleSystem = puzzleSystem;
+        PuzzleGameplayService = puzzleGameplayService;
     }
 
     public void SetNextState(EGameState state)

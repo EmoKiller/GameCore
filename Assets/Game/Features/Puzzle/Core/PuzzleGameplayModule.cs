@@ -28,19 +28,8 @@ public class PuzzleGameplayModule : BaseGameModule
         var puzzleService = services.Resolve<IPuzzleService>();
 
         var assetProvider = services.Resolve<IAssetProvider>();
-        var handlePuzzleBoardView = await assetProvider.LoadAsync<GameObject>("PuzzleBoardView", ct);
-        var handleTileView = await assetProvider.LoadAsync<GameObject>("TileView", ct);
-        var handleTileVisualDatabase = await assetProvider.LoadAsync<GameObject>("TileVisualDatabase", ct);
 
-        var tileView = handleTileView.Asset.GetComponent<TileView>();
-        var tileVisualDatabase = handleTileVisualDatabase.Asset.GetComponent<TileVisualDatabase>();
-        var puzzleBoardView = handlePuzzleBoardView.Asset.GetComponent<PuzzleBoardView>();
-
-        puzzleBoardView.Initialize(tileView, tileVisualDatabase);
-
-
-        var puzzleBoardViewFactory = new PuzzleBoardViewFactory(puzzleBoardView);
-
+        var puzzleBoardViewFactory = new PuzzleBoardViewFactory(assetProvider);
 
         var puzzleGameplayService = new PuzzleGameplayService(
             puzzleService,

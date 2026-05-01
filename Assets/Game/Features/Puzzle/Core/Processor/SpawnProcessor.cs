@@ -9,8 +9,7 @@ public sealed class SpawnProcessor
         ETileType.Sword,
         ETileType.Heart,
         ETileType.Shield,
-        ETileType.Coin,
-        ETileType.None
+        //ETileType.Coin,
     };
 
     public SpawnProcessor(IRandomProvider random)

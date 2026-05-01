@@ -4,44 +4,44 @@ public sealed class PuzzleCascadeTest : MonoBehaviour
 {
     private void Awake()
     {
-        var random = new UnityRandomProvider();
+        // var random = new UnityRandomProvider();
 
-        var board = new PuzzleBoard(8, 8);
+        // var board = new PuzzleBoard(8, 8);
 
-        var generator =
-            new BoardGenerator(random);
+        // var generator =
+        //     new BoardGenerator(random);
 
-        generator.Fill(board);
+        // generator.Fill(board);
 
-        ForceTestBoard(board);
+        // ForceTestBoard(board);
 
-        Debug.Log("Before Cascade");
-        BoardDebugPrinter.Print(board);
+        // Debug.Log("Before Cascade");
+        // BoardDebugPrinter.Print(board);
 
-        var resolver = new MatchResolver();
+        // var resolver = new MatchResolver();
 
-        var remover =
-            new RemoveMatchedTilesProcessor();
+        // var remover =
+        //     new RemoveMatchedTilesProcessor();
 
-        var gravity =
-            new GravityProcessor();
+        // var gravity =
+        //     new GravityProcessor();
 
-        var spawner =
-            new SpawnProcessor(random);
+        // var spawner =
+        //     new SpawnProcessor(random);
 
-        var cascade =
-            new CascadeProcessor(
-                resolver,
-                remover,
-                gravity,
-                spawner);
+        // var cascade =
+        //     new CascadeProcessor(
+        //         resolver,
+        //         remover,
+        //         gravity,
+        //         spawner);
 
-        var result = cascade.Process(board);
+        // var result = cascade.Process(board);
 
-        BoardDebugPrinter.Print(result);
+        // BoardDebugPrinter.Print(result);
 
-        Debug.Log("After Cascade");
-        BoardDebugPrinter.Print(board);
+        // Debug.Log("After Cascade");
+        // BoardDebugPrinter.Print(board);
     }
 
     private void ForceTestBoard(PuzzleBoard board)

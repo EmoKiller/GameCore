@@ -10,8 +10,9 @@ public interface IPuzzleService : IService
     void GenerateBoard();
 
     event Action BoardChanged;
-
     event Action<CascadeResult> CascadeResolved;
+    
+    bool IsInside(TilePosition position);
 }
 public sealed class PuzzleService : IPuzzleService
 {
@@ -87,23 +88,29 @@ public sealed class PuzzleService : IPuzzleService
                 new List<BoardChangeSet>());
         }
 
-        var cascadeResult =
-            _cascadeProcessor.Process(_board);
+        var cascadeResult = _cascadeProcessor.Process(_board);
 
         CascadeResolved?.Invoke(cascadeResult);
 
         
-        var allChangeSets = new List<BoardChangeSet>();
+        var allChangeSets = new List<BoardChangeSet>
+        {
+            swapChangeSet
+        };
 
         foreach (var step in cascadeResult.Steps)
         {
             allChangeSets.Add(step.ChangeSet);
         }
-
+        
         _state = EPuzzleState.Idle;
 
         return new SwapResult(
             true,
             allChangeSets);
+    }
+    public bool IsInside(TilePosition position)
+    {
+        return _board.IsInside(position);
     }
 }

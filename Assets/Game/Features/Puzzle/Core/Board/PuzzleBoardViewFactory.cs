@@ -1,16 +1,27 @@
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 public class PuzzleBoardViewFactory 
 {
-    private PuzzleBoardView _prefab;
-    public PuzzleBoardViewFactory(PuzzleBoardView prefab)
+    private IAssetProvider _assetProvider;
+    public PuzzleBoardViewFactory(IAssetProvider assetProvider)
     {
-        _prefab = prefab;
+        _assetProvider = assetProvider;
     }
-    public  PuzzleBoardView Create()
+    public async UniTask<PuzzleBoardView> Create(CancellationToken ct)
     {
-        var handle = GameObject.Instantiate(_prefab);
+        var handlePuzzleBoardView = await _assetProvider.LoadAsync<GameObject>("PuzzleBoardView", ct);
+        var handleTileView = await _assetProvider.LoadAsync<GameObject>("TileView", ct);
+        var handleTileVisualDatabase = await _assetProvider.LoadAsync<ScriptableObject>("TileVisualDatabase", ct);
 
-        return handle;
+        var tileView = handleTileView.Asset.GetComponent<TileView>();
+        var tileVisualDatabase = handleTileVisualDatabase.Asset as TileVisualDatabase;
+        var puzzleBoardView = handlePuzzleBoardView.Asset.GetComponent<PuzzleBoardView>();
+        
+        var instance = Object.Instantiate(puzzleBoardView);
+        instance.Initialize(tileView, tileVisualDatabase);
+
+        return instance; 
     }
 }

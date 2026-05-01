@@ -2,6 +2,7 @@ using UnityEngine;
 
 public sealed class PuzzleBoardView : MonoBehaviour
 {
+    private TileViewPool _pool;
     private TileView _tilePrefab;
     private TileVisualDatabase _visualDatabase;
 
@@ -20,10 +21,10 @@ public sealed class PuzzleBoardView : MonoBehaviour
         _visualDatabase = visualDatabase;
     }
 
-    private void OnEnable()
-    {
-        _service.BoardChanged += RefreshBoard;
-    }
+    // private void OnEnable()
+    // {
+    //     _service.BoardChanged += RefreshBoard;
+    // }
 
     private void OnDisable()
     {
@@ -34,8 +35,11 @@ public sealed class PuzzleBoardView : MonoBehaviour
         float cellSize)
     {
         _service = service;
+        _service.BoardChanged += RefreshBoard;
 
         _layout = new BoardLayout(cellSize);
+
+        _pool = new TileViewPool( _tilePrefab, transform);
 
         CreateViews();
 
@@ -58,8 +62,8 @@ public sealed class PuzzleBoardView : MonoBehaviour
     }
     private void CreateTileView(int x, int y)
     {
-        var view =
-            Instantiate(_tilePrefab, transform);
+        var view = _pool.Get();
+            //Instantiate(_tilePrefab, transform);
 
         var position =
             new TilePosition(x, y);
@@ -69,6 +73,8 @@ public sealed class PuzzleBoardView : MonoBehaviour
         view.SetWorldPosition(
             _layout.GetWorldPosition(position));
 
+        view.gameObject.name = "(" + x + ", " + y + ")";
+        
         _tileViews[x, y] = view;
     }
     public void RefreshBoard()
@@ -117,20 +123,32 @@ public sealed class PuzzleBoardView : MonoBehaviour
         _tileViews[a.X, a.Y] = viewB;
         _tileViews[b.X, b.Y] = viewA;
 
-        viewA.SetPosition(b);
-        viewB.SetPosition(a);
+        if (viewA != null)
+        {
+            viewA.SetPosition(b);
+        }
+        if (viewB != null)
+        {
+            viewB.SetPosition(a);
+        }
+
+
     }
     public void HideView( TilePosition position)
     {
         var view = _tileViews[position.X, position.Y];
-
-        view.gameObject.SetActive(false);
-
+        if (view == null)
+        {
+            return;
+        }
+        
         _tileViews[position.X, position.Y] = null;
+        _pool.Release(view);
     }
     public TileView CreateOrReuseView( TilePosition position, ETileType tileType)
     {
-        var view = Instantiate(_tilePrefab, transform);
+        var view = _pool.Get();
+        //Instantiate(_tilePrefab, transform);
 
         view.SetPosition(position);
 

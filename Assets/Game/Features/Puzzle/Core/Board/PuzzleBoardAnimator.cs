@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -26,12 +27,15 @@ public sealed class PuzzleBoardAnimator
     private async UniTask PlaySwaps(
         BoardChangeSet changeSet)
     {
-        var swaps =
-            changeSet.Transitions
-                .OfType<SwapTransition>();
+        var swaps = changeSet.Transitions.OfType<SwapTransition>();
+        // List<UniTask> tasks = new List<UniTask>();
+        // foreach (SwapTransition swap in swaps)
+        // {
+        //     tasks.Add(PlaySwapAsync(swap));
 
-        await UniTask.WhenAll(
-            swaps.Select(PlaySwapAsync));
+        // }
+        var tasks = swaps.Select(PlaySwapAsync);
+        await UniTask.WhenAll(tasks);
     }
 
     private async UniTask PlayRemoves(
@@ -70,29 +74,34 @@ public sealed class PuzzleBoardAnimator
     private async UniTask PlaySwapAsync(
         SwapTransition transition)
     {
-        var fromView =
+        TileView fromView =
             _boardView.GetTileView(
                 transition.From);
 
-        var toView =
+        TileView toView =
             _boardView.GetTileView(
                 transition.To);
+        if (fromView == null || toView == null)
+        {
+            return;
+        }
+        Vector3 fromWorld =
+            _boardView.Layout.GetWorldPosition(
+                transition.From);        
 
-        Vector3 fromTarget =
+        Vector3 toWorld =
             _boardView.Layout.GetWorldPosition(
                 transition.To);
 
-        Vector3 toTarget =
-            _boardView.Layout.GetWorldPosition(
-                transition.From);
+        
 
         await UniTask.WhenAll(
             fromView.MoveToAsync(
-                fromTarget,
+                toWorld,
                 0.15f),
 
             toView.MoveToAsync(
-                toTarget,
+                fromWorld,
                 0.15f));
         
         _boardView.SwapViews(

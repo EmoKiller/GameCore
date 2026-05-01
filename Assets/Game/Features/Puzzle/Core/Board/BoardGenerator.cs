@@ -9,8 +9,7 @@ public sealed class BoardGenerator
         ETileType.Sword,
         ETileType.Heart,
         ETileType.Shield,
-        ETileType.Coin,
-        ETileType.None
+        //ETileType.Coin
     };
 
     public BoardGenerator(IRandomProvider random)

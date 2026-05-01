@@ -129,6 +129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 54940240}
   - component: {fileID: 54940241}
+  - component: {fileID: 54940242}
   m_Layer: 0
   m_Name: GameBootstrap
   m_TagString: Untagged
@@ -149,7 +150,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1187530943}
+  - {fileID: 1062198330}
   - {fileID: 1721306401}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -165,6 +166,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b074d8d6a5c5f54bb33fd9abae9c6b4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Project.Bootstrap::Game.Bootstrap.PuzzleGameBootstrap
+--- !u!114 &54940242
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54940239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.InputSystem::UnityEngine.InputSystem.PlayerInput
+  m_Actions: {fileID: -944628639613478452, guid: 5ec64e45bec2c59408da19795a516af2, type: 3}
+  m_NotificationBehavior: 0
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents: []
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: PlayerPointer
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 1721306400}
 --- !u!1 &389795546
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,7 +323,7 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_RenderingLayers: 1
   m_ShadowRenderingLayers: 1
---- !u!1001 &1187530942
+--- !u!1001 &1062198329
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -349,10 +380,10 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afa7ee72e3c906a4f96f3a23f8c8a568, type: 3}
---- !u!4 &1187530943 stripped
+--- !u!4 &1062198330 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2730992432968005604, guid: afa7ee72e3c906a4f96f3a23f8c8a568, type: 3}
-  m_PrefabInstance: {fileID: 1187530942}
+  m_PrefabInstance: {fileID: 1062198329}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1721306398
 GameObject:
@@ -416,7 +447,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 10
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -441,7 +472,7 @@ Transform:
   m_GameObject: {fileID: 1721306398}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: 3.5, y: 0, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

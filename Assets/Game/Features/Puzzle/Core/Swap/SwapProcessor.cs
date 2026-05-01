@@ -36,8 +36,7 @@ public sealed class SwapProcessor : ISwapProcessor
 
         if (matchResult.HasMatches)
         {
-            changeSet.Add(
-                new SwapTransition(a, b));
+            changeSet.Add(new SwapTransition(a, b));
             return true;
         }
 

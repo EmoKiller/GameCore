@@ -1,57 +1,68 @@
+using Cysharp.Threading.Tasks;
 using Game.Application.Core;
 using UnityEngine;
+using UnityEngine.InputSystem;
 public interface IPuzzleInputService : IService
 {
     
 }
 public sealed class PuzzleInputService : IPuzzleInputService , IUpdatable
-{
-    [SerializeField]
-    private Camera _camera;
+{   private readonly Camera _camera;
+    private readonly IPointerInputReader _input;
+    private readonly IPuzzleGameplayService _service;
 
-    private IPuzzleService _service;
-
-    private TileView _selectedTile;
+    private TilePosition? _selectedTile;
     private Vector2 _pointerDownPosition;
-    public PuzzleInputService(IPuzzleService service)
+    public PuzzleInputService(
+        IPuzzleGameplayService service,
+        IPointerInputReader input,
+        Camera camera)
     {
         _service = service;
+        _input = input;
+        _camera = camera;
     }
     public void OnUpdate(float deltaTime)
     {
-        Update();
+        ProcessInput();
     }
-    private void Update()
+    private void ProcessInput()
     {
-        
-        if (Input.GetMouseButtonDown(0))
+        if (_input.WasPressedThisFrame())
         {
             HandlePointerDown();
         }
 
-        if (Input.GetMouseButtonUp(0))
+        if (_input.WasReleasedThisFrame())
         {
             HandlePointerUp();
         }
     }
     private void HandlePointerDown()
     {
-        _pointerDownPosition = Input.mousePosition;
-        _selectedTile = RaycastTile();
-    }
-    private TileView RaycastTile()
-    {
-        Vector3 world =
-            _camera.ScreenToWorldPoint(
-                Input.mousePosition);
+        _pointerDownPosition = _input.GetPosition();
 
-        Vector2 position = new Vector2(
-            world.x,
-            world.y);
+        _selectedTile = RaycastTile(_pointerDownPosition);
+    }
+
+    private TilePosition? RaycastTile( Vector2 screenPosition)
+    {
+        Vector3 screenPoint =
+            new Vector3(
+                screenPosition.x,
+                screenPosition.y,
+                -_camera.transform.position.z);
+
+        Vector3 world = _camera.ScreenToWorldPoint( screenPoint);
+
+        Vector2 worldPosition =
+            new Vector2(
+                world.x,
+                world.y);
 
         RaycastHit2D hit =
             Physics2D.Raycast(
-                position,
+                worldPosition,
                 Vector2.zero);
 
         if (hit.collider == null)
@@ -59,37 +70,45 @@ public sealed class PuzzleInputService : IPuzzleInputService , IUpdatable
             return null;
         }
 
-        return hit.collider.GetComponent<TileView>();
+        TileView view = hit.collider.GetComponent<TileView>();
+
+        if (view == null)
+        {
+            return null;
+        }
+
+        return view.Position;
     }
+
     private void HandlePointerUp()
     {
-        if (_selectedTile == null)
+        if (_selectedTile.HasValue == false)
         {
             return;
         }
 
-        Vector2 dragDelta =
-            (Vector2)Input.mousePosition -
-            _pointerDownPosition;
+        Vector2 pointerUpPosition = _input.GetPosition();
+
+        Vector2 dragDelta = pointerUpPosition - _pointerDownPosition;
 
         if (dragDelta.magnitude < 20f)
         {
             _selectedTile = null;
+
             return;
         }
 
         Vector2Int direction =
             GetSwapDirection(dragDelta);
 
-        ExecuteSwap(direction);
+        ExecuteSwap(direction).Forget();
 
         _selectedTile = null;
     }
-    private Vector2Int GetSwapDirection(
-        Vector2 dragDelta)
+
+    private Vector2Int GetSwapDirection( Vector2 dragDelta)
     {
-        if (Mathf.Abs(dragDelta.x) >
-            Mathf.Abs(dragDelta.y))
+        if (Mathf.Abs(dragDelta.x) > Mathf.Abs(dragDelta.y))
         {
             return dragDelta.x > 0
                 ? Vector2Int.right
@@ -100,22 +119,29 @@ public sealed class PuzzleInputService : IPuzzleInputService , IUpdatable
             ? Vector2Int.up
             : Vector2Int.down;
     }
-    private void ExecuteSwap(
-        Vector2Int direction)
+
+    private async UniTask ExecuteSwap( Vector2Int direction)
     {
-        TilePosition from =
-            _selectedTile.Position;
-
-        TilePosition to =
-            new TilePosition(
+        if (_selectedTile.HasValue == false)
+        {
+            return;
+        }
+        TilePosition from = _selectedTile.Value;
+        
+        TilePosition to = new TilePosition(
                 from.X + direction.x,
-                from.Y + direction.y);
+                from.Y + direction.y
+        );
+        if (_service.IsInside(to) == false)
+        {
+            return;
+        }
+        if (_service.IsBusy)
+        {
+            return;
+        }
+        await _service.TrySwapAsync(from, to);
 
-        SwapResult swapResult =
-            _service.TrySwap(from, to);
-
-        Debug.Log($"Swap Result: {swapResult.Success}");
+        
     }
-
-
 }
