@@ -9,7 +9,7 @@ public sealed class SpawnProcessor
     {
         ETileType.Sword,
         ETileType.Heart,
-        ETileType.Shield,
+        //ETileType.Shield,
         //ETileType.Coin,
     };
 

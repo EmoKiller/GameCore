@@ -35,20 +35,20 @@ public sealed class CascadeProcessor
         SwapContext swapContext
     )
     {
+        _movedPositions.Clear();
         var steps = new List<CascadeStepResult>();
 
         MatchResult initialMatch = _matchResolver.Resolve(board);
 
         if (initialMatch.HasMatches)
         {
-            _movedPositions.Clear();
             ProcessStep(
                 board,
                 initialMatch,
                 initialChangeSet,
                 swapContext);
 
-            steps.Add( new CascadeStepResult( initialMatch,initialChangeSet));
+            steps.Add( new CascadeStepResult(initialMatch, initialChangeSet));
         }
 
         while (true)
@@ -61,7 +61,6 @@ public sealed class CascadeProcessor
             }
 
             var changeSet = new BoardChangeSet();
-            _movedPositions.Clear();
             ProcessStep(
                 board,
                 matchResult,
@@ -71,7 +70,7 @@ public sealed class CascadeProcessor
 
             steps.Add( new CascadeStepResult(matchResult, changeSet));
         }
-
+        _movedPositions.Clear();
         return new CascadeResult(steps);
     }
     private void ProcessStep(

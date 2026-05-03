@@ -4,6 +4,7 @@ public interface IReadOnlyBoardLayout
 {
     float TileSize{ get; }
     Vector3 GetWorldPosition(TilePosition position);
+    Vector3 GetSpawnWorldPosition(int column, IReadOnlyPuzzleBoard board);
 }
 
 public sealed class BoardLayout : IReadOnlyBoardLayout
@@ -91,17 +92,27 @@ public sealed class BoardLayout : IReadOnlyBoardLayout
             0f);
     }
 
-    public Vector3 GetSpawnWorldPosition( TilePosition position,int extraRows = 1)
+    public Vector3 GetSpawnWorldPosition(int column, IReadOnlyPuzzleBoard board)
     {
-        return new Vector3(
-            _origin.x +
-            position.X * _tileSize,
+        int highestY = 0;
 
-            _origin.y +
-            (_height - 1 + extraRows) *
-            _tileSize,
+        for (int y = board.Height - 1; y >= 0; y--)
+        {
+            TilePosition pos = new TilePosition(column, y);
 
-            0f);
+            if (board.IsInside(pos) == false)
+            {
+                continue;
+            }
+
+            highestY = y;
+
+            break;
+        }
+
+        Vector3 highest =  GetWorldPosition(new TilePosition(column, highestY));
+
+        return highest + Vector3.up * TileSize;
     }
 
     public Vector2 GetBoardSize()

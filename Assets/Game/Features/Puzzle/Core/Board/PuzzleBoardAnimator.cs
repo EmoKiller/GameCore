@@ -9,6 +9,8 @@ public sealed class PuzzleBoardAnimator
     private readonly PuzzleAnimationConfig _config;
     private readonly SpecialTileVisualDatabase _specialDatabase;
 
+    private readonly Dictionary<int, int> _spawnCountsPerColumn = new();
+
     public PuzzleBoardAnimator(
         PuzzleAnimationConfig config,
         SpecialTileVisualDatabase specialDatabase
@@ -172,52 +174,91 @@ public sealed class PuzzleBoardAnimator
 
         await UniTask.WhenAll(falls.Select(PlayFallAsync));
     }
-    private async UniTask PlayFallAsync( FallTransition transition)
+    private async UniTask PlayFallAsync(FallTransition transition)
     {
-        var view = _boardView.GetTileView(transition.From);
+        var view =
+            _boardView.GetTileView(
+                transition.From);
 
-        Vector3 target = _boardView.Layout.GetWorldPosition(transition.To);
+        Vector3 target =
+            _boardView.Layout.GetWorldPosition(
+                transition.To);
 
-        int distance = Mathf.Abs( transition.From.Y - transition.To.Y);
-        float duration = Mathf.Min( distance * _config.FallDurationPerCell, _config.MaxFallDuration);
+        float distance =
+            Vector3.Distance(
+                view.transform.position,
+                target);
+
+        float duration =
+            distance *
+            _config.FallDurationPerUnit;
 
         await view.MoveToAsync(
             target,
             duration);
 
-        _boardView.MoveView(transition.From, transition.To);
+        _boardView.MoveView(
+            transition.From,
+            transition.To);
     }
 
     private async UniTask PlaySpawns(BoardChangeSet changeSet)
     {
-        var spawns =changeSet.Transitions.OfType<SpawnTransition>();
+        var spawns = changeSet.Transitions.OfType<SpawnTransition>();
+
+        _spawnCountsPerColumn.Clear();
 
         await UniTask.WhenAll(spawns.Select(PlaySpawnAsync));
     }
 
     private async UniTask PlaySpawnAsync(SpawnTransition transition)
     {
-        var view = _boardView.CreateOrReuseView(transition.Position, transition.TileType);
+        if (_spawnCountsPerColumn.TryGetValue(
+                transition.Position.X,
+                out int spawnCount) == false)
+        {
+            spawnCount = 0;
+        }
 
-        Vector3 target = _boardView.Layout.GetWorldPosition(transition.Position);
+        _spawnCountsPerColumn[
+            transition.Position.X] =
+                spawnCount + 1;
 
-        Vector3 spawnPosition = target + Vector3.up * 2f;
+        var view =
+            _boardView.CreateOrReuseView(
+                transition.Position,
+                transition.TileType);
 
-        view.SetInstantPosition(spawnPosition);
+        Vector3 target =
+            _boardView.Layout.GetWorldPosition(
+                transition.Position);
 
-        view.transform.localScale = Vector3.zero;
-        float distance = Mathf.Abs( spawnPosition.y - target.y);
-        float duration = Mathf.Min( distance * _config.FallDurationPerCell, _config.MaxFallDuration);
-        await UniTask.WhenAll(
-            view.MoveToAsync(
-                target,
-                duration
-            ),
+        Vector3 spawnPosition =
+            _boardView.Layout.GetSpawnWorldPosition(
+                transition.Position.X,
+                _boardView.Board)
 
-            view.ScaleToAsync(
-                Vector3.one,
-                _config.SpawnScaleDuration
-            )
-        );
+            + Vector3.up *
+            (spawnCount *
+            _boardView.Layout.TileSize);
+
+        view.transform.localScale =
+            Vector3.one;
+
+        view.SetInstantPosition(
+            spawnPosition);
+
+        float distance =
+            Vector3.Distance(
+                spawnPosition,
+                target);
+
+        float duration =
+            distance *
+            _config.FallDurationPerUnit;
+
+        await view.MoveToAsync(
+            target,
+            duration);
     }
 }

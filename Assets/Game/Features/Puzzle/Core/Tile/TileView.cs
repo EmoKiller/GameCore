@@ -33,27 +33,29 @@ public sealed class TileView : MonoBehaviour
     {
         transform.position = position;
     }
-    public async UniTask MoveToAsync(
-        Vector3 target,
-        float duration)
+    public async UniTask MoveToAsync(Vector3 target, float duration)
     {
-        Vector3 start = transform.position;
+        Vector3 start =
+            transform.position;
 
-        float time = 0f;
+        float elapsed = 0f;
 
-        while (time < duration)
+        while (elapsed < duration)
         {
-            time += Time.deltaTime;
+            elapsed += Time.deltaTime;
 
-            float t = time / duration;
-            
-            t = 1f - Mathf.Pow(1f - t, 3f);
-            
+            float progress = Mathf.Clamp01(
+                    elapsed / duration);
+
+            // Ease In (gravity feel)
+            // float eased = 1f - (1f - progress) * (1f - progress);
+            float eased = progress;
+
             transform.position =
                 Vector3.Lerp(
                     start,
                     target,
-                    t);
+                    eased);
 
             await UniTask.Yield();
         }

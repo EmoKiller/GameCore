@@ -36,6 +36,7 @@ public sealed class SpecialTileProcessor
                     board,
                     spawn.SpawnPosition,
                     spawn.SpecialType);
+                    
             changeSet.Protect(spawn.SpawnPosition);
             changeSet.Add(
                 new CreateSpecialTransition(

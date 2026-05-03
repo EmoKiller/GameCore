@@ -6,20 +6,21 @@ public sealed class PuzzleBoardView : MonoBehaviour
     // private PuzzleBoardTheme _theme;
     
     
-    private IPuzzleService _service;
+    private IPuzzleService _puzzleService;
+    public IReadOnlyPuzzleBoard Board => _puzzleService.Board;
 
     private BoardCellLayer _cellLayer;
 
     private TileLayer _tileLayer;
-
     private IReadOnlyBoardLayout _layout;
     public IReadOnlyBoardLayout Layout => _layout;
+
     [SerializeField]
     private BoardBackgroundView _boardBackgroundView;
 
     private void OnDisable()
     {
-        _service.BoardChanged -= RefreshBoard;
+        _puzzleService.BoardChanged -= RefreshBoard;
     }
     public void InitializeBoard(
         IPuzzleService service,
@@ -30,8 +31,8 @@ public sealed class PuzzleBoardView : MonoBehaviour
         SpecialTileVisualDatabase specialTileVisualDatabase
         )
     {
-        _service = service;
-        _service.BoardChanged += RefreshBoard;
+        _puzzleService = service;
+        _puzzleService.BoardChanged += RefreshBoard;
 
         _layout = boardLayout;
 
@@ -48,16 +49,14 @@ public sealed class PuzzleBoardView : MonoBehaviour
     }
     private void CreateViews()
     {
-        IReadOnlyPuzzleBoard board =
-            _service.Board;
 
-        _cellLayer.Initialize(board);
+        _cellLayer.Initialize(Board);
 
-        _tileLayer.Initialize(board);
+        _tileLayer.Initialize(Board);
 
-        for (int y = 0; y < board.Height; y++)
+        for (int y = 0; y < Board.Height; y++)
         {
-            for (int x = 0; x < board.Width; x++)
+            for (int x = 0; x < Board.Width; x++)
             {
                 _cellLayer.Create(x, y);
 
@@ -67,14 +66,11 @@ public sealed class PuzzleBoardView : MonoBehaviour
     }
     public void RefreshBoard()
     {
-        IReadOnlyPuzzleBoard board =
-            _service.Board;
-
-        for (int y = 0; y < board.Height; y++)
+        for (int y = 0; y < Board.Height; y++)
         {
-            for (int x = 0; x < board.Width; x++)
+            for (int x = 0; x < Board.Width; x++)
             {
-                _tileLayer.Refresh(board, x, y);
+                _tileLayer.Refresh(Board, x, y);
             }
         }
     }
@@ -100,13 +96,5 @@ public sealed class PuzzleBoardView : MonoBehaviour
     public TileView GetTileView(TilePosition position)
     {
         return _tileLayer.Get(position);
-    }
-    public bool IsInside(TilePosition position)
-    {
-        return
-            position.X >= 0 &&
-            position.Y >= 0 &&
-            position.X < _service.Board.Width &&
-            position.Y < _service.Board.Height;
     }
 }

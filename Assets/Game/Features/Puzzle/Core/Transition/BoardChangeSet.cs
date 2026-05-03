@@ -7,7 +7,6 @@ public sealed class BoardChangeSet
 
     private readonly List<IBoardTransition> _transitions = new();
     private readonly HashSet<TilePosition> _protectedPositions = new();
-    // private readonly HashSet<TilePosition> _movedPositions = new();
 
     public void Add(IBoardTransition transition)
     {
@@ -21,12 +20,4 @@ public sealed class BoardChangeSet
     {
         _protectedPositions.Add(position);
     }
-    // public void MarkMoved(TilePosition position)
-    // {
-    //     _movedPositions.Add(position);
-    // }
-    // public bool WasMoved(TilePosition position)
-    // {
-    //     return _movedPositions.Contains(position);
-    // }
 }

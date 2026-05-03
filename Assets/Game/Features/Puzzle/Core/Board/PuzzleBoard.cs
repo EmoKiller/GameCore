@@ -3,6 +3,7 @@ public interface IReadOnlyPuzzleBoard
     TileData Get(int x, int y);
     int Width { get; }
     int Height { get; }
+    bool IsInside(TilePosition position);
 }
 public sealed class PuzzleBoard : IReadOnlyPuzzleBoard
 {
