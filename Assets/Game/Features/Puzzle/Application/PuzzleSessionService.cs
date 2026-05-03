@@ -30,13 +30,13 @@ public sealed class PuzzleSessionService
     {
         int score = 0;
 
-        // foreach (CascadeStepResult step in cascadeResult.Steps)
-        // {
-        //     foreach (TileMatch match in step.MatchResult.Matches)
-        //     {
-        //         score += match.Positions.Count * 10;
-        //     }
-        // }
+        foreach (CascadeStepResult step in cascadeResult.Steps)
+        {
+            foreach (MatchGroup match in step.MatchResult.Groups)
+            {
+                score += match.Positions.Count * 10;
+            }
+        }
 
         _state.AddScore(score);
     }

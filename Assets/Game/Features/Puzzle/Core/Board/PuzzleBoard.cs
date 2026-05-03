@@ -52,4 +52,12 @@ public sealed class PuzzleBoard : IReadOnlyPuzzleBoard
     {
         return IsInside(position.X, position.Y);
     }
+    public bool IsEmpty(TilePosition position)
+    {
+        return Get(position).IsEmpty;
+    }
+    public void Clear(TilePosition position)
+    {
+        Set(position,new TileData(ETileType.None));
+    }
 }

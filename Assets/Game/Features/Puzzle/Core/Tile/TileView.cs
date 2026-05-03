@@ -6,6 +6,13 @@ public sealed class TileView : MonoBehaviour
     [SerializeField]
     private SpriteRenderer _spriteRenderer;
 
+    [SerializeField]
+    private SpriteRenderer _specialRenderer;
+    private void Awake() 
+    {
+        _specialRenderer.enabled = false;
+    }
+
     public TilePosition Position { get; private set; }
 
     public void SetPosition(TilePosition position)
@@ -81,6 +88,10 @@ public sealed class TileView : MonoBehaviour
     }
     public void ResetVisual()
     {
+        _specialRenderer.enabled = false;
+
+        _specialRenderer.sprite = null;
+
         transform.localScale =Vector3.one;
         transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
     }
@@ -88,5 +99,33 @@ public sealed class TileView : MonoBehaviour
     {
         _spriteRenderer.sortingOrder = order;
     }
-    
+    public void SetSpecial(ETileSpecialType type, SpecialTileVisualDatabase database)
+    {
+        Debug.Log(type);
+        if (type == ETileSpecialType.None)
+        {
+            _specialRenderer.enabled = false;
+
+            return;
+        }
+
+        _specialRenderer.enabled = true;
+
+        switch (type)
+        {
+            case ETileSpecialType.HorizontalRocket:
+
+                _specialRenderer.sprite =
+                    database.HorizontalRocket;
+
+                break;
+
+            case ETileSpecialType.VerticalRocket:
+
+                _specialRenderer.sprite =
+                    database.VerticalRocket;
+
+                break;
+        }
+    }
 }

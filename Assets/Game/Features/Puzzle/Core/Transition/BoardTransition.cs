@@ -16,6 +16,21 @@ public readonly struct SwapTransition : IBoardTransition
         To = to;
     }
 }
+public sealed class CreateSpecialTransition : IBoardTransition
+{
+    public TilePosition Position { get; }
+
+    public ETileSpecialType SpecialType { get; }
+
+    public CreateSpecialTransition(
+        TilePosition position,
+        ETileSpecialType specialType)
+    {
+        Position = position;
+
+        SpecialType = specialType;
+    }
+}
 public readonly struct RemoveTransition : IBoardTransition
 {
     public readonly TilePosition Position;

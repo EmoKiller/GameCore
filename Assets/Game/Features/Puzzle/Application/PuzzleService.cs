@@ -63,54 +63,40 @@ public sealed class PuzzleService : IPuzzleService
         {
             return new SwapResult(
                 false,
-                new List<BoardChangeSet>(),
                 null
             );
         }
 
         _state = EPuzzleState.Busy;
 
-        var swapChangeSet =
-            new BoardChangeSet();
+        var swapChangeSet = new BoardChangeSet();
 
-        bool success =
-            _swapProcessor.TrySwap(
+        bool success = _swapProcessor.TrySwap(
                 _board,
                 a,
                 b,
                 swapChangeSet);
-
+        
         if (success == false)
         {
             _state = EPuzzleState.Idle;
 
             return new SwapResult(
                 false,
-                new List<BoardChangeSet>(),
                 null
                 );
         }
 
-        var cascadeResult = _cascadeProcessor.Process(_board);
+        var swapContext = new SwapContext(a, b);
 
-        CascadeResolved?.Invoke(cascadeResult);
-
+        var cascadeResult = _cascadeProcessor.Process(_board, swapChangeSet, swapContext);
         
-        var allChangeSets = new List<BoardChangeSet>
-        {
-            swapChangeSet
-        };
-
-        foreach (var step in cascadeResult.Steps)
-        {
-            allChangeSets.Add(step.ChangeSet);
-        }
+        CascadeResolved?.Invoke(cascadeResult);
         
         _state = EPuzzleState.Idle;
 
         return new SwapResult(
             true,
-            allChangeSets,
             cascadeResult
         );
     }

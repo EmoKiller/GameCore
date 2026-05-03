@@ -69,6 +69,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - staticglobal
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e0e142f3a4700974f98d194f5d032999
+    m_Address: SpecialTileVisualDatabase
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - staticglobal
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 3e673466b3ca3ef449facbb044418450, type: 2}
   m_SchemaSet:

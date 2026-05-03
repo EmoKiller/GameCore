@@ -57,9 +57,9 @@ public sealed class PuzzleGameplayService : IPuzzleGameplayService
 
         if (result.Success)
         {
-            foreach (BoardChangeSet changeSet in result.ChangeSets)
+            foreach (CascadeStepResult StepResult in result.CascadeResult.Steps)
             {
-                await _boardAnimator.PlayAsync(changeSet);
+                await _boardAnimator.PlayAsync(StepResult.ChangeSet);
             }
 
             //_sessionService.ProcessMove(result.CascadeResult);

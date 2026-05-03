@@ -19,17 +19,17 @@ public sealed class CollectTileGoal :IPuzzleGoal
 
     public void Process(MatchResult matchResult)
     {
-        // foreach (TileMatch match in matchResult.Matches)
-        // {
-        //     foreach (TilePosition position in match.Positions)
-        //     {
-        //         if (match.TileType != _targetType)
-        //         {
-        //             continue;
-        //         }
+        foreach (MatchGroup match in matchResult.Groups)
+        {
+            foreach (TilePosition position in match.Positions)
+            {
+                if (match.TileType != _targetType)
+                {
+                    continue;
+                }
 
-        //         _remaining--;
-        //     }
-        // }
+                _remaining--;
+            }
+        }
     }
 }

@@ -39,8 +39,10 @@ public class PuzzleGameplayModule : BaseGameModule
         var puzzleBoardViewFactory = new PuzzleBoardViewFactory(assetProvider);
 
         var handlePuzzleAnimationConfig = await assetProvider.LoadAsync<ScriptableObject>("PuzzleAnimationConfig", ct);
+        var handleSpecialTileVisualDatabase = await assetProvider.LoadAsync<ScriptableObject>("SpecialTileVisualDatabase", ct);
         var puzzleAnimationConfig = handlePuzzleAnimationConfig.Asset as PuzzleAnimationConfig;
-        var boardAnimator = new PuzzleBoardAnimator(puzzleAnimationConfig);
+        var puzzleSpecialTileVisualDatabas = handleSpecialTileVisualDatabase.Asset as SpecialTileVisualDatabase;
+        var boardAnimator = new PuzzleBoardAnimator(puzzleAnimationConfig, puzzleSpecialTileVisualDatabas);
         
 
         var puzzleGameplayService = new PuzzleGameplayService(

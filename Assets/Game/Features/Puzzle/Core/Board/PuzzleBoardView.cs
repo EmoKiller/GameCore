@@ -26,7 +26,9 @@ public sealed class PuzzleBoardView : MonoBehaviour
         IReadOnlyBoardLayout boardLayout,
         BoardCellView cellPrefab,
         TileView tilePrefab,
-        TileVisualDatabase visualDatabase)
+        TileVisualDatabase tilevisualDatabase,
+        SpecialTileVisualDatabase specialTileVisualDatabase
+        )
     {
         _service = service;
         _service.BoardChanged += RefreshBoard;
@@ -34,7 +36,7 @@ public sealed class PuzzleBoardView : MonoBehaviour
         _layout = boardLayout;
 
         _cellLayer = new BoardCellLayer(cellPrefab , _layout , transform);
-        _tileLayer = new TileLayer(tilePrefab, transform, _layout, visualDatabase);
+        _tileLayer = new TileLayer(tilePrefab, transform, _layout, tilevisualDatabase, specialTileVisualDatabase);
 
         // backGround
         float width = service.Board.Width * _layout.TileSize;

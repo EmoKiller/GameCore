@@ -11,6 +11,8 @@ public sealed class PuzzleBoardTheme :ScriptableObject
     [Header("Visual Database")]
     public TileVisualDatabase TileVisualDatabase;
 
+    public SpecialTileVisualDatabase SpecialTileVisualDatabase;
+
     [Header("Background")]
     public Sprite BoardBackground;
 

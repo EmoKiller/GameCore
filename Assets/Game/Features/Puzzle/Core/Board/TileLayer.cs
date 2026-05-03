@@ -4,7 +4,9 @@ public sealed class TileLayer
 {
     private readonly TileViewPool _pool;
 
-    private readonly TileVisualDatabase _visualDatabase;
+    private readonly TileVisualDatabase _tileVisualDatabase;
+
+    private readonly SpecialTileVisualDatabase _specialTileVisualDatabase;
 
     private readonly IReadOnlyBoardLayout _layout;
 
@@ -14,11 +16,14 @@ public sealed class TileLayer
         TileView prefab,
         Transform parent,
         IReadOnlyBoardLayout layout,
-        TileVisualDatabase visualDatabase)
+        TileVisualDatabase tileVisualDatabase,
+        SpecialTileVisualDatabase specialTileVisualDatabase
+        )
     {
         _layout = layout;
 
-        _visualDatabase = visualDatabase;
+        _tileVisualDatabase = tileVisualDatabase;
+        _specialTileVisualDatabase = specialTileVisualDatabase;
 
         _pool = new TileViewPool( prefab, parent);
     }
@@ -52,9 +57,10 @@ public sealed class TileLayer
 
         TileView view = _tileViews[x, y];
 
-        Sprite sprite = _visualDatabase.GetSprite(tile.Type);
+        Sprite sprite = _tileVisualDatabase.GetSprite(tile.Type);
 
         view.SetSprite(sprite);
+        view.SetSpecial(tile.SpecialType, _specialTileVisualDatabase);
     }
 
     public void Move(TilePosition from, TilePosition to)
@@ -112,7 +118,7 @@ public sealed class TileLayer
 
         view.SetPosition(position);
 
-        view.SetSprite(_visualDatabase.GetSprite(tileType));
+        view.SetSprite(_tileVisualDatabase.GetSprite(tileType));
 
         _tileViews[position.X,position.Y] = view;
 

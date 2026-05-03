@@ -28,20 +28,26 @@ public class PuzzleModule : BaseGameModule
         // SwapProcessor
         var matchResolver = new MatchResolver();
 
-        var swapProcessor = new SwapProcessor(
-            matchResolver
-        ); 
+        var swapProcessor = new SwapProcessor(matchResolver); 
 
         // BoardGenerator
         var generator = new BoardGenerator(random);
 
         // CascadeProcessor
+
+        var matchPatternAnalyzer = new MatchPatternAnalyzer();
+        var SpecialTileFactory = new SpecialTileFactory();
+        var specialTileProcessor = new SpecialTileProcessor(
+            matchPatternAnalyzer,
+            SpecialTileFactory
+        );
         var removeMatchedTilesProcessor = new RemoveMatchedTilesProcessor();
         var gravityProcessor = new GravityProcessor();
         var spawnProcessor = new SpawnProcessor(random);
 
         var cascadeProcessor = new CascadeProcessor(
             matchResolver,
+            specialTileProcessor,
             removeMatchedTilesProcessor,
             gravityProcessor,
             spawnProcessor
