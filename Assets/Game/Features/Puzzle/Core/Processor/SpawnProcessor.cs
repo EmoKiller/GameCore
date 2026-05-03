@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class SpawnProcessor
@@ -17,7 +18,7 @@ public sealed class SpawnProcessor
         _random = random;
     }
 
-    public void FillEmpty( PuzzleBoard board, BoardChangeSet changeSet)
+    public void FillEmpty( PuzzleBoard board, BoardChangeSet changeSet, HashSet<TilePosition> movedPositions)
     {
         for (int x = 0; x < board.Width; x++)
         {
@@ -32,14 +33,17 @@ public sealed class SpawnProcessor
 
                 var tileType = GetRandomTile();
 
-                board.Set( x, y, new TileData(tileType));
+                board.Set(x, y, new TileData(tileType));
+
+                var position = new TilePosition(x, y); 
 
                 changeSet.Add(
                     new SpawnTransition(
-                    new TilePosition(x, y),
+                    position,
                     tileType
                     )
                 );
+                movedPositions.Add(position);
             }
         }
     }

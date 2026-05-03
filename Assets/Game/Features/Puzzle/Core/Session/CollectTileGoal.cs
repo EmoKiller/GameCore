@@ -19,7 +19,7 @@ public sealed class CollectTileGoal :IPuzzleGoal
 
     public void Process(MatchResult matchResult)
     {
-        foreach (MatchGroup match in matchResult.Groups)
+        foreach (MatchCluster  match in matchResult.Clusters)
         {
             foreach (TilePosition position in match.Positions)
             {

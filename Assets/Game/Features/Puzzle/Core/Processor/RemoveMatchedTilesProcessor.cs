@@ -22,7 +22,7 @@ public sealed class RemoveMatchedTilesProcessor
         //             new TileData(ETileType.None));
         //     }
         // }
-        foreach (var group in matchResult.Groups)
+        foreach (var group in matchResult.Clusters)
         {
             foreach (var position in group.Positions)
             {

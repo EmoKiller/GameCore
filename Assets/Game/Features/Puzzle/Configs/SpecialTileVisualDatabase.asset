@@ -12,5 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68d726323c86e8b46936d8c727502ac7, type: 3}
   m_Name: SpecialTileVisualDatabase
   m_EditorClassIdentifier: ProjectFeatures::SpecialTileVisualDatabase
-  HorizontalRocket: {fileID: 1415374166, guid: efeca123e18ccd647b28666e19390cbe, type: 3}
-  VerticalRocket: {fileID: -2137694403, guid: efeca123e18ccd647b28666e19390cbe, type: 3}
+  _entries:
+  - TileType: 1
+    SpecialType: 1
+    Sprite: {fileID: 0}
+  - TileType: 1
+    SpecialType: 2
+    Sprite: {fileID: 0}
+  - TileType: 1
+    SpecialType: 3
+    Sprite: {fileID: 0}
+  - TileType: 1
+    SpecialType: 4
+    Sprite: {fileID: 0}

@@ -99,33 +99,22 @@ public sealed class TileView : MonoBehaviour
     {
         _spriteRenderer.sortingOrder = order;
     }
-    public void SetSpecial(ETileSpecialType type, SpecialTileVisualDatabase database)
+    public void SetSpecial( TileData tile, SpecialTileVisualDatabase database)
     {
-        Debug.Log(type);
-        if (type == ETileSpecialType.None)
+        Debug.Log(tile.SpecialType);
+
+        if (tile.SpecialType == ETileSpecialType.None)
         {
             _specialRenderer.enabled = false;
+            _specialRenderer.sprite = null;
 
             return;
         }
 
+        Sprite sprite = database.GetSprite(tile.Type, tile.SpecialType);
+
         _specialRenderer.enabled = true;
 
-        switch (type)
-        {
-            case ETileSpecialType.HorizontalRocket:
-
-                _specialRenderer.sprite =
-                    database.HorizontalRocket;
-
-                break;
-
-            case ETileSpecialType.VerticalRocket:
-
-                _specialRenderer.sprite =
-                    database.VerticalRocket;
-
-                break;
-        }
+        _specialRenderer.sprite = sprite;
     }
 }

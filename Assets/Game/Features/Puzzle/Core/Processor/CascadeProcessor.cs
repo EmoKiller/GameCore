@@ -10,6 +10,9 @@ public sealed class CascadeProcessor
 
     private readonly GravityProcessor _gravityProcessor;
 
+    private readonly HashSet<TilePosition> _movedPositions = new();
+    public HashSet<TilePosition> MovedPositions => _movedPositions;
+
     private readonly SpawnProcessor _spawnProcessor;
 
     public CascadeProcessor(
@@ -38,6 +41,7 @@ public sealed class CascadeProcessor
 
         if (initialMatch.HasMatches)
         {
+            _movedPositions.Clear();
             ProcessStep(
                 board,
                 initialMatch,
@@ -57,7 +61,7 @@ public sealed class CascadeProcessor
             }
 
             var changeSet = new BoardChangeSet();
-
+            _movedPositions.Clear();
             ProcessStep(
                 board,
                 matchResult,
@@ -81,7 +85,8 @@ public sealed class CascadeProcessor
             board,
             matchResult,
             changeSet,
-            swapContext);
+            swapContext,
+            _movedPositions);
 
         _removeProcessor.Remove(
             board,
@@ -90,10 +95,21 @@ public sealed class CascadeProcessor
 
         _gravityProcessor.Apply(
             board,
-            changeSet);
+            changeSet,
+            _movedPositions);
 
         _spawnProcessor.FillEmpty(
             board,
-            changeSet);
+            changeSet,
+            _movedPositions);
+    }
+
+    public void Add(TilePosition position)
+    {
+        _movedPositions.Add(position);
+    }
+    public bool WasMoved(TilePosition position)
+    {
+        return _movedPositions.Contains(position);
     }
 }

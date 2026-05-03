@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 public interface ISwapProcessor
 {
-    bool TrySwap( PuzzleBoard board, TilePosition a, TilePosition b, BoardChangeSet changeSet);
+    bool TrySwap( PuzzleBoard board, TilePosition a, TilePosition b, BoardChangeSet changeSet, HashSet<TilePosition> movedPositions);
 }
 public sealed class SwapProcessor : ISwapProcessor
 {
@@ -13,7 +14,7 @@ public sealed class SwapProcessor : ISwapProcessor
         _matchResolver = matchResolver;
     }
 
-    public bool TrySwap( PuzzleBoard board, TilePosition a, TilePosition b, BoardChangeSet changeSet)
+    public bool TrySwap( PuzzleBoard board, TilePosition a, TilePosition b, BoardChangeSet changeSet, HashSet<TilePosition> movedPositions)
     {
         if (board.IsInside(a) == false || board.IsInside(b) == false)
         {
@@ -32,6 +33,8 @@ public sealed class SwapProcessor : ISwapProcessor
         if (matchResult.HasMatches)
         {
             changeSet.Add(new SwapTransition(a, b));
+            movedPositions.Add(a);
+            movedPositions.Add(b);
             return true;
         }
 

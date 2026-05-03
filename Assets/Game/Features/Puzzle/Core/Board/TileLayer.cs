@@ -60,7 +60,7 @@ public sealed class TileLayer
         Sprite sprite = _tileVisualDatabase.GetSprite(tile.Type);
 
         view.SetSprite(sprite);
-        view.SetSpecial(tile.SpecialType, _specialTileVisualDatabase);
+        view.SetSpecial(tile, _specialTileVisualDatabase);
     }
 
     public void Move(TilePosition from, TilePosition to)

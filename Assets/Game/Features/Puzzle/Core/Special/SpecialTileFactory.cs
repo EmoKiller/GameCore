@@ -2,16 +2,19 @@ using UnityEngine;
 
 public class SpecialTileFactory 
 {
-    public void CreateSpecial(
+    public TileData CreateSpecial(
         PuzzleBoard board,
-        SpecialSpawnResult result,
-        ETileType baseType
-    )
+        TilePosition position,
+        ETileSpecialType specialType)
     {
-        TileData tile = new TileData(baseType, result.SpecialType);
+        TileData baseTile = board.Get(position);
 
-        board.Set(result.SpawnPosition, tile);
+        TileData specialTile = new TileData(
+                baseTile.Type,
+                specialType);
 
-        Debug.Log(tile.SpecialType);
+        board.Set(position, specialTile);
+
+        return specialTile;
     }
 }

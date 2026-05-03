@@ -268,11 +268,11 @@ TextureImporter:
       rect:
         serializedVersion: 2
         x: 31
-        y: 479
+        y: 480
         width: 17
-        height: 17
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -292,6 +292,28 @@ TextureImporter:
         x: 31
         y: 463
         width: 17
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6989828c53a088241b113f7a052804ad
+      internalID: 1415374166
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Boom
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 480
+        width: 16
         height: 16
       alignment: 0
       pivot: {x: 0, y: 0}
@@ -301,8 +323,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6989828c53a088241b113f7a052804ad
-      internalID: 1415374166
+      spriteID: 5cde10c71a03a0f428cfbefff3720f2a
+      internalID: 1160974469
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BoomClor
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 463
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 22fe785547f3bfe4cab9bd112847b579
+      internalID: 501500560
       vertices: []
       indices: 
       edges: []
@@ -322,6 +366,8 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       BackGroundBoard_01: -526587412
+      Boom: 1160974469
+      BoomClor: 501500560
       Puzzle_icon_4: -1569024559
       Puzzle_icon_6: -893999540
       Special_Tile_Sword_Horizontal: 1415374166

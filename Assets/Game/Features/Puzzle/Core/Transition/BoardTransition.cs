@@ -20,15 +20,15 @@ public sealed class CreateSpecialTransition : IBoardTransition
 {
     public TilePosition Position { get; }
 
-    public ETileSpecialType SpecialType { get; }
+    public TileData Tile { get; }
 
     public CreateSpecialTransition(
         TilePosition position,
-        ETileSpecialType specialType)
+        TileData tile)
     {
         Position = position;
 
-        SpecialType = specialType;
+        Tile = tile;
     }
 }
 public readonly struct RemoveTransition : IBoardTransition

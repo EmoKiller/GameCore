@@ -75,7 +75,8 @@ public sealed class PuzzleService : IPuzzleService
                 _board,
                 a,
                 b,
-                swapChangeSet);
+                swapChangeSet,
+                _cascadeProcessor.MovedPositions);
         
         if (success == false)
         {

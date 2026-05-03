@@ -3,14 +3,14 @@ using UnityEngine;
 
 public sealed class MatchResult
 {
-    public IReadOnlyList<MatchGroup> Groups => _groups;
+    public IReadOnlyList<MatchCluster> Clusters => _clusters;
 
-    private readonly List<MatchGroup> _groups;
+    private readonly List<MatchCluster> _clusters;
 
-    public bool HasMatches => _groups.Count > 0;
+    public bool HasMatches => _clusters.Count > 0;
 
-    public MatchResult(List<MatchGroup> groups)
+    public MatchResult( List<MatchCluster> clusters)
     {
-        _groups = groups;
+        _clusters = clusters;
     }
 }

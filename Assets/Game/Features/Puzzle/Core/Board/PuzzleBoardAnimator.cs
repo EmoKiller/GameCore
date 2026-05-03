@@ -142,7 +142,7 @@ public sealed class PuzzleBoardAnimator
             return;
         }
 
-        view.SetSpecial(transition.SpecialType, _specialDatabase);
+        view.SetSpecial(transition.Tile, _specialDatabase);
     }
     private async UniTask PlayRemoves(BoardChangeSet changeSet)
     {

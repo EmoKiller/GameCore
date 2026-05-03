@@ -10,14 +10,58 @@ public sealed class MatchResolver : IMatchResolver
 
     public MatchResult Resolve(PuzzleBoard board)
     {
-        var groups = new List<MatchGroup>();
+        var groups =
+            new List<MatchGroup>();
 
-        ScanHorizontal(board, groups);
-        ScanVertical(board, groups);
+        ScanHorizontal(
+            board,
+            groups);
 
-        return new MatchResult(groups);
+        ScanVertical(
+            board,
+            groups);
+
+        List<MatchCluster> clusters = BuildClusters(groups);
+
+        return new MatchResult(
+            clusters);
     }
+    private List<MatchCluster> BuildClusters(List<MatchGroup> groups)
+    {
+        var clusters =
+            new List<MatchCluster>();
 
+        foreach (MatchGroup group in groups)
+        {
+            MatchCluster overlapCluster =
+                null;
+
+            foreach (MatchCluster cluster
+                in clusters)
+            {
+                if (cluster.Overlaps(group))
+                {
+                    overlapCluster = cluster;
+
+                    break;
+                }
+            }
+
+            if (overlapCluster == null)
+            {
+                clusters.Add(
+                    new MatchCluster(
+                        group.TileType,
+                        group.Positions));
+
+                continue;
+            }
+
+            overlapCluster.Merge(group);
+        }
+
+        return clusters;
+    }
     private void ScanHorizontal(
         PuzzleBoard board,
         List<MatchGroup> groups)

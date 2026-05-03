@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public sealed class SpecialTileProcessor
@@ -19,31 +20,27 @@ public sealed class SpecialTileProcessor
         PuzzleBoard board,
         MatchResult result,
         BoardChangeSet changeSet,
-        SwapContext swapContext)
+        SwapContext swapContext,
+        HashSet<TilePosition> movedPositions)
     {
-        foreach (MatchGroup group in result.Groups)
+        foreach (MatchCluster group in result.Clusters)
         {
-            SpecialSpawnResult spawn = _analyzer.Analyze(group, swapContext);
+            SpecialSpawnResult spawn = _analyzer.Analyze(group, swapContext, movedPositions);
 
             if (spawn.HasSpecial == false)
             {
                 continue;
             }
 
-            ETileType baseType = group.TileType;
-
-            _factory.CreateSpecial(
-                board,
-                spawn,
-                baseType
-            );
-            Debug.Log($"Spawn Rocket at {spawn.SpawnPosition}");
+            TileData specialTile = _factory.CreateSpecial(
+                    board,
+                    spawn.SpawnPosition,
+                    spawn.SpecialType);
             changeSet.Protect(spawn.SpawnPosition);
-
-            changeSet.Add(new CreateSpecialTransition(
-                spawn.SpawnPosition,
-                spawn.SpecialType
-            ));
+            changeSet.Add(
+                new CreateSpecialTransition(
+                    spawn.SpawnPosition,
+                    specialTile));
         }
     }
 }
