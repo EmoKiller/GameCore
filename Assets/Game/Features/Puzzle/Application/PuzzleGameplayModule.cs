@@ -28,12 +28,26 @@ public class PuzzleGameplayModule : BaseGameModule
         var puzzleService = services.Resolve<IPuzzleService>();
 
         var assetProvider = services.Resolve<IAssetProvider>();
+        
+        var boardLayout = new BoardLayout(
+            puzzleService.Board.Width,
+            puzzleService.Board.Height,
+            GameObject.FindFirstObjectByType<Camera>(),
+            boardOffset: new Vector2(0f, -4f)
+        );
 
         var puzzleBoardViewFactory = new PuzzleBoardViewFactory(assetProvider);
 
+        var handlePuzzleAnimationConfig = await assetProvider.LoadAsync<ScriptableObject>("PuzzleAnimationConfig", ct);
+        var puzzleAnimationConfig = handlePuzzleAnimationConfig.Asset as PuzzleAnimationConfig;
+        var boardAnimator = new PuzzleBoardAnimator(puzzleAnimationConfig);
+        
+
         var puzzleGameplayService = new PuzzleGameplayService(
             puzzleService,
-            puzzleBoardViewFactory
+            puzzleBoardViewFactory,
+            boardAnimator,
+            boardLayout
         );
         services.Register<IPuzzleGameplayService>(puzzleGameplayService);
 

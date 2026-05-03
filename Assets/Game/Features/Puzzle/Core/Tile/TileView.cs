@@ -4,7 +4,7 @@ using UnityEngine;
 public sealed class TileView : MonoBehaviour
 {
     [SerializeField]
-    private SpriteRenderer _iconRenderer;
+    private SpriteRenderer _spriteRenderer;
 
     public TilePosition Position { get; private set; }
 
@@ -19,7 +19,7 @@ public sealed class TileView : MonoBehaviour
     }
     public void SetSprite(Sprite sprite)
     {
-        _iconRenderer.sprite = sprite;
+        _spriteRenderer.sprite = sprite;
     }
 
     public void SetWorldPosition(Vector3 position)
@@ -39,7 +39,9 @@ public sealed class TileView : MonoBehaviour
             time += Time.deltaTime;
 
             float t = time / duration;
-
+            
+            t = 1f - Mathf.Pow(1f - t, 3f);
+            
             transform.position =
                 Vector3.Lerp(
                     start,
@@ -63,6 +65,8 @@ public sealed class TileView : MonoBehaviour
             time += Time.deltaTime;
 
             float t = time / duration;
+            t = 1f - Mathf.Pow(1f - t, 3f);
+            
 
             transform.localScale =
                 Vector3.Lerp(
@@ -75,6 +79,14 @@ public sealed class TileView : MonoBehaviour
 
         transform.localScale = target;
     }
-
+    public void ResetVisual()
+    {
+        transform.localScale =Vector3.one;
+        transform.SetLocalPositionAndRotation(Vector3.zero, Quaternion.identity);
+    }
+    public void SetSortingOrder(int order)
+    {
+        _spriteRenderer.sortingOrder = order;
+    }
     
 }

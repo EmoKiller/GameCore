@@ -7,12 +7,15 @@ public interface IPuzzleInputService : IService
     
 }
 public sealed class PuzzleInputService : IPuzzleInputService , IUpdatable
-{   private readonly Camera _camera;
+{   
+    private const float SwipeThreshold = 30f;
+    private readonly Camera _camera;
     private readonly IPointerInputReader _input;
     private readonly IPuzzleGameplayService _service;
 
     private TilePosition? _selectedTile;
     private Vector2 _pointerDownPosition;
+    private bool _hasConsumedSwipe;
     public PuzzleInputService(
         IPuzzleGameplayService service,
         IPointerInputReader input,
@@ -28,24 +31,69 @@ public sealed class PuzzleInputService : IPuzzleInputService , IUpdatable
     }
     private void ProcessInput()
     {
+        if (_service.IsBusy)
+        {
+            return;
+        }
+
         if (_input.WasPressedThisFrame())
         {
             HandlePointerDown();
         }
 
-        if (_input.WasReleasedThisFrame())
+        if (_input.IsPressed())
         {
-            HandlePointerUp();
+            HandleDragging();
         }
     }
+
     private void HandlePointerDown()
     {
-        _pointerDownPosition = _input.GetPosition();
+        _pointerDownPosition =
+            _input.GetPosition();
 
-        _selectedTile = RaycastTile(_pointerDownPosition);
+        _selectedTile =
+            RaycastTile(
+                _pointerDownPosition);
+
+        _hasConsumedSwipe = false;
     }
 
-    private TilePosition? RaycastTile( Vector2 screenPosition)
+    private void HandleDragging()
+    {
+        if (_selectedTile.HasValue == false)
+        {
+            return;
+        }
+
+        if (_hasConsumedSwipe)
+        {
+            return;
+        }
+
+        Vector2 currentPosition =
+            _input.GetPosition();
+
+        Vector2 dragDelta =
+            currentPosition -
+            _pointerDownPosition;
+
+        if (dragDelta.magnitude < SwipeThreshold)
+        {
+            return;
+        }
+
+        Vector2Int direction =
+            GetSwapDirection(
+                dragDelta);
+
+        _hasConsumedSwipe = true;
+
+        ExecuteSwap(direction).Forget();
+    }
+
+    private TilePosition? RaycastTile(
+        Vector2 screenPosition)
     {
         Vector3 screenPoint =
             new Vector3(
@@ -53,7 +101,9 @@ public sealed class PuzzleInputService : IPuzzleInputService , IUpdatable
                 screenPosition.y,
                 -_camera.transform.position.z);
 
-        Vector3 world = _camera.ScreenToWorldPoint( screenPoint);
+        Vector3 world =
+            _camera.ScreenToWorldPoint(
+                screenPoint);
 
         Vector2 worldPosition =
             new Vector2(
@@ -70,7 +120,8 @@ public sealed class PuzzleInputService : IPuzzleInputService , IUpdatable
             return null;
         }
 
-        TileView view = hit.collider.GetComponent<TileView>();
+        TileView view =
+            hit.collider.GetComponent<TileView>();
 
         if (view == null)
         {
@@ -80,35 +131,11 @@ public sealed class PuzzleInputService : IPuzzleInputService , IUpdatable
         return view.Position;
     }
 
-    private void HandlePointerUp()
+    private Vector2Int GetSwapDirection(
+        Vector2 dragDelta)
     {
-        if (_selectedTile.HasValue == false)
-        {
-            return;
-        }
-
-        Vector2 pointerUpPosition = _input.GetPosition();
-
-        Vector2 dragDelta = pointerUpPosition - _pointerDownPosition;
-
-        if (dragDelta.magnitude < 20f)
-        {
-            _selectedTile = null;
-
-            return;
-        }
-
-        Vector2Int direction =
-            GetSwapDirection(dragDelta);
-
-        ExecuteSwap(direction).Forget();
-
-        _selectedTile = null;
-    }
-
-    private Vector2Int GetSwapDirection( Vector2 dragDelta)
-    {
-        if (Mathf.Abs(dragDelta.x) > Mathf.Abs(dragDelta.y))
+        if (Mathf.Abs(dragDelta.x) >
+            Mathf.Abs(dragDelta.y))
         {
             return dragDelta.x > 0
                 ? Vector2Int.right
@@ -120,28 +147,31 @@ public sealed class PuzzleInputService : IPuzzleInputService , IUpdatable
             : Vector2Int.down;
     }
 
-    private async UniTask ExecuteSwap( Vector2Int direction)
+    private async UniTask ExecuteSwap(
+        Vector2Int direction)
     {
         if (_selectedTile.HasValue == false)
         {
             return;
         }
-        TilePosition from = _selectedTile.Value;
-        
-        TilePosition to = new TilePosition(
+
+        TilePosition from =
+            _selectedTile.Value;
+
+        TilePosition to =
+            new TilePosition(
                 from.X + direction.x,
-                from.Y + direction.y
-        );
+                from.Y + direction.y);
+
         if (_service.IsInside(to) == false)
         {
             return;
         }
-        if (_service.IsBusy)
-        {
-            return;
-        }
-        await _service.TrySwapAsync(from, to);
 
-        
+        await _service.TrySwapAsync(
+            from,
+            to);
+
+        _selectedTile = null;
     }
 }

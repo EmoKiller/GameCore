@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae7d4ef08e062954fb891da51cd54dd1, type: 3}
+  m_Name: PuzzleBoardTheme
+  m_EditorClassIdentifier: ProjectFeatures::PuzzleBoardTheme
+  CellPrefab: {fileID: 8526733093612468966, guid: b6a22b17e2d83aa45ba9d6b992d13ad9, type: 3}
+  TilePrefab: {fileID: 6377307754444957144, guid: c37f2713bacf8cb48897b5f0c6a2eb9d, type: 3}
+  TileVisualDatabase: {fileID: 11400000, guid: aa27c660011d25443b68dafb7e4e8bde, type: 2}
+  BoardBackground: {fileID: -526587412, guid: efeca123e18ccd647b28666e19390cbe, type: 3}
+  BoardTint: {r: 1, g: 1, b: 1, a: 1}

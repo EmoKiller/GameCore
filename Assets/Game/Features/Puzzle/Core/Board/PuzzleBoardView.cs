@@ -2,29 +2,20 @@ using UnityEngine;
 
 public sealed class PuzzleBoardView : MonoBehaviour
 {
-    private TileViewPool _pool;
-    private TileView _tilePrefab;
-    private TileVisualDatabase _visualDatabase;
-
-    private TileView[,] _tileViews;
-
+    // [SerializeField]
+    // private PuzzleBoardTheme _theme;
+    
+    
     private IPuzzleService _service;
 
-    private BoardLayout _layout;
+    private BoardCellLayer _cellLayer;
 
-    // để tạm test
-    public BoardLayout Layout=> _layout;
+    private TileLayer _tileLayer;
 
-    public void Initialize(TileView tilePrefab, TileVisualDatabase visualDatabase)
-    {
-        _tilePrefab = tilePrefab;
-        _visualDatabase = visualDatabase;
-    }
-
-    // private void OnEnable()
-    // {
-    //     _service.BoardChanged += RefreshBoard;
-    // }
+    private IReadOnlyBoardLayout _layout;
+    public IReadOnlyBoardLayout Layout => _layout;
+    [SerializeField]
+    private BoardBackgroundView _boardBackgroundView;
 
     private void OnDisable()
     {
@@ -32,135 +23,88 @@ public sealed class PuzzleBoardView : MonoBehaviour
     }
     public void InitializeBoard(
         IPuzzleService service,
-        float cellSize)
+        IReadOnlyBoardLayout boardLayout,
+        BoardCellView cellPrefab,
+        TileView tilePrefab,
+        TileVisualDatabase visualDatabase)
     {
         _service = service;
         _service.BoardChanged += RefreshBoard;
 
-        _layout = new BoardLayout(cellSize);
+        _layout = boardLayout;
 
-        _pool = new TileViewPool( _tilePrefab, transform);
+        _cellLayer = new BoardCellLayer(cellPrefab , _layout , transform);
+        _tileLayer = new TileLayer(tilePrefab, transform, _layout, visualDatabase);
+
+        // backGround
+        float width = service.Board.Width * _layout.TileSize;
+        float height = service.Board.Height * _layout.TileSize;
+        _boardBackgroundView.SetSize(width, height);
 
         CreateViews();
-
         RefreshBoard();
     }
     private void CreateViews()
     {
-        var board = _service.Board;
+        IReadOnlyPuzzleBoard board =
+            _service.Board;
 
-        _tileViews =
-            new TileView[board.Width, board.Height];
+        _cellLayer.Initialize(board);
+
+        _tileLayer.Initialize(board);
 
         for (int y = 0; y < board.Height; y++)
         {
             for (int x = 0; x < board.Width; x++)
             {
-                CreateTileView(x, y);
+                _cellLayer.Create(x, y);
+
+                _tileLayer.Create(x, y);
             }
         }
-    }
-    private void CreateTileView(int x, int y)
-    {
-        var view = _pool.Get();
-            //Instantiate(_tilePrefab, transform);
-
-        var position =
-            new TilePosition(x, y);
-
-        view.SetPosition(position);
-
-        view.SetWorldPosition(
-            _layout.GetWorldPosition(position));
-
-        view.gameObject.name = "(" + x + ", " + y + ")";
-        
-        _tileViews[x, y] = view;
     }
     public void RefreshBoard()
     {
-        var board = _service.Board;
+        IReadOnlyPuzzleBoard board =
+            _service.Board;
 
         for (int y = 0; y < board.Height; y++)
         {
             for (int x = 0; x < board.Width; x++)
             {
-                RefreshTile(x, y);
+                _tileLayer.Refresh(board, x, y);
             }
         }
     }
-    private void RefreshTile(int x, int y)
+    public void MoveView( TilePosition from,  TilePosition to)
     {
-        var tile = _service.Board.Get(x, y);
-
-        var view = _tileViews[x, y];
-
-        var sprite =
-            _visualDatabase.GetSprite(tile.Type);
-
-        view.SetSprite(sprite);
+        _tileLayer.Move(from, to);
     }
-    public void MoveView(
-        TilePosition from,
-        TilePosition to)
+
+    public void SwapViews( TilePosition a, TilePosition b)
     {
-        var view = _tileViews[from.X, from.Y];
-
-        _tileViews[to.X, to.Y] = view;
-
-        _tileViews[from.X, from.Y] = null;
-
-        view.SetPosition(to);
+        _tileLayer.Swap(a, b);
     }
-    public void SwapViews(
-        TilePosition a,
-        TilePosition b)
-    {
-        var viewA = _tileViews[a.X, a.Y];
 
-        var viewB = _tileViews[b.X, b.Y];
-
-        _tileViews[a.X, a.Y] = viewB;
-        _tileViews[b.X, b.Y] = viewA;
-
-        if (viewA != null)
-        {
-            viewA.SetPosition(b);
-        }
-        if (viewB != null)
-        {
-            viewB.SetPosition(a);
-        }
-
-
-    }
     public void HideView( TilePosition position)
     {
-        var view = _tileViews[position.X, position.Y];
-        if (view == null)
-        {
-            return;
-        }
-        
-        _tileViews[position.X, position.Y] = null;
-        _pool.Release(view);
+        _tileLayer.Hide(position);
     }
+
     public TileView CreateOrReuseView( TilePosition position, ETileType tileType)
     {
-        var view = _pool.Get();
-        //Instantiate(_tilePrefab, transform);
-
-        view.SetPosition(position);
-
-        view.SetSprite( _visualDatabase.GetSprite(tileType));
-
-        _tileViews[position.X, position.Y] = view;
-
-        return view;
+        return _tileLayer.CreateOrReuse(position, tileType);
     }
-    public TileView GetTileView(
-        TilePosition position)
+    public TileView GetTileView(TilePosition position)
     {
-        return _tileViews[position.X, position.Y];
+        return _tileLayer.Get(position);
+    }
+    public bool IsInside(TilePosition position)
+    {
+        return
+            position.X >= 0 &&
+            position.Y >= 0 &&
+            position.X < _service.Board.Width &&
+            position.Y < _service.Board.Height;
     }
 }

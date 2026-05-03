@@ -14,7 +14,7 @@ public class PuzzleMainMenuLoading : ILoadingOperation<PuzzleGameStateContext>
             new LoadingProgressAggregator()
         );
         var pipeline = new LoadingPipeline()
-            .Use(new MinimumDurationMiddleware(1.5f))
+            .Use(new MinimumDurationMiddleware(0.5f))
             .Use(new LoadSceneMiddleware("MainMenu", bus, loader))
             .Use(new LoadAssetsMiddleware( new MainMenuAssetProvider(), bus, assets))
             .Use(new PrewarmMiddleware());
@@ -33,7 +33,7 @@ public class PuzzleGamePlayLoading : ILoadingOperation<PuzzleGameStateContext>
             new LoadingProgressAggregator()
         );
         var pipeline = new LoadingPipeline()
-            .Use(new MinimumDurationMiddleware(1.5f))
+            .Use(new MinimumDurationMiddleware(0.5f))
             .Use(new LoadSceneMiddleware("Gameplay", bus, loader))
             .Use(new LoadAssetsMiddleware( new GamePlayAssetProvider(), bus, assets))
             .Use(new PrewarmMiddleware());

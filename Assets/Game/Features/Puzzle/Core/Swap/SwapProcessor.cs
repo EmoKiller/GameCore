@@ -13,12 +13,7 @@ public sealed class SwapProcessor : ISwapProcessor
         _matchResolver = matchResolver;
     }
 
-    public bool TrySwap(
-        PuzzleBoard board,
-        TilePosition a,
-        TilePosition b,
-        BoardChangeSet changeSet
-    )
+    public bool TrySwap( PuzzleBoard board, TilePosition a, TilePosition b, BoardChangeSet changeSet)
     {
         if (board.IsInside(a) == false || board.IsInside(b) == false)
         {

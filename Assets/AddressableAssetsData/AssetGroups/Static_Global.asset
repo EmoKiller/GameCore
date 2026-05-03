@@ -39,6 +39,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - staticglobal
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ef2dc98c3247964895e1818e0d1e709
+    m_Address: PuzzleAnimationConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - staticglobal
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7c99153485ac46b41a72fcd9687b5828
     m_Address: PuzzleBoardView
     m_ReadOnly: 0
@@ -47,6 +53,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: aa27c660011d25443b68dafb7e4e8bde
     m_Address: TileVisualDatabase
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - staticglobal
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: b6a22b17e2d83aa45ba9d6b992d13ad9
+    m_Address: BoardCellView
     m_ReadOnly: 0
     m_SerializedLabels:
     - staticglobal

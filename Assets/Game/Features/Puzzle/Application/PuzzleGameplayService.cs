@@ -6,35 +6,39 @@ public interface IPuzzleGameplayService : IService
 {
     UniTask CreateRuntime(CancellationToken ct);
     UniTask TrySwapAsync( TilePosition a, TilePosition b);
-    bool IsInside( TilePosition position);
+    bool IsInside(TilePosition position);
     bool IsBusy { get; }
 }
 public sealed class PuzzleGameplayService : IPuzzleGameplayService
 {
+    private readonly PuzzleBoardViewFactory _puzzleBoardViewFactory;
+    private readonly IPuzzleService _puzzleService;
+    private IReadOnlyBoardLayout _boardLayout;
+    private PuzzleBoardAnimator _boardAnimator;
     private PuzzleBoardView _boardView;
-
-    private PuzzleBoardViewFactory _puzzleBoardViewFactory;
-    private IPuzzleService _puzzleService;
-
-    private PuzzleBoardAnimator _animator;
-
+    private PuzzleSessionService _sessionService;
     private bool _isBusy;
     public bool IsBusy => _isBusy;
-    public PuzzleGameplayService(IPuzzleService PuzzleService, PuzzleBoardViewFactory puzzleBoardViewFactory)
+
+    
+    public PuzzleGameplayService(
+        IPuzzleService PuzzleService,
+        PuzzleBoardViewFactory puzzleBoardViewFactory,
+        PuzzleBoardAnimator boardAnimator,
+        IReadOnlyBoardLayout boardLayout
+    )
     {
         _puzzleService = PuzzleService;
         _puzzleBoardViewFactory = puzzleBoardViewFactory;
+        _boardAnimator = boardAnimator;
+        _boardLayout = boardLayout;
     }
     public async UniTask CreateRuntime(CancellationToken ct)
     {
-        _boardView = await _puzzleBoardViewFactory.Create(ct);
-
         _puzzleService.GenerateBoard();
-        _boardView.InitializeBoard(_puzzleService, 1f);
+        _boardView = await _puzzleBoardViewFactory.Create(_puzzleService, _boardLayout, ct);
 
-        _animator =
-            new PuzzleBoardAnimator(
-                _boardView);
+        _boardAnimator.InitializeBoard(_boardView);
     }
     public async UniTask TrySwapAsync(
         TilePosition a,
@@ -48,21 +52,27 @@ public sealed class PuzzleGameplayService : IPuzzleGameplayService
         _isBusy = true;
 
         SwapResult result = _puzzleService.TrySwap(a, b);
-        //Debug.Log( $"Swap Result: {result.Success}");
-        //await _animator.PlayAsync(result.ChangeSets)
+
+
 
         if (result.Success)
         {
             foreach (BoardChangeSet changeSet in result.ChangeSets)
             {
-                await _animator.PlayAsync(changeSet);
+                await _boardAnimator.PlayAsync(changeSet);
             }
-        }
 
+            //_sessionService.ProcessMove(result.CascadeResult);
+        }
+        else
+        {
+            await _boardAnimator.PlayInvalidSwapAsync(a, b);
+        }
         _isBusy = false;
     }
     public bool IsInside(TilePosition position)
     {
         return _puzzleService.IsInside(position);
     }
+
 }

@@ -5,13 +5,17 @@ using UnityEngine;
 
 public sealed class PuzzleBoardAnimator
 {
-    private readonly PuzzleBoardView _boardView;
+    private PuzzleBoardView _boardView;
+    private readonly PuzzleAnimationConfig _config;
 
-    public PuzzleBoardAnimator(PuzzleBoardView boardView)
+    public PuzzleBoardAnimator(PuzzleAnimationConfig config )
+    {
+        _config = config;
+    }
+    public void InitializeBoard(PuzzleBoardView boardView)
     {
         _boardView = boardView;
     }
-
     public async UniTask PlayAsync(
         BoardChangeSet changeSet)
     {
@@ -24,154 +28,170 @@ public sealed class PuzzleBoardAnimator
         await PlaySpawns(changeSet);
     }
 
-    private async UniTask PlaySwaps(
-        BoardChangeSet changeSet)
+    private async UniTask PlaySwaps(BoardChangeSet changeSet)
     {
-        var swaps = changeSet.Transitions.OfType<SwapTransition>();
-        // List<UniTask> tasks = new List<UniTask>();
-        // foreach (SwapTransition swap in swaps)
-        // {
-        //     tasks.Add(PlaySwapAsync(swap));
 
-        // }
+        var swaps = changeSet.Transitions.OfType<SwapTransition>();
+        
         var tasks = swaps.Select(PlaySwapAsync);
         await UniTask.WhenAll(tasks);
     }
 
-    private async UniTask PlayRemoves(
-        BoardChangeSet changeSet)
+    private async UniTask PlayRemoves(BoardChangeSet changeSet)
     {
-        var removes =
-            changeSet.Transitions
-                .OfType<RemoveTransition>();
+        var removes = changeSet.Transitions.OfType<RemoveTransition>();
 
-        await UniTask.WhenAll(
-            removes.Select(PlayRemoveAsync));
+        await UniTask.WhenAll(removes.Select(PlayRemoveAsync));
     }
 
     private async UniTask PlayFalls(
         BoardChangeSet changeSet)
     {
-        var falls =
-            changeSet.Transitions
-                .OfType<FallTransition>();
+        var falls = changeSet.Transitions.OfType<FallTransition>();
 
-        await UniTask.WhenAll(
-            falls.Select(PlayFallAsync));
+        await UniTask.WhenAll(falls.Select(PlayFallAsync));
     }
 
-    private async UniTask PlaySpawns(
-        BoardChangeSet changeSet)
+    private async UniTask PlaySpawns(BoardChangeSet changeSet)
     {
-        var spawns =
-            changeSet.Transitions
-                .OfType<SpawnTransition>();
+        var spawns =changeSet.Transitions.OfType<SpawnTransition>();
 
-        await UniTask.WhenAll(
-            spawns.Select(PlaySpawnAsync));
+        await UniTask.WhenAll(spawns.Select(PlaySpawnAsync));
     }
 
-    private async UniTask PlaySwapAsync(
-        SwapTransition transition)
+    private async UniTask AnimateSwapAsync(
+        TileView fromView,
+        TileView toView,
+        TilePosition from,
+        TilePosition to)
     {
-        TileView fromView =
-            _boardView.GetTileView(
-                transition.From);
+        Vector3 fromWorld = _boardView.Layout.GetWorldPosition(from);
 
-        TileView toView =
-            _boardView.GetTileView(
-                transition.To);
-        if (fromView == null || toView == null)
-        {
-            return;
-        }
-        Vector3 fromWorld =
-            _boardView.Layout.GetWorldPosition(
-                transition.From);        
-
-        Vector3 toWorld =
-            _boardView.Layout.GetWorldPosition(
-                transition.To);
-
-        
+        Vector3 toWorld = _boardView.Layout.GetWorldPosition(to);
 
         await UniTask.WhenAll(
             fromView.MoveToAsync(
                 toWorld,
-                0.15f),
+                _config.SwapDuration
+            ),
 
             toView.MoveToAsync(
                 fromWorld,
-                0.15f));
-        
-        _boardView.SwapViews(
+                _config.SwapDuration
+            ));
+}
+    private void CommitSwapViews( TilePosition from, TilePosition to)
+    {
+        _boardView.SwapViews(from, to);
+    }
+    private async UniTask PlaySwapAsync(SwapTransition transition)
+    {
+        TileView fromView = _boardView.GetTileView(transition.From);
+
+        TileView toView = _boardView.GetTileView(transition.To);
+
+        if (fromView == null || toView == null)
+        {
+            return;
+        }
+
+        await AnimateSwapAsync(
+            fromView,
+            toView,
+            transition.From,
+            transition.To);
+
+        CommitSwapViews(
             transition.From,
             transition.To);
     }
-
-    private async UniTask PlayRemoveAsync(
-        RemoveTransition transition)
+    public async UniTask PlayInvalidSwapAsync(
+        TilePosition from,
+        TilePosition to)
     {
-        var view =
-            _boardView.GetTileView(
-                transition.Position);
+        TileView fromView = _boardView.GetTileView(from);
 
+        TileView toView = _boardView.GetTileView(to);
+
+        if (fromView == null || toView == null)
+        {
+            return;
+        }
+
+        await AnimateSwapAsync(
+            fromView,
+            toView,
+            from,
+            to);
+
+        await UniTask.Delay(40);
+
+        await AnimateSwapAsync(
+            fromView,
+            toView,
+            to,
+            from);
+
+        fromView.SetInstantPosition(
+            _boardView.Layout.GetWorldPosition(from));
+
+        toView.SetInstantPosition(
+            _boardView.Layout.GetWorldPosition(to));
+    }
+    private async UniTask PlayRemoveAsync(RemoveTransition transition)
+    {
+        var view = _boardView.GetTileView(transition.Position);
+        if (view == null)
+        {
+            return;
+        }
         await view.ScaleToAsync(
             Vector3.zero,
-            0.15f);
+            _config.RemoveDuration
+        );
 
-        _boardView.HideView(
-            transition.Position);
+        _boardView.HideView(transition.Position);
     }
 
-    private async UniTask PlayFallAsync(
-        FallTransition transition)
+    private async UniTask PlayFallAsync( FallTransition transition)
     {
-        var view =
-            _boardView.GetTileView(
-                transition.From);
+        var view = _boardView.GetTileView(transition.From);
 
-        Vector3 target =
-            _boardView.Layout.GetWorldPosition(
-                transition.To);
+        Vector3 target = _boardView.Layout.GetWorldPosition(transition.To);
+
+        int distance = Mathf.Abs( transition.From.Y - transition.To.Y);
+        float duration = Mathf.Min( distance * _config.FallDurationPerCell, _config.MaxFallDuration);
 
         await view.MoveToAsync(
             target,
-            0.2f);
+            duration);
 
-        _boardView.MoveView(
-            transition.From,
-            transition.To);
+        _boardView.MoveView(transition.From, transition.To);
     }
 
-    private async UniTask PlaySpawnAsync(
-        SpawnTransition transition)
+    private async UniTask PlaySpawnAsync(SpawnTransition transition)
     {
-        var view =
-            _boardView.CreateOrReuseView(
-                transition.Position,
-                transition.TileType);
+        var view = _boardView.CreateOrReuseView(transition.Position, transition.TileType);
 
-        Vector3 target =
-            _boardView.Layout.GetWorldPosition(
-                transition.Position);
+        Vector3 target = _boardView.Layout.GetWorldPosition(transition.Position);
 
-        Vector3 spawnPosition =
-            target + Vector3.up * 2f;
+        Vector3 spawnPosition = target + Vector3.up * 2f;
 
-        view.SetInstantPosition(
-            spawnPosition);
+        view.SetInstantPosition(spawnPosition);
 
-        view.transform.localScale =
-            Vector3.zero;
-
+        view.transform.localScale = Vector3.zero;
+        float distance = Mathf.Abs( spawnPosition.y - target.y);
+        float duration = Mathf.Min( distance * _config.FallDurationPerCell, _config.MaxFallDuration);
         await UniTask.WhenAll(
             view.MoveToAsync(
                 target,
-                0.2f),
+                duration
+            ),
 
             view.ScaleToAsync(
                 Vector3.one,
-                0.15f));
+                _config.SpawnScaleDuration
+            )
+        );
     }
 }

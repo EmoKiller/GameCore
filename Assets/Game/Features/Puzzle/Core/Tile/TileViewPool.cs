@@ -20,24 +20,30 @@ public sealed class TileViewPool
 
     public TileView Get()
     {
+        TileView view;
+
         if (_pool.Count > 0)
         {
-            TileView view =
-                _pool.Pop();
-            
-            view.gameObject.SetActive(true);
-
-            return view;
+            view = _pool.Pop();
+        }
+        else
+        {
+            view = Object.Instantiate(
+                _prefab,
+                _parent);
         }
 
-        return Object.Instantiate(
-            _prefab,
-            _parent);
+        view.gameObject.SetActive(true);
+
+        view.ResetVisual();
+
+        return view;
     }
 
-    public void Release(
-        TileView view)
+    public void Release(TileView view)
     {
+        view.ResetVisual();
+
         view.gameObject.SetActive(false);
 
         _pool.Push(view);

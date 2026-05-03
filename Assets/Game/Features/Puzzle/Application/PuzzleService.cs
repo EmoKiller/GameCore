@@ -63,7 +63,8 @@ public sealed class PuzzleService : IPuzzleService
         {
             return new SwapResult(
                 false,
-                new List<BoardChangeSet>()
+                new List<BoardChangeSet>(),
+                null
             );
         }
 
@@ -85,7 +86,9 @@ public sealed class PuzzleService : IPuzzleService
 
             return new SwapResult(
                 false,
-                new List<BoardChangeSet>());
+                new List<BoardChangeSet>(),
+                null
+                );
         }
 
         var cascadeResult = _cascadeProcessor.Process(_board);
@@ -107,7 +110,9 @@ public sealed class PuzzleService : IPuzzleService
 
         return new SwapResult(
             true,
-            allChangeSets);
+            allChangeSets,
+            cascadeResult
+        );
     }
     public bool IsInside(TilePosition position)
     {
