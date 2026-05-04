@@ -36,9 +36,9 @@ public sealed class TileLayer
     public void Create(int x, int y)
     {
         TileView view = _pool.Get();
-
-        TilePosition position =
-            new TilePosition(x, y);
+        if (view == null)
+            return;
+        TilePosition position = new TilePosition(x, y);
 
         view.SetPosition(position);
 
@@ -115,7 +115,6 @@ public sealed class TileLayer
     public TileView CreateOrReuse(TilePosition position, ETileType tileType)
     {
         TileView view = _pool.Get();
-
         view.SetPosition(position);
 
         view.SetSprite(_tileVisualDatabase.GetSprite(tileType));

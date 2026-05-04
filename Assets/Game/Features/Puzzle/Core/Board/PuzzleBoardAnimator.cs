@@ -179,7 +179,6 @@ public sealed class PuzzleBoardAnimator
         var view =
             _boardView.GetTileView(
                 transition.From);
-
         Vector3 target =
             _boardView.Layout.GetWorldPosition(
                 transition.To);
@@ -228,7 +227,6 @@ public sealed class PuzzleBoardAnimator
             _boardView.CreateOrReuseView(
                 transition.Position,
                 transition.TileType);
-
         Vector3 target =
             _boardView.Layout.GetWorldPosition(
                 transition.Position);

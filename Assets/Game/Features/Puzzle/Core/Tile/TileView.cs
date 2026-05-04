@@ -59,7 +59,6 @@ public sealed class TileView : MonoBehaviour
 
             await UniTask.Yield();
         }
-
         transform.position = target;
     }
     public async UniTask ScaleToAsync( Vector3 target, float duration)
@@ -85,7 +84,6 @@ public sealed class TileView : MonoBehaviour
 
             await UniTask.Yield();
         }
-
         transform.localScale = target;
     }
     public void ResetVisual()

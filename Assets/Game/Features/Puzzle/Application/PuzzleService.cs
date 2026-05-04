@@ -55,9 +55,7 @@ public sealed class PuzzleService : IPuzzleService
         _generator.Fill(_board);
         BoardChanged?.Invoke();
     }
-    public SwapResult TrySwap(
-        TilePosition a,
-        TilePosition b)
+    public SwapResult TrySwap(TilePosition a, TilePosition b)
     {
         if (_state != EPuzzleState.Idle)
         {

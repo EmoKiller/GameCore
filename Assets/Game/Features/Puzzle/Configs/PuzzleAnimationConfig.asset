@@ -15,7 +15,5 @@ MonoBehaviour:
   SwapDuration: 0.1
   InvalidSwapPause: 0.5
   RemoveDuration: 0.2
-  FallDurationPerCell: 0.59
-  MaxFallDuration: 0.5
-  SpawnDuration: 0.3
-  SpawnScaleDuration: 0.15
+  FallDurationPerUnit: 0.12
+  SpawnDuration: 0.08

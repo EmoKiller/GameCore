@@ -1,3 +1,5 @@
+using System;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Application.Core;
 using UnityEngine;
@@ -6,7 +8,7 @@ public interface IPuzzleInputService : IService
 {
     
 }
-public sealed class PuzzleInputService : IPuzzleInputService , IUpdatable
+public sealed class PuzzleInputService : IPuzzleInputService , IUpdatable , IOnPreShutdown
 {   
     private const float SwipeThreshold = 30f;
     private readonly Camera _camera;
@@ -16,6 +18,10 @@ public sealed class PuzzleInputService : IPuzzleInputService , IUpdatable
     private TilePosition? _selectedTile;
     private Vector2 _pointerDownPosition;
     private bool _hasConsumedSwipe;
+
+    private readonly CancellationTokenSource _disposeCts = new();
+    private CancellationToken Token => _disposeCts.Token;
+
     public PuzzleInputService(
         IPuzzleGameplayService service,
         IPointerInputReader input,
@@ -147,31 +153,43 @@ public sealed class PuzzleInputService : IPuzzleInputService , IUpdatable
             : Vector2Int.down;
     }
 
-    private async UniTask ExecuteSwap(
-        Vector2Int direction)
+    private async UniTask ExecuteSwap(Vector2Int direction)
     {
-        if (_selectedTile.HasValue == false)
+        try
         {
-            return;
+            if (_selectedTile.HasValue == false)
+            {
+                return;
+            }
+
+            TilePosition from =
+                _selectedTile.Value;
+
+            TilePosition to =
+                new TilePosition(
+                    from.X + direction.x,
+                    from.Y + direction.y);
+
+            if (_service.IsInside(to) == false)
+            {
+                return;
+            }
+
+            await _service.TrySwapAsync(
+                from,
+                to,
+                Token);
+
+            _selectedTile = null;
         }
-
-        TilePosition from =
-            _selectedTile.Value;
-
-        TilePosition to =
-            new TilePosition(
-                from.X + direction.x,
-                from.Y + direction.y);
-
-        if (_service.IsInside(to) == false)
+        catch (OperationCanceledException)
         {
-            return;
         }
+    }
 
-        await _service.TrySwapAsync(
-            from,
-            to);
-
-        _selectedTile = null;
+    public void OnPreShutdown()
+    {
+        _disposeCts.Cancel();
+        _disposeCts.Dispose();
     }
 }

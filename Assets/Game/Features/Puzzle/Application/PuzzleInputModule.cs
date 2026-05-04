@@ -36,6 +36,7 @@ public class PuzzleInputModule : BaseGameModule
 
         var puzzleInputService = new PuzzleInputService(puzzleGameplayService, pointerInputReader, camera);
         services.Register<IPuzzleInputService>(puzzleInputService);
+        
         applicationLifecycle.Register(puzzleInputService);
         
     }

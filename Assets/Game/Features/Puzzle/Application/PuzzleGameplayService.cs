@@ -5,7 +5,7 @@ using UnityEngine;
 public interface IPuzzleGameplayService : IService
 {
     UniTask CreateRuntime(CancellationToken ct);
-    UniTask TrySwapAsync( TilePosition a, TilePosition b);
+    UniTask TrySwapAsync( TilePosition a, TilePosition b, CancellationToken cancellationToken);
     bool IsInside(TilePosition position);
     bool IsBusy { get; }
 }
@@ -40,10 +40,9 @@ public sealed class PuzzleGameplayService : IPuzzleGameplayService
 
         _boardAnimator.InitializeBoard(_boardView);
     }
-    public async UniTask TrySwapAsync(
-        TilePosition a,
-        TilePosition b)
+    public async UniTask TrySwapAsync(TilePosition a, TilePosition b , CancellationToken ct)
     {
+        ct.ThrowIfCancellationRequested();
         if (_isBusy)
         {
             return;
@@ -52,8 +51,6 @@ public sealed class PuzzleGameplayService : IPuzzleGameplayService
         _isBusy = true;
 
         SwapResult result = _puzzleService.TrySwap(a, b);
-
-
 
         if (result.Success)
         {
