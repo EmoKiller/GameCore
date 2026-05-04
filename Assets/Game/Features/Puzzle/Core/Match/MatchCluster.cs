@@ -8,7 +8,6 @@ public sealed class MatchCluster
     public IReadOnlyCollection<TilePosition> Positions => _positions;
 
     private readonly HashSet<TilePosition> _positions;
-    public TilePosition AnyPosition => _positions.First();
 
     public MatchCluster(
         ETileType tileType,

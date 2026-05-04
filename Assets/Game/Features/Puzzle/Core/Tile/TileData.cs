@@ -4,19 +4,19 @@ public struct TileData
 {
     public ETileType Type;
 
-    public ETileSpecialType SpecialType;
+    public TileSpecialData Special;
 
     public TileData(
         ETileType type,
-        ETileSpecialType specialType = ETileSpecialType.None
+        TileSpecialData special = null
     )
     {
         Type = type;
 
-        SpecialType = specialType;
+        Special = special;
     }
 
     public readonly bool IsEmpty => Type == ETileType.None;
 
-    public readonly bool HasSpecial => SpecialType != ETileSpecialType.None;
+    public readonly bool HasSpecial => Special != null;
 }

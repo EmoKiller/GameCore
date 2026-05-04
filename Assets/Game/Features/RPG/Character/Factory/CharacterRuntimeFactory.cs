@@ -23,7 +23,7 @@ public sealed class CharacterRuntimeFactory : ICharacterRuntimeFactory
         CharacterDefinition def,
         CancellationToken ct)
     {
-        // 1. Load View
+        // //1. Load View
         // var handle = await _assets.LoadAsync<GameObject>(def.ViewAssetKey, ct);
         // var view = GameObject.Instantiate(handle.Asset)
         //                      .GetComponent<ICharacterView>();

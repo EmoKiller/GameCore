@@ -19,6 +19,9 @@ public class PuzzleModule : BaseGameModule
 
     protected override async UniTask OnInitializeAsync(IServiceContainer services, CancellationToken ct)
     {
+        var assetProvider = services.Resolve<IAssetProvider>();
+        var handleSpecialResolverDatabase = await assetProvider.LoadAsync<ScriptableObject>("SpecialResolverDatabase", ct);
+        var specialResolverDatabase = handleSpecialResolverDatabase.Asset as SpecialResolverDatabase;
         // Random
         var random = services.Resolve<IRandomProvider>();
         
@@ -36,10 +39,11 @@ public class PuzzleModule : BaseGameModule
         // CascadeProcessor
 
         var matchPatternAnalyzer = new MatchPatternAnalyzer();
-        var SpecialTileFactory = new SpecialTileFactory();
+
+        var specialTileResolver = new SpecialTileResolver(specialResolverDatabase);
         var specialTileProcessor = new SpecialTileProcessor(
             matchPatternAnalyzer,
-            SpecialTileFactory
+            specialTileResolver
         );
         var removeMatchedTilesProcessor = new RemoveMatchedTilesProcessor();
         var gravityProcessor = new GravityProcessor();

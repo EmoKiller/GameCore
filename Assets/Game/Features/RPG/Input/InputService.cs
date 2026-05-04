@@ -2,7 +2,6 @@ using System;
 using UnityEngine.InputSystem;
 using Game.Application.Core;
 using UnityEngine;
-using Game.Application.Events;
 
 namespace Game.Application.Core.Input
 {
@@ -14,17 +13,14 @@ namespace Game.Application.Core.Input
     public sealed class InputService : IInputService , IDisposable
     {
         private readonly PlayerInput _playerInput;
-        private ICharacterInput _playerInputAdapter;
         private readonly InputDeviceDetector _inputDeviceDetector;
  
         public InputService(
             PlayerInput playerInput,
-            PlayerInputAdapter playerInputAdapter,
             InputDeviceDetector inputDeviceDetector
             )
         {
             _playerInput = playerInput;
-            _playerInputAdapter = playerInputAdapter;
             _inputDeviceDetector = inputDeviceDetector;
 
             _playerInput.onControlsChanged += HandleDeviceChanged;

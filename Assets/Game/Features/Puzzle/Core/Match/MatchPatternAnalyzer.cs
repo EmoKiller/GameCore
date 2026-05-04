@@ -29,7 +29,7 @@ public sealed class MatchPatternAnalyzer : IMatchPatternAnalyzer
             return new SpecialSpawnResult(
                 true,
                 spawnPosition,
-                ETileSpecialType.ColorBomb);
+                EMatchPatternType.Line5);
         }
 
         bool hasHorizontal = horizontalLength >= 3;
@@ -41,7 +41,7 @@ public sealed class MatchPatternAnalyzer : IMatchPatternAnalyzer
             return new SpecialSpawnResult(
                 true,
                 spawnPosition,
-                ETileSpecialType.Bomb);
+                EMatchPatternType.TShape);
         }
 
         if (horizontalLength == 4)
@@ -49,7 +49,7 @@ public sealed class MatchPatternAnalyzer : IMatchPatternAnalyzer
             return new SpecialSpawnResult(
                 true,
                 spawnPosition,
-                ETileSpecialType.HorizontalRocket);
+                EMatchPatternType.Line4Horizontal);
         }
 
         if (verticalLength == 4)
@@ -57,7 +57,7 @@ public sealed class MatchPatternAnalyzer : IMatchPatternAnalyzer
             return new SpecialSpawnResult(
                 true,
                 spawnPosition,
-                ETileSpecialType.VerticalRocket);
+                EMatchPatternType.Line4Vertical);
         }
 
         return SpecialSpawnResult.None();

@@ -1,5 +1,4 @@
 using System;
-using Game.Application.Events;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -28,11 +27,6 @@ namespace Game.Application.Core.Input
             };
 
             SetDevice(newDevice);
-            
-            GameApplication.Instance.Services.Resolve<IEventBus>().Publish(
-                new InputDeviceOnChanger(newDevice),
-                EventChannel.Input
-                );
         }
 
         private void SetDevice(InputDeviceType device)

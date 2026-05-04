@@ -127,12 +127,6 @@ namespace Game.Application.Modules.UIModules
             
         }
 
-        public async UniTask ShowLoadingAsync(EGameState state)
-        {
-            Debug.Log(state  + "UImodule");
-            await Task.CompletedTask;
-        }
-
         private UIManifest BuildManifest()
         {
             // luôn PoolWarmupSize <= PoolCapacity    // nếu PoolWarmupSize > PoolCapacity bug

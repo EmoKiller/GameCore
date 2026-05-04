@@ -2,14 +2,10 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Application.Core;
-using Game.Application.Core.Input;
 using Game.Application.Core.Logging;
-using Game.Application.Core.Modules;
 using Game.Application.Core.SceneLoader;
 using Game.Application.Core.TimeService;
 using Game.Application.Events;
-using Game.Application.Modules.Assets;
-using Game.Application.Modules.UIModules;
 using UnityEngine;
 
 

@@ -2,20 +2,20 @@ public sealed class SpecialSpawnResult
 {
     public bool HasSpecial { get; }
 
-    public TilePosition SpawnPosition { get; }
+    public TilePosition Position  { get; }
 
-    public ETileSpecialType SpecialType { get; }
+    public EMatchPatternType Pattern { get; }
 
     public SpecialSpawnResult(
         bool hasSpecial,
-        TilePosition spawnPosition,
-        ETileSpecialType specialType)
+        TilePosition position,
+        EMatchPatternType pattern)
     {
         HasSpecial = hasSpecial;
 
-        SpawnPosition = spawnPosition;
+        Position = position;
 
-        SpecialType = specialType;
+        Pattern = pattern;
     }
 
     public static SpecialSpawnResult None()
@@ -23,6 +23,6 @@ public sealed class SpecialSpawnResult
         return new SpecialSpawnResult(
             false,
             default,
-            ETileSpecialType.None);
+            EMatchPatternType.None);
     }
 }

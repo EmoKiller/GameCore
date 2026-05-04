@@ -5,43 +5,56 @@ public sealed class SpecialTileProcessor
 {
     private readonly IMatchPatternAnalyzer _analyzer;
 
-    private readonly SpecialTileFactory _factory;
+    private readonly ISpecialTileResolver _resolver;
 
     public SpecialTileProcessor(
         IMatchPatternAnalyzer analyzer,
-        SpecialTileFactory factory)
+        ISpecialTileResolver resolver)
     {
         _analyzer = analyzer;
 
-        _factory = factory;
+        _resolver = resolver;
     }
 
     public void Process(
         PuzzleBoard board,
-        MatchResult result,
+        MatchResult matchResult,
         BoardChangeSet changeSet,
         SwapContext swapContext,
         HashSet<TilePosition> movedPositions)
     {
-        foreach (MatchCluster group in result.Clusters)
+        foreach (MatchCluster cluster in matchResult.Clusters)
         {
-            SpecialSpawnResult spawn = _analyzer.Analyze(group, swapContext, movedPositions);
+            SpecialSpawnResult result =_analyzer.Analyze(
+                    cluster,
+                    swapContext,
+                    movedPositions);
 
-            if (spawn.HasSpecial == false)
+            if (result.HasSpecial == false)
             {
                 continue;
             }
 
-            TileData specialTile = _factory.CreateSpecial(
-                    board,
-                    spawn.SpawnPosition,
-                    spawn.SpecialType);
-                    
-            changeSet.Protect(spawn.SpawnPosition);
+            TileData original = board.Get(result.Position);
+
+            TileSpecialData special = _resolver.Resolve(
+                    original.Type,
+                    result.Pattern);
+            Debug.Log( "special : "+ special);
+            if (special == null)
+            {
+                continue;
+            }
+
+            TileData specialTile = new TileData(original.Type, special);
+
+            board.Set(result.Position, specialTile);
+
             changeSet.Add(
                 new CreateSpecialTransition(
-                    spawn.SpawnPosition,
-                    specialTile));
+                    result.Position,
+                    specialTile.Special));
+            changeSet.Protect(result.Position);
         }
     }
 }

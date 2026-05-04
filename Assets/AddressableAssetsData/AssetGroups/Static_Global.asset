@@ -27,6 +27,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - staticglobal
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 2d11d269c671b0a42ada4679e6947ab2
+    m_Address: SpecialResolverDatabase
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - staticglobal
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 3f632e8c94af7844597648263a2669bd
     m_Address: LoadingView
     m_ReadOnly: 0
@@ -65,12 +71,6 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c37f2713bacf8cb48897b5f0c6a2eb9d
     m_Address: TileView
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - staticglobal
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: e0e142f3a4700974f98d194f5d032999
-    m_Address: SpecialTileVisualDatabase
     m_ReadOnly: 0
     m_SerializedLabels:
     - staticglobal

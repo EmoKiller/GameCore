@@ -7,17 +7,14 @@ public sealed class PuzzleBoardAnimator
 {
     private PuzzleBoardView _boardView;
     private readonly PuzzleAnimationConfig _config;
-    private readonly SpecialTileVisualDatabase _specialDatabase;
 
     private readonly Dictionary<int, int> _spawnCountsPerColumn = new();
 
     public PuzzleBoardAnimator(
-        PuzzleAnimationConfig config,
-        SpecialTileVisualDatabase specialDatabase
+        PuzzleAnimationConfig config
     )
     {
         _config = config;
-        _specialDatabase = specialDatabase;
     }
     public void InitializeBoard(PuzzleBoardView boardView)
     {
@@ -144,7 +141,7 @@ public sealed class PuzzleBoardAnimator
             return;
         }
 
-        view.SetSpecial(transition.Tile, _specialDatabase);
+        view.SetSpecial(transition.Special);
     }
     private async UniTask PlayRemoves(BoardChangeSet changeSet)
     {

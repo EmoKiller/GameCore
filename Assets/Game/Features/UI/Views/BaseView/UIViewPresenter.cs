@@ -1,5 +1,4 @@
 using System;
-using Game.Application.Events;
 using Game.Application.UI;
 using Game.Application.UI.Core.Abstractions;
 using Game.Presentation.UI;

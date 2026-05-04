@@ -10,10 +10,10 @@ public sealed class CascadeProcessor
 
     private readonly GravityProcessor _gravityProcessor;
 
+    private readonly SpawnProcessor _spawnProcessor;
+
     private readonly HashSet<TilePosition> _movedPositions = new();
     public HashSet<TilePosition> MovedPositions => _movedPositions;
-
-    private readonly SpawnProcessor _spawnProcessor;
 
     public CascadeProcessor(
         IMatchResolver matchResolver,

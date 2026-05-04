@@ -99,22 +99,16 @@ public sealed class TileView : MonoBehaviour
     {
         _spriteRenderer.sortingOrder = order;
     }
-    public void SetSpecial( TileData tile, SpecialTileVisualDatabase database)
+    public void SetSpecial(TileSpecialData special)
     {
-        Debug.Log(tile.SpecialType);
-
-        if (tile.SpecialType == ETileSpecialType.None)
+        if (special == null)
         {
             _specialRenderer.enabled = false;
             _specialRenderer.sprite = null;
-
             return;
         }
+        _specialRenderer.sprite = special.Icon;
 
-        Sprite sprite = database.GetSprite(tile.Type, tile.SpecialType);
-
-        _specialRenderer.enabled = true;
-
-        _specialRenderer.sprite = sprite;
+        _specialRenderer.enabled = special != null;
     }
 }

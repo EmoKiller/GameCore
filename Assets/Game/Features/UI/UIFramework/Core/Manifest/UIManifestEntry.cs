@@ -1,8 +1,5 @@
 using System;
-using Game.Application.UI;
 using Game.Application.UI.Core.Abstractions;
-using UnityEngine;
-using UnityEngine.AddressableAssets;
 namespace Game.Presentation.UI.Data
 {
     [Serializable]

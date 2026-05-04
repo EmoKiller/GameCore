@@ -4,7 +4,7 @@ using UnityEngine.ResourceManagement.AsyncOperations;
 
 
 public class AssetHandle<T> : IAssetHandle
-    where T : UnityEngine.Object
+    where T : Object
 {
     public string Key { get; }
     public T Asset { get; }

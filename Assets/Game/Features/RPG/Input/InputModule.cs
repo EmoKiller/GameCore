@@ -18,21 +18,20 @@ namespace Game.Application.Core.Input
 
         protected override async UniTask OnInitializeAsync(IServiceContainer services, CancellationToken ct)
         {
-            var playerInput = GameObject.FindFirstObjectByType<PlayerInput>();
+            // var playerInput = GameObject.FindFirstObjectByType<PlayerInput>();
             
-            if (playerInput == null)
-                throw new Exception("PlayerInput not found in scene");
+            // if (playerInput == null)
+            //     throw new Exception("PlayerInput not found in scene");
 
-            var inputDeviceDetector = new InputDeviceDetector(); 
-            var playerInputAdapter = new PlayerInputAdapter(playerInput);     
+            // var inputDeviceDetector = new InputDeviceDetector();   
 
-            var inputService = new InputService(
-                playerInput,
-                playerInputAdapter,
-                inputDeviceDetector
-                );
-            _inputService = inputService;
-            services.Register(_inputService);
+            // var inputService = new InputService(
+            //     playerInput,
+            //     playerInputAdapter,
+            //     inputDeviceDetector
+            //     );
+            // _inputService = inputService;
+            // services.Register(_inputService);
 
             await UniTask.CompletedTask;
         }
