@@ -19,3 +19,33 @@ MonoBehaviour:
   - TileType: 2
     Pattern: 1
     Result: {fileID: 11400000, guid: d6be0e84e9333bf47ba897e017c4bd2d, type: 2}
+  - TileType: 3
+    Pattern: 1
+    Result: {fileID: 11400000, guid: d6be0e84e9333bf47ba897e017c4bd2d, type: 2}
+  - TileType: 1
+    Pattern: 2
+    Result: {fileID: 11400000, guid: 72a22fda2d87d9d4ca1c1aeadbd86ece, type: 2}
+  - TileType: 2
+    Pattern: 2
+    Result: {fileID: 11400000, guid: 72a22fda2d87d9d4ca1c1aeadbd86ece, type: 2}
+  - TileType: 3
+    Pattern: 2
+    Result: {fileID: 11400000, guid: 72a22fda2d87d9d4ca1c1aeadbd86ece, type: 2}
+  - TileType: 1
+    Pattern: 4
+    Result: {fileID: 11400000, guid: 349d6235d90059b44a605bf26abba473, type: 2}
+  - TileType: 2
+    Pattern: 4
+    Result: {fileID: 11400000, guid: 349d6235d90059b44a605bf26abba473, type: 2}
+  - TileType: 3
+    Pattern: 4
+    Result: {fileID: 11400000, guid: 349d6235d90059b44a605bf26abba473, type: 2}
+  - TileType: 1
+    Pattern: 3
+    Result: {fileID: 11400000, guid: 46bcf16af6ab00940a342bf28e26530b, type: 2}
+  - TileType: 2
+    Pattern: 3
+    Result: {fileID: 11400000, guid: 46bcf16af6ab00940a342bf28e26530b, type: 2}
+  - TileType: 3
+    Pattern: 3
+    Result: {fileID: 11400000, guid: 46bcf16af6ab00940a342bf28e26530b, type: 2}

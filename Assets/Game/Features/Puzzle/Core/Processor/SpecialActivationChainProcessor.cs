@@ -41,17 +41,17 @@ public sealed class SpecialActivationChainProcessor : ISpecialActivationChainPro
 
             visited.Add(current);
 
-            TileData tile = board.Get(current);
+            SpecialActivationResult result =
+                _activationProcessor.Activate(
+                    board,
+                    current,
+                    changeSet);
 
-            if (tile.HasSpecial == false)
+            foreach (TilePosition next
+                in result.TriggeredSpecials)
             {
-                continue;
+                queue.Enqueue(next);
             }
-
-            _activationProcessor.Activate(
-                board,
-                current,
-                changeSet);
         }
     }
 }

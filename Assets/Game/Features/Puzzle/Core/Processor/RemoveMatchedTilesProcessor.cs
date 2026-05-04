@@ -3,37 +3,42 @@ using UnityEngine;
 
 public sealed class RemoveMatchedTilesProcessor
 {
-    public void Remove( PuzzleBoard board, MatchResult matchResult, BoardChangeSet changeSet)
+    public void Remove(
+        PuzzleBoard board,
+        MatchResult matchResult,
+        BoardChangeSet changeSet)
     {
-        // HashSet<TilePosition> removed = new HashSet<TilePosition>();
-        // foreach (var group in matchResult.Groups)
-        // {
-        //     foreach (var position in group.Positions)
-        //     {
-        //         if (removed.Add(position) == false)
-        //         {
-        //             continue;
-        //         }
-        //         changeSet.Add(
-        //             new RemoveTransition(position));
+        HashSet<TilePosition> removed =
+            new HashSet<TilePosition>();
 
-        //         board.Set(
-        //             position,
-        //             new TileData(ETileType.None));
-        //     }
-        // }
-        foreach (var group in matchResult.Clusters)
+        foreach (MatchCluster cluster
+            in matchResult.Clusters)
         {
-            foreach (var position in group.Positions)
+            foreach (TilePosition pos
+                in cluster.Positions)
             {
-                if (changeSet.IsProtected(position))
+                if (removed.Contains(pos))
                 {
                     continue;
                 }
-                
-                changeSet.Add(new RemoveTransition(position));
 
-                board.Clear(position);
+                removed.Add(pos);
+
+                TileData tile =
+                    board.Get(pos);
+
+                if (tile.IsEmpty || tile.HasSpecial || changeSet.IsProtected(pos))
+                {
+                    continue;
+                }
+
+
+                changeSet.MarkRemoved(pos);
+
+                changeSet.Add(
+                    new RemoveTransition(pos));
+
+                board.Clear(pos);
             }
         }
     }

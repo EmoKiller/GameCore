@@ -1,20 +1,30 @@
 using UnityEngine;
 public interface ISpecialActivationProcessor
 {
-    void Activate(PuzzleBoard board, TilePosition position, BoardChangeSet changeSet);
+    SpecialActivationResult Activate(PuzzleBoard board, TilePosition position, BoardChangeSet changeSet);
 }
 public sealed class SpecialActivationProcessor : ISpecialActivationProcessor
 {
-    public void Activate(PuzzleBoard board, TilePosition position, BoardChangeSet changeSet)
+    public SpecialActivationResult Activate(
+        PuzzleBoard board,
+        TilePosition position,
+        BoardChangeSet changeSet)
     {
         TileData tile = board.Get(position);
 
         if (tile.HasSpecial == false)
         {
-            return;
+            return SpecialActivationResult.Empty();
         }
+        
+        SpecialTileBehaviour behaviour =
+            tile.Special.Behaviour;
 
-        tile.Special.Behaviour.Activate(
+        
+        changeSet.Add(new RemoveTransition(position));
+        board.Clear(position);
+
+        return behaviour.Activate(
             board,
             position,
             changeSet);

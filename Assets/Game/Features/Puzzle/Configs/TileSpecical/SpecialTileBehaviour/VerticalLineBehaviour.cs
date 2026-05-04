@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Horizontal Line",menuName = "Puzzle/Special/Special Behaviours/Horizontal Line")]
-public sealed class HorizontalLineBehaviour : SpecialTileBehaviour
+[CreateAssetMenu(fileName = "Vertical Line",menuName = "Puzzle/Special/Special Behaviours/Vertical Line")]
+public sealed class VerticalLineBehaviour
+    : SpecialTileBehaviour
 {
     public override SpecialActivationResult Activate(
         PuzzleBoard board,
@@ -12,12 +13,12 @@ public sealed class HorizontalLineBehaviour : SpecialTileBehaviour
         List<TilePosition> triggered =
             new List<TilePosition>();
 
-        for (int x = 0; x < board.Width; x++)
+        for (int y = 0; y < board.Height; y++)
         {
             TilePosition target =
                 new TilePosition(
-                    x,
-                    position.Y);
+                    position.X,
+                    y);
 
             SpecialActivationUtility.ProcessTarget(
                 board,

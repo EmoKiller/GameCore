@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79e9fd64b51615d41afa14467a09cb39, type: 3}
-  m_Name: HorizontalLine
-  m_EditorClassIdentifier: ProjectFeatures::TileSpecialData
-  <Id>k__BackingField: 1
-  <Icon>k__BackingField: {fileID: 1415374166, guid: efeca123e18ccd647b28666e19390cbe, type: 3}
-  <Behaviour>k__BackingField: {fileID: 11400000, guid: bde4bf7c981da3f4690f755912f6405b, type: 2}
+  m_Name: ColorBoomData
+  m_EditorClassIdentifier: Project.Feature.Puzzle::TileSpecialData
+  <Id>k__BackingField: 4
+  <Icon>k__BackingField: {fileID: 501500560, guid: efeca123e18ccd647b28666e19390cbe, type: 3}
+  <Behaviour>k__BackingField: {fileID: 11400000, guid: 92ca3d309659b1c499eedef20b44a98d, type: 2}

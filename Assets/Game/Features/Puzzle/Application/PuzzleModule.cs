@@ -45,6 +45,9 @@ public class PuzzleModule : BaseGameModule
             matchPatternAnalyzer,
             specialTileResolver
         );
+        var SpecialActivationProcessor = new SpecialActivationProcessor();
+        var specialActivationChainProcessor = new SpecialActivationChainProcessor(SpecialActivationProcessor);
+
         var removeMatchedTilesProcessor = new RemoveMatchedTilesProcessor();
         var gravityProcessor = new GravityProcessor();
         var spawnProcessor = new SpawnProcessor(random);
@@ -52,10 +55,10 @@ public class PuzzleModule : BaseGameModule
         var cascadeProcessor = new CascadeProcessor(
             matchResolver,
             specialTileProcessor,
+            specialActivationChainProcessor,
             removeMatchedTilesProcessor,
             gravityProcessor,
             spawnProcessor
-
         ); 
 
         // PuzzleService

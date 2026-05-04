@@ -11,9 +11,5 @@ public sealed class TileSpecialData : ScriptableObject
     public Sprite Icon { get; private set; }
 
     [field: SerializeField]
-    public SpecialTileBehaviour Behaviour
-    {
-        get;
-        private set;
-    }
+    public SpecialTileBehaviour Behaviour { get; private set; }
 }

@@ -1,10 +1,12 @@
 using System.Collections.Generic;
+using System.Linq;
 
 public sealed class CascadeProcessor
 {
     private readonly IMatchResolver _matchResolver;
 
     private readonly SpecialTileProcessor _specialTileProcessor;
+    private readonly ISpecialActivationChainProcessor _specialActivationProcessor;
 
     private readonly RemoveMatchedTilesProcessor _removeProcessor;
 
@@ -18,12 +20,14 @@ public sealed class CascadeProcessor
     public CascadeProcessor(
         IMatchResolver matchResolver,
         SpecialTileProcessor specialTileProcessor,
+        ISpecialActivationChainProcessor specialActivationProcessor,
         RemoveMatchedTilesProcessor removeProcessor,
         GravityProcessor gravityProcessor,
         SpawnProcessor spawnProcessor)
     {
         _matchResolver = matchResolver;
         _specialTileProcessor = specialTileProcessor;
+        _specialActivationProcessor = specialActivationProcessor;
         _removeProcessor = removeProcessor;
         _gravityProcessor = gravityProcessor;
         _spawnProcessor = spawnProcessor;
@@ -80,12 +84,19 @@ public sealed class CascadeProcessor
         SwapContext swapContext
     )
     {
+        IEnumerable<TilePosition> activatedSpecials = matchResult.GetSpecialPositions(board).ToList();
+
         _specialTileProcessor.Process(
             board,
             matchResult,
             changeSet,
             swapContext,
             _movedPositions);
+
+        _specialActivationProcessor.Process(
+            board,
+            activatedSpecials,
+            changeSet);
 
         _removeProcessor.Remove(
             board,

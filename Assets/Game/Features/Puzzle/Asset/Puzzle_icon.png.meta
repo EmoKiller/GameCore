@@ -264,7 +264,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Special_Tile_Sword_Vertical
+      name: Special_Tile_Sword_Horizontal
       rect:
         serializedVersion: 2
         x: 31
@@ -286,7 +286,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Special_Tile_Sword_Horizontal
+      name: Special_Tile_Sword_Vertical
       rect:
         serializedVersion: 2
         x: 31
@@ -316,7 +316,7 @@ TextureImporter:
         width: 16
         height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -338,7 +338,7 @@ TextureImporter:
         width: 16
         height: 17
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -370,8 +370,8 @@ TextureImporter:
       BoomClor: 501500560
       Puzzle_icon_4: -1569024559
       Puzzle_icon_6: -893999540
-      Special_Tile_Sword_Horizontal: 1415374166
-      Special_Tile_Sword_Vertical: -2137694403
+      Special_Tile_Sword_Horizontal: -2137694403
+      Special_Tile_Sword_Vertical: 1415374166
       Tile_Coin: 1726836101
       Tile_Heart: 2089510123
       Tile_Shield: -973319780
