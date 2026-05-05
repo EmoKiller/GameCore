@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79e9fd64b51615d41afa14467a09cb39, type: 3}
   m_Name: BombData
   m_EditorClassIdentifier: Project.Feature.Puzzle::TileSpecialData
-  <Id>k__BackingField: 3
+  <Id>k__BackingField: Bomb
   <Icon>k__BackingField: {fileID: 1160974469, guid: efeca123e18ccd647b28666e19390cbe, type: 3}
   <Behaviour>k__BackingField: {fileID: 11400000, guid: ab922c8d23d2af64e9dccdc3c455d442, type: 2}

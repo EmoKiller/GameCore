@@ -73,7 +73,7 @@ MonoBehaviour:
     TileType: 0
     Special: {fileID: 0}
   - Position: {x: 3, y: 2}
-    TileType: 2
+    TileType: 0
     Special: {fileID: 0}
   - Position: {x: 4, y: 2}
     TileType: 0

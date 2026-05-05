@@ -1,9 +1,14 @@
+using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
 [CustomEditor(typeof(BoardPreset))]
 public sealed class BoardPresetEditor : Editor
 {
+    private TileVisualDatabase _tileVisualDatabase;
+    private SpecialResolverDatabase _database;
+    private Dictionary<string, TileSpecialData> _specialLookup;
     private const int CellSize = 70;
 
     private BoardPreset _preset;
@@ -15,6 +20,10 @@ public sealed class BoardPresetEditor : Editor
         _preset = (BoardPreset)target;
 
         EnsureTileArray();
+        _database = FindDatabase<SpecialResolverDatabase>();
+        _tileVisualDatabase =
+        FindDatabase<TileVisualDatabase>();
+        BuildLookup();
     }
 
     public override void OnInspectorGUI()
@@ -24,6 +33,8 @@ public sealed class BoardPresetEditor : Editor
         DrawBoardSize();
 
         GUILayout.Space(10);
+
+        DrawBrushToolbar();
 
         DrawGrid();
 
@@ -91,124 +102,159 @@ public sealed class BoardPresetEditor : Editor
         EditorGUILayout.EndScrollView();
     }
 
-    private void DrawCell(int x, int y)
+    private void DrawCell(
+        int x,
+        int y)
     {
         ref TilePresetData tile =
             ref GetTile(x, y);
 
-        string special =
-            tile.Special != null
-                ? tile.Special.Id
-                : "-";
+        Rect rect =
+            GUILayoutUtility.GetRect(
+                CellSize,
+                CellSize);
 
-        string label =
-            $"{tile.TileType}\n{special}";
+        GUI.Box(
+            rect,
+            GUIContent.none);
 
-        if (GUILayout.Button(
-                label,
-                GUILayout.Width(CellSize),
-                GUILayout.Height(CellSize)))
+        Texture preview = null;
+
+        if (tile.Special != null &&
+            tile.Special.Icon != null)
         {
-            ShowCellMenu(x, y);
+            preview =
+                AssetPreview.GetAssetPreview(
+                    tile.Special.Icon);
+
+            if (preview == null)
+            {
+                preview =
+                    AssetPreview.GetMiniThumbnail(
+                        tile.Special.Icon);
+            }
+        }
+        else
+        {
+            Sprite sprite =
+                _tileVisualDatabase.GetSprite(
+                    tile.TileType);
+
+            if (sprite != null)
+            {
+                preview =
+                    AssetPreview.GetAssetPreview(
+                        sprite);
+
+                if (preview == null)
+                {
+                    preview =
+                        AssetPreview.GetMiniThumbnail(
+                            sprite);
+                }
+            }
+        }
+
+        if (preview != null)
+        {
+            GUI.DrawTexture(
+                rect,
+                preview,
+                ScaleMode.ScaleToFit);
+        }
+
+        Event e =
+            Event.current;
+
+        bool isInside =
+            rect.Contains(
+                e.mousePosition);
+
+        if (isInside == false)
+        {
+            return;
+        }
+
+        if (e.button == 0)
+        {
+            if (e.type == EventType.MouseDown ||
+                e.type == EventType.MouseDrag)
+            {
+                PaintCell(x, y);
+
+                e.Use();
+            }
+        }
+
+        if (e.button == 1)
+        {
+            if (e.type == EventType.MouseDown ||
+                e.type == EventType.MouseDrag)
+            {
+                ClearCell(x, y);
+
+                e.Use();
+            }
         }
     }
 
-    private void ShowCellMenu(int x, int y)
+    private void ClearCell(
+        int x,
+        int y)
     {
-        GenericMenu menu =
-            new GenericMenu();
+        ref TilePresetData tile =
+            ref GetTile(x, y);
 
-        AddTileMenuItem(
-            menu,
-            x,
-            y,
-            ETileType.None);
+        tile.TileType =
+            ETileType.None;
 
-        menu.AddSeparator("Tile/");
+        tile.Special = null;
 
-        foreach (ETileType tileType
-                 in System.Enum.GetValues(
-                     typeof(ETileType)))
+        EditorUtility.SetDirty(
+            _preset);
+
+        Repaint();
+    }
+    private void AddSpecialMenus(
+        GenericMenu menu,
+        int x,
+        int y)
+    {
+        HashSet<string> added =
+            new HashSet<string>();
+
+        foreach (SpecialResolverEntry entry in _database.Entries)
         {
-            if (tileType == ETileType.None)
+            TileSpecialData special = entry.Result;
+
+            if (special == null)
             {
                 continue;
             }
 
-            AddTileMenuItem(
-                menu,
-                x,
-                y,
-                tileType);
+            if (added.Contains(special.Id))
+            {
+                continue;
+            }
+
+            added.Add(special.Id);
+
+            menu.AddItem(
+                new GUIContent(
+                    $"Special/{special.Id}"),
+                false,
+                () =>
+                {
+                    ref TilePresetData tile =
+                        ref GetTile(x, y);
+
+                    tile.Special = special;
+
+                    EditorUtility.SetDirty(
+                        _preset);
+                });
         }
-
-        menu.AddSeparator("");
-
-        menu.AddItem(
-            new GUIContent(
-                "Special/None"),
-            false,
-            () =>
-            {
-                ref TilePresetData tile =
-                    ref GetTile(x, y);
-
-                tile.Special = null;
-
-                EditorUtility.SetDirty(
-                    _preset);
-            });
-
-        AddSpecialMenuItem(
-            menu,
-            x,
-            y,
-            "Special/HorizontalLine",
-            "HorizontalLine");
-
-        AddSpecialMenuItem(
-            menu,
-            x,
-            y,
-            "Special/VerticalLine",
-            "VerticalLine");
-
-        AddSpecialMenuItem(
-            menu,
-            x,
-            y,
-            "Special/Bomb",
-            "Bomb");
-
-        AddSpecialMenuItem(
-            menu,
-            x,
-            y,
-            "Special/ColorBomb",
-            "ColorBomb");;
-
-        menu.AddSeparator("");
-
-        menu.AddItem(
-            new GUIContent("Clear"),
-            false,
-            () =>
-            {
-                ref TilePresetData tile =
-                    ref GetTile(x, y);
-
-                tile.TileType =
-                    ETileType.None;
-
-                tile.Special = null;
-
-                EditorUtility.SetDirty(
-                    _preset);
-            });
-
-        menu.ShowAsContext();
     }
-
     private void AddTileMenuItem(
         GenericMenu menu,
         int x,
@@ -234,39 +280,7 @@ public sealed class BoardPresetEditor : Editor
             });
     }
 
-    private void AddSpecialMenuItem(
-        GenericMenu menu,
-        int x,
-        int y,
-        string menuPath,
-        string specialId)
-    {
-        menu.AddItem(
-            new GUIContent(menuPath),
-            false,
-            () =>
-            {
-                TileSpecialData special =
-                    FindSpecial(
-                        specialId);
-
-                if (special == null)
-                {
-                    Debug.LogError(
-                        $"Missing TileSpecialData: {specialId}");
-
-                    return;
-                }
-
-                ref TilePresetData tile =
-                    ref GetTile(x, y);
-
-                tile.Special = special;
-
-                EditorUtility.SetDirty(
-                    _preset);
-            });
-    }
+    
     private TileSpecialData FindSpecial(
         string id)
     {
@@ -386,5 +400,215 @@ public sealed class BoardPresetEditor : Editor
 
         gameplay.ReloadBoard(
             _preset);
+    }
+
+    private T FindDatabase<T>() where T : ScriptableObject
+    {
+        string[] guids = AssetDatabase.FindAssets($"t:{typeof(T).Name}");
+
+        if (guids.Length == 0)
+        {
+            Debug.LogError($"Missing database: {typeof(T).Name}");
+
+            return null;
+        }
+
+        string path = AssetDatabase.GUIDToAssetPath(guids[0]);
+
+        return AssetDatabase.LoadAssetAtPath<T>(path);
+    }
+    private void BuildLookup()
+    {
+        _specialLookup = new Dictionary<string, TileSpecialData>();
+
+        if (_database == null)
+        {
+            return;
+        }
+
+        foreach (SpecialResolverEntry entry
+                in _database.Entries)
+        {
+            TileSpecialData special =
+                entry.Result;
+
+            if (special == null)
+            {
+                continue;
+            }
+
+            _specialLookup[special.Id] =
+                special;
+        }
+    }
+
+
+    private ETileType _selectedTileType;
+
+    private TileSpecialData _selectedSpecial;
+
+    private void DrawBrushToolbar()
+    {
+        EditorGUILayout.LabelField(
+            "Brushes",
+            EditorStyles.boldLabel);
+
+        DrawNormalTileBrushes();
+
+        EditorGUILayout.Space();
+
+        DrawSpecialBrushes();
+    }
+    private void DrawNormalTileBrushes()
+    {
+        if (_tileVisualDatabase == null)
+        {
+            return;
+        }
+
+        EditorGUILayout.LabelField(
+            "Tiles",
+            EditorStyles.boldLabel);
+
+        EditorGUILayout.BeginHorizontal();
+
+        foreach (TileVisualEntry entry
+                in _tileVisualDatabase.Entries)
+        {
+            if (entry.Type == ETileType.None)
+            {
+                continue;
+            }
+
+            GUIStyle style =
+                new GUIStyle(GUI.skin.button);
+
+            if (_selectedSpecial == null &&
+                _selectedTileType == entry.Type)
+            {
+                style.normal.background =
+                    style.active.background;
+            }
+
+            Texture preview = AssetPreview.GetAssetPreview( entry.Sprite);
+
+            if (preview == null)
+            {
+                preview = AssetPreview.GetMiniThumbnail(entry.Sprite);
+            }
+
+            GUIContent content = new GUIContent(preview);
+
+            if (GUILayout.Button(
+                    content,
+                    style,
+                    GUILayout.Width(48),
+                    GUILayout.Height(48)))
+            {
+                _selectedTileType =
+                    entry.Type;
+
+                _selectedSpecial =
+                    null;
+
+                Repaint();
+            }
+        }
+
+        EditorGUILayout.EndHorizontal();
+    }
+    private void DrawSpecialBrushes()
+    {
+        if (_database == null)
+        {
+            return;
+        }
+
+        EditorGUILayout.Space();
+
+        EditorGUILayout.LabelField(
+            "Specials",
+            EditorStyles.boldLabel);
+
+        EditorGUILayout.BeginHorizontal();
+
+        HashSet<string> added =
+            new HashSet<string>();
+
+        foreach (SpecialResolverEntry entry
+                in _database.Entries)
+        {
+            TileSpecialData special =
+                entry.Result;
+
+            if (special == null)
+            {
+                continue;
+            }
+
+            if (added.Contains(special.Id))
+            {
+                continue;
+            }
+
+            added.Add(special.Id);
+
+            GUIStyle style =
+                new GUIStyle(GUI.skin.button);
+
+            if (_selectedSpecial == special)
+            {
+                style.normal.background =
+                    style.active.background;
+            }
+
+            Texture preview = AssetPreview.GetAssetPreview(special.Icon);
+
+            if (preview == null)
+            {
+                preview = AssetPreview.GetMiniThumbnail(special.Icon);
+            }
+
+            GUIContent content = new GUIContent(preview);
+
+            if (GUILayout.Button(
+                    content,
+                    style,
+                    GUILayout.Width(48),
+                    GUILayout.Height(48)))
+            {
+                _selectedSpecial =
+                    special;
+
+                Repaint();
+            }
+        }
+
+        EditorGUILayout.EndHorizontal();
+    }
+    private void PaintCell(
+        int x,
+        int y)
+    {
+        ref TilePresetData tile =
+            ref GetTile(x, y);
+
+        if (_selectedSpecial != null)
+        {
+            tile.Special =
+                _selectedSpecial;
+        }
+        else
+        {
+            tile.TileType =
+                _selectedTileType;
+
+            tile.Special = null;
+        }
+
+        EditorUtility.SetDirty(
+            _preset);
+
+        Repaint();
     }
 }

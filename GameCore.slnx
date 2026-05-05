@@ -49,7 +49,7 @@
   <Project Path="Unity.2D.PixelPerfect.Editor.csproj" />
   <Project Path="UniRx.Examples.csproj" />
   <Project Path="Project.Shared.csproj" />
-  <Project Path="Project.Bootstrap.csproj" />
+  <Project Path="Project.BootStrap.Puzzle.csproj" />
   <Project Path="Unity.InputSystem.ForUI.csproj" />
   <Project Path="Unity.AI.Navigation.csproj" />
   <Project Path="Unity.Collections.CodeGen.csproj" />
