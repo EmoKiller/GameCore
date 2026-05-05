@@ -6,10 +6,6 @@ using UnityEngine;
 
 public class CemeraModule : BaseGameModule
 {
-    public override string ModuleName => "CemeraModule";
-
-    public override int InitializationOrder => 0;
-
     public override Type[] GetDependencies() => Type.EmptyTypes;
 
     protected override async UniTask OnInitializeAsync(IServiceContainer services, CancellationToken ct)

@@ -6,10 +6,6 @@ using UnityEngine;
 
 public class PuzzleGameplayModule : BaseGameModule
 {
-    public override string ModuleName => "PuzzleGameplayModule";
-
-    public override int InitializationOrder => 10;
-
     public override Type[] GetDependencies()
     {
         return new Type[]

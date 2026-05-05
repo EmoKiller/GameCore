@@ -10,9 +10,6 @@ using UnityEngine;
 
 public class PuzzleGameFlowModule : BaseGameFlowModule<PuzzleGameStateContext>
 {
-    public override string ModuleName => "PuzzelGameFlowModule";
-    public override int InitializationOrder => 100;
-
     public override Type[] GetDependencies() => new[]
     {
         typeof(AssetModule),

@@ -6,10 +6,6 @@ using UnityEngine;
 
 public class PuzzleCameraModule : BaseGameModule
 {
-    public override string ModuleName => "PuzzleCameraModule";
-
-    public override int InitializationOrder => 0;
-
     public override Type[] GetDependencies() => Type.EmptyTypes;
 
     protected override async UniTask OnInitializeAsync(IServiceContainer services, CancellationToken ct)

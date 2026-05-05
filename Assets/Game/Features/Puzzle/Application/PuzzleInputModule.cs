@@ -7,10 +7,6 @@ using UnityEngine.InputSystem;
 
 public class PuzzleInputModule : BaseGameModule
 {
-    public override string ModuleName => "PuzzleInputModule";
-
-    public override int InitializationOrder => 10;
-
     public override Type[] GetDependencies()
     {
         return new Type[]

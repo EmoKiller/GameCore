@@ -10,9 +10,6 @@ using UnityEngine;
 
 public class RPGGameFlowModule : BaseGameFlowModule<RPGGameStateContext>
 {
-    public override string ModuleName => "RPGGameFlowModule";
-    public override int InitializationOrder => 100;
-
     public override Type[] GetDependencies() => new[]
     {
         typeof(AssetModule),

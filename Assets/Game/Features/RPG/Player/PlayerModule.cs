@@ -8,10 +8,6 @@ using UnityEngine;
 
 public class PlayerModule : BaseGameModule
 {
-    public override string ModuleName => "PlayerModule";
-
-    public override int InitializationOrder => 10;
-
     public override Type[] GetDependencies() => Type.EmptyTypes;
 
     protected override async UniTask OnInitializeAsync(IServiceContainer services, CancellationToken ct)

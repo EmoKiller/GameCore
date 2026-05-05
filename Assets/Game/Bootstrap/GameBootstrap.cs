@@ -11,26 +11,6 @@ using UnityEngine;
 
 namespace Game.Bootstrap
 {
-    /// <summary>
-    /// Example bootstrap script showing how to initialize GameApplication.
-    /// 
-    /// This is a MonoBehaviour placed in your first scene that:
-    /// 1. Creates GameApplication
-    /// 2. Registers services (including ILogger and ITimeService)
-    /// 3. Registers modules via factory
-    /// 4. Initializes the application
-    /// 
-    /// After this runs, your game is fully initialized and ready.
-    /// 
-    /// Pattern:
-    /// - THIS is your game's bootstrap
-    /// - NOT a scene loader or manager
-    /// - Just sets up the application infrastructure
-    /// - Uses dependency injection for loose coupling
-    /// </summary>
-    
-
-    
     public abstract class GameBootstrap : MonoBehaviour
     {
         protected GameApplication App;
@@ -48,6 +28,10 @@ namespace Game.Bootstrap
             // Run Task
             Run(_bootstrapCts.Token).Forget();
 
+        }
+
+        private void Start() 
+        {
             QualitySettings.vSyncCount = 0;
             UnityEngine.Application.targetFrameRate = 120;
         }

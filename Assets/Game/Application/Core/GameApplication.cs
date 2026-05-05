@@ -149,24 +149,33 @@ namespace Game.Application.Core
         /// Register a game module.
         /// Must be called before Initialize().
         /// </summary>
-        public void RegisterModule(IGameModule module)
+        // public void RegisterModule(IGameModule module)
+        // {
+        //     if (module == null)
+        //         throw new ArgumentNullException(nameof(module));
+
+        //     if (_initialized)
+        //     {
+        //         throw new InvalidOperationException(
+        //             "Cannot register modules after initialization. " +
+        //             "Call RegisterModule before Initialize()."
+        //         );
+        //     }
+
+        //     _moduleLoader.RegisterModule(module);
+        //     if (_logDebugInfo)
+        //         _logger?.Log($"Registered module '{module.ModuleName}'");
+        // }
+        public void RegisterModule<T>() where T : MonoBehaviour, IGameModule
         {
-            if (module == null)
-                throw new ArgumentNullException(nameof(module));
-
             if (_initialized)
-            {
-                throw new InvalidOperationException(
-                    "Cannot register modules after initialization. " +
-                    "Call RegisterModule before Initialize()."
-                );
-            }
+                throw new InvalidOperationException("Cannot register after initialization");
 
-            _moduleLoader.RegisterModule(module);
+            _moduleLoader.RegisterModule(typeof(T));
+
             if (_logDebugInfo)
-                _logger?.Log($"Registered module '{module.ModuleName}'");
+                _logger?.Log($"Registered module '{typeof(T).Name}'");
         }
-
         public void Validate()
         {
             // var modules = _moduleLoader.GetAllModules(); // Bạn cần thêm hàm getter này
@@ -267,7 +276,7 @@ namespace Game.Application.Core
 
             // Initialize core systems
             _services = new ServiceContainer();
-            _moduleLoader = new ModuleLoader(_services);
+            _moduleLoader = new ModuleLoader(_services,transform);
             _lifecycle = new ApplicationLifecycle();
             // Register lifecycle as a service
             _services.Register<IApplicationLifecycle>(_lifecycle);

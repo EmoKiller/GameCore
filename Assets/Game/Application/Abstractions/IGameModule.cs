@@ -22,12 +22,6 @@ namespace Game.Application.Core
         string ModuleName { get; }
 
         /// <summary>
-        /// Kiểm soát thứ tự khởi tạo. Các giá trị thấp hơn khởi tạo trước.
-        /// Sử dụng phạm vi 0-100. Ví dụ: Input (10), Physics (20), Gameplay (50), UI (90).
-        /// </summary>
-        int InitializationOrder { get; }
-
-        /// <summary>
         /// Trả về mảng các loại mà module này phụ thuộc vào.
         /// Các dịch vụ này phải được đăng ký trước khi module khởi tạo.
         /// 

@@ -10,9 +10,6 @@ using Game.Application.Events.Debugging;
 
 public sealed class EventModule : BaseGameModule 
 {
-    public override string ModuleName => "EventModule";
-
-    public override int InitializationOrder => 0;
     public override Type[] GetDependencies() => Type.EmptyTypes;
 
     private IEventBus _eventBus;

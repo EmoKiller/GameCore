@@ -11,15 +11,16 @@ namespace Game.Application.Modules.Assets
     /// </summary>
     public class AssetModule : BaseGameModule
     {
-        public override string ModuleName => "AssetModule";
-        public override int InitializationOrder => 0;
         public override Type[] GetDependencies() => Type.EmptyTypes;
         
-        private readonly AssetScope _globalScope = new();
+        private AssetScope _globalScope;
 
         private IAssetProvider _assetProvider;
+        private void Awake() 
+        {
+            _globalScope = new AssetScope();
+        }
         
-
         protected override async UniTask OnInitializeAsync(IServiceContainer services, CancellationToken ct)
         {   
             // Register Addressable Asset Provider
@@ -35,7 +36,7 @@ namespace Game.Application.Modules.Assets
             }
 
         }
-
+        
         public override void Shutdown()
         {
             _globalScope.Dispose();

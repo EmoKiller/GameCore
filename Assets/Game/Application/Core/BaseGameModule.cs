@@ -5,11 +5,21 @@ using UnityEngine;
 
 namespace Game.Application.Core
 {
-    public abstract class BaseGameModule : IGameModule , IAsyncInitializable
+    public abstract class BaseGameModule : MonoBehaviour, IGameModule , IAsyncInitializable
     {
-        public abstract string ModuleName { get; }
+        private string _cachedModuleName;
 
-        public abstract int InitializationOrder { get; }
+        public virtual string ModuleName 
+        {
+            get 
+            {
+                if (string.IsNullOrEmpty(_cachedModuleName))
+                {
+                    _cachedModuleName = this.GetType().Name;
+                }
+                return _cachedModuleName;
+            }
+        }
 
         public bool IsInitialized { get; protected set; }
 

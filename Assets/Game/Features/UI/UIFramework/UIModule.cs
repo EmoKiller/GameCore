@@ -16,9 +16,6 @@ namespace Game.Application.Modules.UIModules
 {
     public class UIModule : BaseGameModule
     {
-        public override string ModuleName => "UIModule";
-
-        public override int InitializationOrder => 1;
         public override Type[] GetDependencies()
         {
             return new Type[]

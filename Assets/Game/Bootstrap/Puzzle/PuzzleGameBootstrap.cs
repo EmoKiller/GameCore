@@ -8,18 +8,12 @@ namespace Game.Bootstrap
     {
         protected override void RegisterModules()
         {
-            var factory = new ModuleFactory();
-
-            factory.AddModule<AssetModule>(App);
-            factory.AddModule<UIModule>(App);
-
-
-            factory.AddModule<PuzzleModule>(App);
-            factory.AddModule<PuzzleGameplayModule>(App);
-            factory.AddModule<PuzzleInputModule>(App);
-            
-
-            factory.AddModule<PuzzleGameFlowModule>(App);
+            App.RegisterModule<AssetModule>();
+            App.RegisterModule<UIModule>();
+            App.RegisterModule<PuzzleModule>();
+            App.RegisterModule<PuzzleGameplayModule>();
+            App.RegisterModule<PuzzleInputModule>();
+            App.RegisterModule<PuzzleGameFlowModule>();
         }
     }
 }

@@ -25,88 +25,181 @@ namespace Game.Application.Core
     public class ModuleLoader
     {
         private readonly IServiceContainer _services;
-        private readonly List<IGameModule> _allModules = new();
-        private readonly Dictionary<string, IGameModule> _modulesByName = new();
-        
-        
+        private readonly Transform _root;
+
         private CustomLogger _logger;
 
-        public ModuleLoader(IServiceContainer services)
+        // Registered module definitions
+        private readonly List<Type> _moduleTypes = new();
+
+        // Runtime instances
+        private readonly Dictionary<Type, IGameModule> _modulesByType = new();
+
+        // Final sorted initialization order
+        private readonly List<Type> _initOrder = new();
+
+        public ModuleLoader(IServiceContainer services, Transform root)
         {
             _services = services ?? throw new ArgumentNullException(nameof(services));
+            _root = root ?? throw new ArgumentNullException(nameof(root));
         }
 
-        /// <summary>
-        /// Set the logger for this ModuleLoader.
-        /// Called by GameApplication after ILogger is registered.
-        /// </summary>
         public void SetLogger(CustomLogger logger)
         {
             _logger = logger;
         }
 
         /// <summary>
-        /// Register a module to be loaded.
+        /// Register module TYPE only.
+        /// Runtime instance will be created later.
         /// </summary>
-        public void RegisterModule(IGameModule module)
+        public void RegisterModule(Type moduleType)
         {
-            if (module == null)
-                throw new ArgumentNullException(nameof(module));
+            if (moduleType == null)
+                throw new ArgumentNullException(nameof(moduleType));
 
-            if (_modulesByName.ContainsKey(module.ModuleName))
+            if (!typeof(IGameModule).IsAssignableFrom(moduleType))
             {
-                throw new InvalidOperationException(
-                    $"Module '{module.ModuleName}' already registered. " +
-                    $"Module names must be unique."
+                throw new Exception(
+                    $"{moduleType.Name} must implement IGameModule"
                 );
             }
 
-            _allModules.Add(module);
-            _modulesByName[module.ModuleName] = module;
+            if (_moduleTypes.Contains(moduleType))
+            {
+                throw new Exception(
+                    $"Module type already registered: {moduleType.Name}"
+                );
+            }
 
+            _moduleTypes.Add(moduleType);
         }
 
         /// <summary>
-        /// Load all registered modules in correct dependency order.
-        /// Calls Initialize() on each module.
-        /// Throws on circular dependencies, missing dependencies, or initialization errors.
+        /// Create Unity module instance.
         /// </summary>
-        public async UniTask LoadModules( CancellationToken ct)
+        private IGameModule CreateModule(Type type)
         {
-            if (_allModules.Count == 0)
+            var go = new GameObject(type.Name);
+            go.transform.SetParent(_root);
+
+            return (IGameModule)go.AddComponent(type);
+        }
+
+        /// <summary>
+        /// Main bootstrap flow.
+        /// </summary>
+        public async UniTask LoadModules(CancellationToken ct)
+        {
+            if (_moduleTypes.Count == 0)
             {
                 _logger?.LogWarning("No modules registered.");
                 return;
             }
-            _initializedTypes.Clear();
-            _resolvingTypes.Clear();
-            _resolutionStack.Clear();
-            try
+
+            _modulesByType.Clear();
+            _initOrder.Clear();
+
+            // =====================================================
+            // 1. CREATE ALL MODULE INSTANCES
+            // =====================================================
+
+            foreach (var type in _moduleTypes)
             {
-                // Duyệt qua danh sách gốc. 
-                // Hàm ResolveAndInitialize sẽ tự lo việc nạp "cha" trước "con".
-                foreach (var module in _allModules)
+                ct.ThrowIfCancellationRequested();
+
+                var module = CreateModule(type);
+
+                _modulesByType[type] = module;
+            }
+
+            // =====================================================
+            // 2. BUILD INITIALIZATION ORDER
+            // =====================================================
+
+            var sorted = BuildInitOrder();
+
+            _initOrder.AddRange(sorted);
+
+            // =====================================================
+            // 3. INITIALIZE IN CORRECT ORDER
+            // =====================================================
+
+            foreach (var type in _initOrder)
+            {
+                ct.ThrowIfCancellationRequested();
+
+                var module = _modulesByType[type];
+
+                _logger?.Log($"[Init] {module.ModuleName}");
+
+                await module.InitializeAsync(_services, ct);
+            }
+
+            _logger?.Log("[Success] All modules initialized.");
+        }
+
+        /// <summary>
+        /// Build dependency-based initialization order.
+        /// Uses DFS topological sort.
+        /// </summary>
+        private List<Type> BuildInitOrder()
+        {
+            var result = new List<Type>();
+
+            var visited = new HashSet<Type>();
+            var visiting = new HashSet<Type>();
+
+            void Visit(Type type)
+            {
+                if (visited.Contains(type))
+                    return;
+
+                if (visiting.Contains(type))
                 {
-                    ct.ThrowIfCancellationRequested();
-                    await ResolveAndInitializeAsync(module, ct);
+                    throw new Exception(
+                        $"Circular dependency detected: {type.Name}"
+                    );
                 }
 
-                _logger?.Log("[Success] Hệ thống Module đã khởi tạo an toàn.");
-            }
-            catch (OperationCanceledException)
-            {
-                // Log dạng Warning hoặc im lặng vì đây là hành vi bình thường
-                Debug.LogWarning("[CancellationRequested] LoadModules was canceled.");
-                throw; // Ném ngược ra để phía gọi (Caller) biết là task đã dừng
-            }
-            catch (Exception ex)
-            {
-                // Bắt mọi lỗi Fatal từ đệ quy (Circular, Missing Dep, Multiple Providers)
-                _logger?.LogError($"[Bootstrap Failed] {ex.Message}");
-                throw; // Throw để GameApplication biết mà dừng lại
+                visiting.Add(type);
+
+                var module = _modulesByType[type];
+
+                var dependencies = module.GetDependencies();
+
+                if (dependencies != null)
+                {
+                    foreach (var dependencyType in dependencies)
+                    {
+                        // Dependency provided by module
+                        if (_modulesByType.ContainsKey(dependencyType))
+                        {
+                            Visit(dependencyType);
+                        }
+                        // Dependency provided by service container
+                        else if (!_services.IsRegistered(dependencyType))
+                        {
+                            throw new Exception(
+                                $"Missing dependency: {dependencyType.Name} required by {type.Name}"
+                            );
+                        }
+                    }
+                }
+
+                visiting.Remove(type);
+
+                visited.Add(type);
+
+                result.Add(type);
             }
 
-            _logger?.Log($"Successfully loaded {_allModules.Count} modules.");
+            foreach (var type in _moduleTypes)
+            {
+                Visit(type);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -114,91 +207,57 @@ namespace Game.Application.Core
         /// </summary>
         public void ShutdownModules()
         {
-            // Reverse order: last initialized, first shutdown
-            var sortedModules = _allModules.OrderByDescending(m => m.InitializationOrder).ToList();
-
-            foreach (var module in sortedModules)
+            for (int i = _initOrder.Count - 1; i >= 0; i--)
             {
+                var type = _initOrder[i];
+
+                if (!_modulesByType.TryGetValue(type, out var module))
+                    continue;
+
                 try
                 {
-                    _logger?.Log($"Shutting down '{module.ModuleName}'");
+                    _logger?.Log($"[Shutdown] {module.ModuleName}");
+
                     module.Shutdown();
                 }
                 catch (Exception ex)
                 {
-                    _logger?.LogError($"Error during shutdown of '{module.ModuleName}': {ex.Message}");
+                    _logger?.LogError(
+                        $"Shutdown error in {module.ModuleName}: {ex.Message}"
+                    );
                 }
             }
 
-            _allModules.Clear();
-            
+            _modulesByType.Clear();
+            _initOrder.Clear();
+
             _logger?.Log("All modules shutdown.");
         }
 
         /// <summary>
-        /// Get a loaded module by name.
+        /// Try get module by type.
         /// </summary>
-        public bool TryGetModule(string moduleName, out IGameModule module)
+        public bool TryGetModule<T>(out T module) where T : class, IGameModule
         {
-            return _modulesByName.TryGetValue(moduleName, out module);
+            foreach (var pair in _modulesByType)
+            {
+                if (pair.Value is T typed)
+                {
+                    module = typed;
+                    return true;
+                }
+            }
+
+            module = null;
+            return false;
         }
 
         /// <summary>
-        /// Get all loaded modules.
+        /// Get all runtime module instances.
         /// </summary>
-        public IReadOnlyList<IGameModule> GetAllModules()
+        public IReadOnlyCollection<IGameModule> GetAllModules()
         {
-            return _allModules.AsReadOnly();
-        }
-
-
-        private readonly HashSet<Type> _initializedTypes = new();
-        private readonly HashSet<Type> _resolvingTypes = new();
-        private readonly Stack<Type> _resolutionStack = new();
-        
-        private async UniTask ResolveAndInitializeAsync(IGameModule module , CancellationToken ct)
-        {
-            var type = module.GetType();
-            if (_initializedTypes.Contains(type)) return;
-
-            if (!_resolvingTypes.Add(type))
-            {
-                throw new InvalidOperationException($"Circular dependency: {type.Name}");
-            }
-
-            _resolutionStack.Push(type);
-
-            try
-            {
-                var deps = module.GetDependencies();
-                if (deps != null)
-                {
-                    foreach (var depType in deps)
-                    {
-                        var provider = _allModules.FirstOrDefault(m => depType.IsAssignableFrom(m.GetType()));
-                        if (provider != null)
-                        {
-                            // Đợi thằng cha nạp xong (Bất đồng bộ)
-                            await ResolveAndInitializeAsync(provider, ct);
-                        }
-                        else if (!_services.IsRegistered(depType))
-                        {
-                            throw new Exception($"Missing dependency: {depType.Name}");
-                        }
-                    }
-                }
-
-                // Khởi tạo module hiện tại và CHỜ NÓ XONG THỰC SỰ
-                _logger?.Log($"[Init Async] {module.ModuleName}");
-                await module.InitializeAsync(_services, ct); 
-
-                _initializedTypes.Add(type);
-            }
-            finally
-            {
-                _resolvingTypes.Remove(type);
-                _resolutionStack.Pop();
-            }
+            return _modulesByType.Values;
         }
     }
 }

@@ -330,8 +330,7 @@ public sealed class BoardPresetEditor : Editor
 
     private void ResizeBoard()
     {
-        TilePresetData[] tiles =
-            new TilePresetData[
+        TilePresetData[] tiles = new TilePresetData[
                 _preset.Width *
                 _preset.Height];
 
@@ -342,8 +341,7 @@ public sealed class BoardPresetEditor : Editor
                 int index =
                     y * _preset.Width + x;
 
-                tiles[index] =
-                    new TilePresetData
+                tiles[index] = new TilePresetData
                     {
                         Position =
                             new Vector2Int(x, y),

@@ -8,10 +8,6 @@ namespace Game.Application.Core.Input
 {
     public class InputModule : BaseGameModule
     {
-        public override string ModuleName => "InputModule";
-
-        public override int InitializationOrder => 0;
-
         public override Type[] GetDependencies()=> Type.EmptyTypes;
 
         public IInputService _inputService;
