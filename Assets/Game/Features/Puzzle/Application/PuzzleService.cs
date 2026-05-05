@@ -13,32 +13,36 @@ public interface IPuzzleService : IService
     event Action<CascadeResult> CascadeResolved;
     
     bool IsInside(TilePosition position);
+    void LoadPreset(BoardPreset preset);
 }
-public sealed class PuzzleService : IPuzzleService
+public sealed class PuzzleService : MonoBehaviour, IPuzzleService
 {
     public IReadOnlyPuzzleBoard Board => _board;
 
     public EPuzzleState State => _state;
     private EPuzzleState _state;
 
-    private readonly PuzzleBoard _board;
+    private BoardPreset _debugPreset;
 
-    private readonly BoardGenerator _generator;
+    private PuzzleBoard _board;
 
-    private readonly ISwapProcessor _swapProcessor;
+    private BoardGenerator _generator;
 
-    private readonly CascadeProcessor _cascadeProcessor;
+    private ISwapProcessor _swapProcessor;
+
+    private CascadeProcessor _cascadeProcessor;
 
     
     public event Action BoardChanged;
 
     public event Action<CascadeResult> CascadeResolved;
 
-    public PuzzleService(
+    public void Initialized(
         PuzzleBoard board,
         BoardGenerator generator,
         ISwapProcessor swapProcessor,
-        CascadeProcessor cascadeProcessor)
+        CascadeProcessor cascadeProcessor
+    )
     {
         _board = board;
 
@@ -50,9 +54,21 @@ public sealed class PuzzleService : IPuzzleService
 
         _state = EPuzzleState.Idle;
     }
+    public void LoadPreset(BoardPreset preset)
+    {
+        _board = BoardPresetBuilder.Build(preset);
+    }
     public void GenerateBoard()
     {
-        _generator.Fill(_board);
+        if (_debugPreset != null)
+        {
+            _board = BoardPresetBuilder.Build(_debugPreset);
+        }
+        else
+        {
+            _generator.Fill(_board);
+        }
+        
         BoardChanged?.Invoke();
     }
     public SwapResult TrySwap(TilePosition a, TilePosition b)

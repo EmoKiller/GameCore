@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Cysharp.Threading.Tasks;
-using Unity.Android.Gradle.Manifest;
 using Game.Application.Core;
 using System.Threading;
 using System;

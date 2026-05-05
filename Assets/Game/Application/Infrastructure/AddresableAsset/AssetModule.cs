@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Application.Core;
-using Mono.Cecil.Cil;
 using UnityEngine;
 
 namespace Game.Application.Modules.Assets

@@ -46,6 +46,49 @@ public sealed class PuzzleBoardView : MonoBehaviour
         CreateViews();
         RefreshBoard();
     }
+    public void Rebuild(IReadOnlyPuzzleBoard board)
+    {
+        ClearAllViews();
+
+        _tileLayer.Initialize(board);
+
+        for (int x = 0; x < board.Width; x++)
+        {
+            for (int y = 0; y < board.Height; y++)
+            {
+                TileData tile = board.Get(x, y);
+
+                if (tile.IsEmpty)
+                {
+                    continue;
+                }
+
+                _tileLayer.Create(x, y);
+
+                _tileLayer.Refresh(
+                    board,
+                    x,
+                    y);
+            }
+        }
+    }
+    private void ClearAllViews()
+    {
+        for (int x = 0; x < _tileLayer.TileViews.GetLength(0); x++)
+        {
+            for (int y = 0; y < _tileLayer.TileViews.GetLength(1); y++)
+            {
+                TileView view = _tileLayer.TileViews[x, y];
+
+                if (view == null)
+                {
+                    continue;
+                }
+
+                _tileLayer.Hide(new TilePosition(x, y));
+            }
+        }
+    }
     private void CreateViews()
     {
 

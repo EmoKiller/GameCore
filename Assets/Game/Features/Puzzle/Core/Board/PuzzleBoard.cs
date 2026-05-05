@@ -1,6 +1,7 @@
 public interface IReadOnlyPuzzleBoard
 {
     TileData Get(int x, int y);
+    TileData Get(TilePosition position);
     int Width { get; }
     int Height { get; }
     bool IsInside(TilePosition position);

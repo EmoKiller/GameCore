@@ -8,12 +8,12 @@ public interface IPuzzleInputService : IService
 {
     
 }
-public sealed class PuzzleInputService : IPuzzleInputService , IUpdatable , IOnPreShutdown
+public sealed class PuzzleInputService : MonoBehaviour, IPuzzleInputService , IUpdatable , IOnPreShutdown
 {   
     private const float SwipeThreshold = 30f;
-    private readonly Camera _camera;
-    private readonly IPointerInputReader _input;
-    private readonly IPuzzleGameplayService _service;
+    private Camera _camera;
+    private IPointerInputReader _input;
+    private IPuzzleGameplayService _service;
 
     private TilePosition? _selectedTile;
     private Vector2 _pointerDownPosition;
@@ -22,7 +22,7 @@ public sealed class PuzzleInputService : IPuzzleInputService , IUpdatable , IOnP
     private readonly CancellationTokenSource _disposeCts = new();
     private CancellationToken Token => _disposeCts.Token;
 
-    public PuzzleInputService(
+    public void Initialized(
         IPuzzleGameplayService service,
         IPointerInputReader input,
         Camera camera)

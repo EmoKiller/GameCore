@@ -26,6 +26,9 @@ public class PuzzleInputModule : BaseGameModule
 
     protected override async UniTask OnInitializeAsync(IServiceContainer services, CancellationToken ct)
     {
+        var assetProvider = services.Resolve<IAssetProvider>();
+
+
         var puzzleGameplayService = services.Resolve<IPuzzleGameplayService>();
         var applicationLifecycle = services.Resolve<IApplicationLifecycle>();
 
@@ -34,10 +37,21 @@ public class PuzzleInputModule : BaseGameModule
 
         var pointerInputReader = new InputSystemPointerReader(playerInput);
 
-        var puzzleInputService = new PuzzleInputService(puzzleGameplayService, pointerInputReader, camera);
-        services.Register<IPuzzleInputService>(puzzleInputService);
+        // PuzzleInputService
+        var prefab = await assetProvider.LoadAsync<GameObject>("PuzzleInputService", ct);
         
-        applicationLifecycle.Register(puzzleInputService);
+        var instance = UnityEngine.Object.Instantiate(prefab.Asset, GameApplication.Instance.transform);
+        var service = instance.GetComponent<PuzzleInputService>();
+
+        service.Initialized(
+            puzzleGameplayService,
+            pointerInputReader,
+            camera
+        );
+        
+        services.Register<IPuzzleInputService>(service);
+        
+        applicationLifecycle.Register(service);
         
     }
 }

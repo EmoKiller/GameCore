@@ -42,15 +42,20 @@ public class PuzzleGameplayModule : BaseGameModule
         var puzzleAnimationConfig = handlePuzzleAnimationConfig.Asset as PuzzleAnimationConfig;
 
         var boardAnimator = new PuzzleBoardAnimator(puzzleAnimationConfig);
-        
 
-        var puzzleGameplayService = new PuzzleGameplayService(
+        // PuzzleGameplayService
+        var prefab = await assetProvider.LoadAsync<GameObject>("PuzzleGameplayService", ct);
+        
+        var instance = UnityEngine.Object.Instantiate(prefab.Asset, GameApplication.Instance.transform);
+        var service = instance.GetComponent<PuzzleGameplayService>();
+
+        service.Initialized(
             puzzleService,
             puzzleBoardViewFactory,
             boardAnimator,
             boardLayout
         );
-        services.Register<IPuzzleGameplayService>(puzzleGameplayService);
+        services.Register<IPuzzleGameplayService>(service);
 
     }
 }

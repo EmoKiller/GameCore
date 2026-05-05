@@ -14,7 +14,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: Unity.Addressables.Editor::UnityEditor.AddressableAssets.Settings.AddressableAssetGroup
   m_GroupName: Config_Data
   m_GUID: 646d3497f2da6964c914c0b8b5959f62
-  m_SerializeEntries: []
+  m_SerializeEntries:
+  - m_GUID: 2d11d269c671b0a42ada4679e6947ab2
+    m_Address: SpecialResolverDatabase
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - staticglobal
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 4ef2dc98c3247964895e1818e0d1e709
+    m_Address: PuzzleAnimationConfig
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - staticglobal
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: aa27c660011d25443b68dafb7e4e8bde
+    m_Address: TileVisualDatabase
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - staticglobal
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 3e673466b3ca3ef449facbb044418450, type: 2}
   m_SchemaSet:

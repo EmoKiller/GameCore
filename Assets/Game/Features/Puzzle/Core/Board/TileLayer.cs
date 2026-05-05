@@ -8,6 +8,7 @@ public sealed class TileLayer
     private readonly IReadOnlyBoardLayout _layout;
 
     private TileView[,] _tileViews;
+    public TileView[,] TileViews => _tileViews;
 
     public TileLayer(
         TileView prefab,

@@ -20,6 +20,7 @@ public class PuzzleModule : BaseGameModule
     protected override async UniTask OnInitializeAsync(IServiceContainer services, CancellationToken ct)
     {
         var assetProvider = services.Resolve<IAssetProvider>();
+
         var handleSpecialResolverDatabase = await assetProvider.LoadAsync<ScriptableObject>("SpecialResolverDatabase", ct);
         var specialResolverDatabase = handleSpecialResolverDatabase.Asset as SpecialResolverDatabase;
         // Random
@@ -62,12 +63,18 @@ public class PuzzleModule : BaseGameModule
         ); 
 
         // PuzzleService
-        var puzzleService = new PuzzleService(
+
+        var prefab = await assetProvider.LoadAsync<GameObject>("PuzzleService", ct);
+        
+        var instance = UnityEngine.Object.Instantiate(prefab.Asset, GameApplication.Instance.transform);
+        var service = instance.GetComponent<PuzzleService>();
+
+        service.Initialized(
             puzzleBoard,
             generator,
             swapProcessor,
             cascadeProcessor
-        );  
-        services.Register<IPuzzleService>(puzzleService);
+        );
+        services.Register<IPuzzleService>(service);
     }
 }

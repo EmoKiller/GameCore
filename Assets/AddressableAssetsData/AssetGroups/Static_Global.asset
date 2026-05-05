@@ -15,50 +15,20 @@ MonoBehaviour:
   m_GroupName: Static_Global
   m_GUID: d8e30a873735de44bb6378693b6bd523
   m_SerializeEntries:
-  - m_GUID: 22fa31b4e4c1a2840b827ea94805dfd6
-    m_Address: MainCamera
+  - m_GUID: 00d581e49cf71c34c8b104cef15a3470
+    m_Address: PuzzleGameplayService
     m_ReadOnly: 0
     m_SerializedLabels:
     - staticglobal
     FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 27abeccda5ad7ef41a4f9303ca471815
-    m_Address: PlayerHUD
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - staticglobal
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 2d11d269c671b0a42ada4679e6947ab2
-    m_Address: SpecialResolverDatabase
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - staticglobal
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 3f632e8c94af7844597648263a2669bd
-    m_Address: LoadingView
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - staticglobal
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4746497c928931840b487b363e80b708
-    m_Address: MainMenuScreen
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - staticglobal
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: 4ef2dc98c3247964895e1818e0d1e709
-    m_Address: PuzzleAnimationConfig
+  - m_GUID: 1c9cd60568bbb9e4a899643fe53021eb
+    m_Address: PuzzleInputService
     m_ReadOnly: 0
     m_SerializedLabels:
     - staticglobal
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: 7c99153485ac46b41a72fcd9687b5828
     m_Address: PuzzleBoardView
-    m_ReadOnly: 0
-    m_SerializedLabels:
-    - staticglobal
-    FlaggedDuringContentUpdateRestriction: 0
-  - m_GUID: aa27c660011d25443b68dafb7e4e8bde
-    m_Address: TileVisualDatabase
     m_ReadOnly: 0
     m_SerializedLabels:
     - staticglobal
@@ -71,6 +41,12 @@ MonoBehaviour:
     FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: c37f2713bacf8cb48897b5f0c6a2eb9d
     m_Address: TileView
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - staticglobal
+    FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: e159c7c08f3496b40868d8657351b9b7
+    m_Address: PuzzleService
     m_ReadOnly: 0
     m_SerializedLabels:
     - staticglobal

@@ -9,10 +9,10 @@ public interface IPuzzleGameplayService : IService
     bool IsInside(TilePosition position);
     bool IsBusy { get; }
 }
-public sealed class PuzzleGameplayService : IPuzzleGameplayService
+public sealed class PuzzleGameplayService : MonoBehaviour, IPuzzleGameplayService
 {
-    private readonly PuzzleBoardViewFactory _puzzleBoardViewFactory;
-    private readonly IPuzzleService _puzzleService;
+    private PuzzleBoardViewFactory _puzzleBoardViewFactory;
+    private IPuzzleService _puzzleService;
     private IReadOnlyBoardLayout _boardLayout;
     private PuzzleBoardAnimator _boardAnimator;
     private PuzzleBoardView _boardView;
@@ -21,7 +21,7 @@ public sealed class PuzzleGameplayService : IPuzzleGameplayService
     public bool IsBusy => _isBusy;
 
     
-    public PuzzleGameplayService(
+    public void Initialized(
         IPuzzleService PuzzleService,
         PuzzleBoardViewFactory puzzleBoardViewFactory,
         PuzzleBoardAnimator boardAnimator,
@@ -32,6 +32,14 @@ public sealed class PuzzleGameplayService : IPuzzleGameplayService
         _puzzleBoardViewFactory = puzzleBoardViewFactory;
         _boardAnimator = boardAnimator;
         _boardLayout = boardLayout;
+    }
+    public void ReloadBoard(BoardPreset preset)
+    {
+        _puzzleService.LoadPreset(
+            preset);
+
+        _boardView.Rebuild(
+            _puzzleService.Board);
     }
     public async UniTask CreateRuntime(CancellationToken ct)
     {

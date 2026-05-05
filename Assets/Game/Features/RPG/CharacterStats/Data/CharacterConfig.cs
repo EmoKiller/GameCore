@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Game.Application.Configuration.BaseScriptableObject;
 using UnityEngine;
 
 public class CharacterStatsConfig 

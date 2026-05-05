@@ -15,5 +15,5 @@ MonoBehaviour:
   SwapDuration: 0.1
   InvalidSwapPause: 0.5
   RemoveDuration: 0.2
-  FallDurationPerUnit: 0.12
+  FallDurationPerUnit: 0.1
   SpawnDuration: 0.08

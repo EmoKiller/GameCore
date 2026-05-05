@@ -47,6 +47,9 @@ namespace Game.Bootstrap
             
             // Run Task
             Run(_bootstrapCts.Token).Forget();
+
+            QualitySettings.vSyncCount = 0;
+            UnityEngine.Application.targetFrameRate = 120;
         }
         private async UniTask Run(CancellationToken ct)
         {

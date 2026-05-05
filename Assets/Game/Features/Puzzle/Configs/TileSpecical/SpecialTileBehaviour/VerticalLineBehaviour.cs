@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Vertical Line",menuName = "Puzzle/Special/Special Behaviours/Vertical Line")]
+[CreateAssetMenu(fileName = "VerticalLine",menuName = "Puzzle/Special/Special Behaviours/VerticalLine")]
 public sealed class VerticalLineBehaviour
     : SpecialTileBehaviour
 {

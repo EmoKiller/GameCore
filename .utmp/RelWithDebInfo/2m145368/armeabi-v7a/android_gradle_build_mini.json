@@ -1,0 +1,28 @@
+{
+  "buildFiles": [
+    "E:\\ProjectUnity6\\GameCore\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\src\\main\\cpp\\CMakeLists.txt",
+    "E:\\ProjectUnity6\\GameCore\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\src\\main\\cpp\\GameActivity\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "D:\\unity\\6000.3.9f1\\Editor\\Data\\PlaybackEngines\\AndroidPlayer\\SDK\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "E:\\ProjectUnity6\\GameCore\\.utmp\\RelWithDebInfo\\2m145368\\armeabi-v7a",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "D:\\unity\\6000.3.9f1\\Editor\\Data\\PlaybackEngines\\AndroidPlayer\\SDK\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "E:\\ProjectUnity6\\GameCore\\.utmp\\RelWithDebInfo\\2m145368\\armeabi-v7a",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {
+    "game::@d02bb112ea9f9c2ed29f": {
+      "artifactName": "game",
+      "abi": "armeabi-v7a",
+      "output": "E:\\ProjectUnity6\\GameCore\\Library\\Bee\\Android\\Prj\\IL2CPP\\Gradle\\unityLibrary\\build\\intermediates\\cxx\\RelWithDebInfo\\2m145368\\obj\\armeabi-v7a\\libgame.so",
+      "runtimeFiles": []
+    }
+  }
+}

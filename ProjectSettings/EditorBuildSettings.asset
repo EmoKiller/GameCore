@@ -6,8 +6,8 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/RPGBootstrapScene.unity
-    guid: 99c9720ab356a0642a771bea13969a05
+    path: Assets/Scenes/PuzzleBootstrapScene.unity
+    guid: 83d3b7df24bd8cf45ab0584d903034f8
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 5412fec42824513489dc78cd30200dfd
