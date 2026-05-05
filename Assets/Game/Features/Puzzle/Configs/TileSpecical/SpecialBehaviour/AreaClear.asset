@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 46fa2d14592e254459ecb53bd226e97f, type: 3}
-  m_Name: Bomb
+  m_Name: AreaClear
   m_EditorClassIdentifier: Project.Feature.Puzzle::BombSpecialBehaviour
   _radius: 1

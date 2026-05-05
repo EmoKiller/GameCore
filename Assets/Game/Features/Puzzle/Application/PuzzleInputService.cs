@@ -8,7 +8,7 @@ public interface IPuzzleInputService : IService
 {
     
 }
-public sealed class PuzzleInputService : MonoBehaviour, IPuzzleInputService , IUpdatable , IOnPreShutdown
+public sealed class PuzzleInputService : MonoBehaviour, IPuzzleInputService , IUpdatable
 {   
     private const float SwipeThreshold = 30f;
     private Camera _camera;
@@ -19,8 +19,7 @@ public sealed class PuzzleInputService : MonoBehaviour, IPuzzleInputService , IU
     private Vector2 _pointerDownPosition;
     private bool _hasConsumedSwipe;
 
-    private readonly CancellationTokenSource _disposeCts = new();
-    private CancellationToken Token => _disposeCts.Token;
+    
 
     public void Initialized(
         IPuzzleGameplayService service,
@@ -177,8 +176,7 @@ public sealed class PuzzleInputService : MonoBehaviour, IPuzzleInputService , IU
 
             await _service.TrySwapAsync(
                 from,
-                to,
-                Token);
+                to);
 
             _selectedTile = null;
         }
@@ -187,9 +185,5 @@ public sealed class PuzzleInputService : MonoBehaviour, IPuzzleInputService , IU
         }
     }
 
-    public void OnPreShutdown()
-    {
-        _disposeCts.Cancel();
-        _disposeCts.Dispose();
-    }
+    
 }

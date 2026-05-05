@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "VerticalLine",menuName = "Puzzle/Special/Special Behaviours/VerticalLine")]
-public sealed class VerticalLineBehaviour
-    : SpecialTileBehaviour
+[CreateAssetMenu(fileName = "Column Clear",menuName = "Puzzle/Special/Special Behaviours/Column Clear")]
+public sealed class ColumnClearBehaviour : SpecialTileBehaviour
 {
     public override SpecialActivationResult Activate(
         PuzzleBoard board,

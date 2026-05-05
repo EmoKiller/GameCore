@@ -9,7 +9,8 @@ public sealed class BoardPresetEditor : Editor
     private TileVisualDatabase _tileVisualDatabase;
     private SpecialResolverDatabase _database;
     private Dictionary<string, TileSpecialData> _specialLookup;
-    private const int CellSize = 70;
+    private const int CellSize = 50;
+    const int Spacing = 6;
 
     private BoardPreset _preset;
 
@@ -35,6 +36,8 @@ public sealed class BoardPresetEditor : Editor
         GUILayout.Space(10);
 
         DrawBrushToolbar();
+
+        GUILayout.Space(10);
 
         DrawGrid();
 
@@ -214,117 +217,6 @@ public sealed class BoardPresetEditor : Editor
             _preset);
 
         Repaint();
-    }
-    private void AddSpecialMenus(
-        GenericMenu menu,
-        int x,
-        int y)
-    {
-        HashSet<string> added =
-            new HashSet<string>();
-
-        foreach (SpecialResolverEntry entry in _database.Entries)
-        {
-            TileSpecialData special = entry.Result;
-
-            if (special == null)
-            {
-                continue;
-            }
-
-            if (added.Contains(special.Id))
-            {
-                continue;
-            }
-
-            added.Add(special.Id);
-
-            menu.AddItem(
-                new GUIContent(
-                    $"Special/{special.Id}"),
-                false,
-                () =>
-                {
-                    ref TilePresetData tile =
-                        ref GetTile(x, y);
-
-                    tile.Special = special;
-
-                    EditorUtility.SetDirty(
-                        _preset);
-                });
-        }
-    }
-    private void AddTileMenuItem(
-        GenericMenu menu,
-        int x,
-        int y,
-        ETileType tileType)
-    {
-        string path =
-            $"Tile/{tileType}";
-
-        menu.AddItem(
-            new GUIContent(path),
-            false,
-            () =>
-            {
-                ref TilePresetData tile =
-                    ref GetTile(x, y);
-
-                tile.TileType =
-                    tileType;
-
-                EditorUtility.SetDirty(
-                    _preset);
-            });
-    }
-
-    
-    private TileSpecialData FindSpecial(
-        string id)
-    {
-        string[] guids =
-            AssetDatabase.FindAssets(
-                $"t:{nameof(TileSpecialData)}");
-
-        foreach (string guid in guids)
-        {
-            string path =
-                AssetDatabase.GUIDToAssetPath(
-                    guid);
-
-            TileSpecialData asset =
-                AssetDatabase.LoadAssetAtPath
-                    <TileSpecialData>(path);
-
-            if (asset.Id == id)
-            {
-                return asset;
-            }
-        }
-
-        return null;
-    }
-
-    private T FindBehaviour<T>()
-        where T : SpecialTileBehaviour
-    {
-        string[] guids =
-            AssetDatabase.FindAssets(
-                $"t:{typeof(T).Name}");
-
-        if (guids.Length == 0)
-        {
-            return null;
-        }
-
-        string path =
-            AssetDatabase.GUIDToAssetPath(
-                guids[0]);
-
-        return AssetDatabase.LoadAssetAtPath<T>(
-            path);
     }
 
     private int GetIndex(int x, int y)
@@ -524,67 +416,80 @@ public sealed class BoardPresetEditor : Editor
             return;
         }
 
-        EditorGUILayout.Space();
+        float inspectorWidth =
+            EditorGUIUtility.currentViewWidth;
 
-        EditorGUILayout.LabelField(
-            "Specials",
-            EditorStyles.boldLabel);
+        
 
-        EditorGUILayout.BeginHorizontal();
+        int columnCount =
+            Mathf.Max(
+                1,
+                Mathf.FloorToInt(
+                    (inspectorWidth - 20) /
+                    (CellSize + Spacing)));
 
-        HashSet<string> added =
-            new HashSet<string>();
+        int currentColumn = 0;
+
+        GUILayout.BeginVertical();
+
+        GUILayout.BeginHorizontal();
 
         foreach (SpecialResolverEntry entry
                 in _database.Entries)
         {
-            TileSpecialData special =
-                entry.Result;
-
-            if (special == null)
+            if (entry.Result == null)
             {
                 continue;
             }
 
-            if (added.Contains(special.Id))
+            if (currentColumn >= columnCount)
             {
-                continue;
+                GUILayout.EndHorizontal();
+
+                GUILayout.BeginHorizontal();
+
+                currentColumn = 0;
             }
 
-            added.Add(special.Id);
+            DrawSpecialBrush(entry);
 
-            GUIStyle style =
-                new GUIStyle(GUI.skin.button);
-
-            if (_selectedSpecial == special)
-            {
-                style.normal.background =
-                    style.active.background;
-            }
-
-            Texture preview = AssetPreview.GetAssetPreview(special.Icon);
-
-            if (preview == null)
-            {
-                preview = AssetPreview.GetMiniThumbnail(special.Icon);
-            }
-
-            GUIContent content = new GUIContent(preview);
-
-            if (GUILayout.Button(
-                    content,
-                    style,
-                    GUILayout.Width(48),
-                    GUILayout.Height(48)))
-            {
-                _selectedSpecial =
-                    special;
-
-                Repaint();
-            }
+            currentColumn++;
         }
 
-        EditorGUILayout.EndHorizontal();
+        GUILayout.EndHorizontal();
+
+        GUILayout.EndVertical();
+    }
+    private void DrawSpecialBrush(
+        SpecialResolverEntry entry)
+    {
+        TileSpecialData special =
+            entry.Result;
+
+        if (special == null)
+        {
+            return;
+        }
+
+        GUIContent content =
+            new GUIContent(
+                AssetPreview.GetAssetPreview(
+                    special.Icon));
+
+        if (GUILayout.Button(
+                content,
+                GUILayout.Width(CellSize),
+                GUILayout.Height(CellSize),
+                GUILayout.ExpandWidth(false)))
+        {
+            _selectedTileType =
+                entry.TileType;
+
+            _selectedSpecial =
+                special;
+
+            Repaint();
+        }
     }
     private void PaintCell(
         int x,
@@ -595,6 +500,9 @@ public sealed class BoardPresetEditor : Editor
 
         if (_selectedSpecial != null)
         {
+            tile.TileType =
+                _selectedTileType;
+
             tile.Special =
                 _selectedSpecial;
         }

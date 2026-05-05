@@ -137,7 +137,7 @@ TextureImporter:
         serializedVersion: 2
         x: 16
         y: 496
-        width: 15
+        width: 16
         height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -157,9 +157,9 @@ TextureImporter:
       name: Tile_Sword
       rect:
         serializedVersion: 2
-        x: 31
+        x: 32
         y: 496
-        width: 17
+        width: 16
         height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -198,13 +198,13 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Puzzle_icon_4
+      name: Special_Tile_Sword_Bomb
       rect:
         serializedVersion: 2
-        x: 64
-        y: 496
+        x: 32
+        y: 448
         width: 16
-        height: 16
+        height: 15
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -223,7 +223,7 @@ TextureImporter:
       name: Tile_Coin
       rect:
         serializedVersion: 2
-        x: 80
+        x: 64
         y: 496
         width: 16
         height: 16
@@ -242,11 +242,11 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Puzzle_icon_6
+      name: Special_Tile_Coin_Horizontal
       rect:
         serializedVersion: 2
-        x: 96
-        y: 496
+        x: 64
+        y: 480
         width: 16
         height: 16
       alignment: 0
@@ -267,9 +267,9 @@ TextureImporter:
       name: Special_Tile_Sword_Horizontal
       rect:
         serializedVersion: 2
-        x: 31
+        x: 32
         y: 480
-        width: 17
+        width: 16
         height: 16
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -289,9 +289,9 @@ TextureImporter:
       name: Special_Tile_Sword_Vertical
       rect:
         serializedVersion: 2
-        x: 31
+        x: 32
         y: 463
-        width: 17
+        width: 16
         height: 17
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
@@ -308,7 +308,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Boom
+      name: Special_Tile_Shield_Horizontal
       rect:
         serializedVersion: 2
         x: 48
@@ -330,7 +330,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: BoomClor
+      name: Special_Tile_Shield_Vertical
       rect:
         serializedVersion: 2
         x: 48
@@ -351,6 +351,226 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Special_Tile_Heart_Horizontal
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 480
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f4a50f4b09dab674e9695f1de7996a06
+      internalID: 1909165099
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Special_Tile_Heart_Vertical
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 463
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 830b36f51e113694cae90d3b876ee815
+      internalID: -721742131
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Special_Tile_Heart_Bomb
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 448
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fcd3854023362c14ba46834bc8259e49
+      internalID: -578577454
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Special_Tile_Heart_ClorBomb
+      rect:
+        serializedVersion: 2
+        x: 16
+        y: 432
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0a21eeac5c8f5a045b75fbf3a78b8dd4
+      internalID: 504817662
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Special_Tile_Sword_ClorBomb
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 432
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df144372907be764998e7eedfa0bc4f1
+      internalID: -899880230
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Special_Tile_Coin_Vertical
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 463
+        width: 16
+        height: 17
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6d3de353e3092be46b94166c16d8e37d
+      internalID: -1910150465
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Special_Tile_Shield_Bomb
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 448
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 1ffca3fe481821b4cbb29fc61419c0e2
+      internalID: -805879868
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Special_Tile_Coin_Bomb
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 448
+        width: 16
+        height: 15
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b24c602207f29d34bb2255812816725c
+      internalID: -2139304758
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Special_Tile_Shield_ClorBomb
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 432
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 89d392146b90d364e9bf9588a9aea394
+      internalID: 1601426834
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Special_Tile_Coin_ClorBomb
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 432
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ad6b09e30a1995e428a2846c1c7bec33
+      internalID: 1946342953
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -366,10 +586,20 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       BackGroundBoard_01: -526587412
-      Boom: 1160974469
-      BoomClor: 501500560
-      Puzzle_icon_4: -1569024559
-      Puzzle_icon_6: -893999540
+      Special_Tile_Coin_Bomb: -2139304758
+      Special_Tile_Coin_ClorBomb: 1946342953
+      Special_Tile_Coin_Horizontal: -893999540
+      Special_Tile_Coin_Vertical: -1910150465
+      Special_Tile_Heart_Bomb: -578577454
+      Special_Tile_Heart_ClorBomb: 504817662
+      Special_Tile_Heart_Horizontal: 1909165099
+      Special_Tile_Heart_Vertical: -721742131
+      Special_Tile_Shield_Bomb: -805879868
+      Special_Tile_Shield_ClorBomb: 1601426834
+      Special_Tile_Shield_Horizontal: 1160974469
+      Special_Tile_Shield_Vertical: 501500560
+      Special_Tile_Sword_Bomb: -1569024559
+      Special_Tile_Sword_ClorBomb: -899880230
       Special_Tile_Sword_Horizontal: -2137694403
       Special_Tile_Sword_Vertical: 1415374166
       Tile_Coin: 1726836101

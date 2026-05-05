@@ -1,3 +1,5 @@
+using System.Collections;
+using System;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using Game.Application.Core;
@@ -5,7 +7,7 @@ using UnityEngine;
 public interface IPuzzleGameplayService : IService
 {
     UniTask CreateRuntime(CancellationToken ct);
-    UniTask TrySwapAsync( TilePosition a, TilePosition b, CancellationToken cancellationToken);
+    UniTask TrySwapAsync( TilePosition a, TilePosition b);
     bool IsInside(TilePosition position);
     bool IsBusy { get; }
 }
@@ -20,6 +22,8 @@ public sealed class PuzzleGameplayService : MonoBehaviour, IPuzzleGameplayServic
     private bool _isBusy;
     public bool IsBusy => _isBusy;
 
+    private CancellationTokenSource _runtimeCts;
+
     
     public void Initialized(
         IPuzzleService PuzzleService,
@@ -32,9 +36,11 @@ public sealed class PuzzleGameplayService : MonoBehaviour, IPuzzleGameplayServic
         _puzzleBoardViewFactory = puzzleBoardViewFactory;
         _boardAnimator = boardAnimator;
         _boardLayout = boardLayout;
+        ResetRuntimeToken();
     }
     public void ReloadBoard(BoardPreset preset)
     {
+        ResetRuntimeToken();
         _puzzleService.LoadPreset(
             preset);
 
@@ -48,36 +54,64 @@ public sealed class PuzzleGameplayService : MonoBehaviour, IPuzzleGameplayServic
 
         _boardAnimator.InitializeBoard(_boardView);
     }
-    public async UniTask TrySwapAsync(TilePosition a, TilePosition b , CancellationToken ct)
+    public async UniTask TrySwapAsync(TilePosition a, TilePosition b)
     {
-        ct.ThrowIfCancellationRequested();
         if (_isBusy)
         {
             return;
         }
-
+        CancellationToken ct = _runtimeCts.Token;
         _isBusy = true;
-
-        SwapResult result = _puzzleService.TrySwap(a, b);
-
-        if (result.Success)
+        try
         {
-            foreach (CascadeStepResult StepResult in result.CascadeResult.Steps)
+            ct.ThrowIfCancellationRequested();
+
+            SwapResult result =  _puzzleService.TrySwap(a, b);
+
+            if (result.Success)
             {
-                await _boardAnimator.PlayAsync(StepResult.ChangeSet);
-            }
+                foreach (CascadeStepResult stepResult in result.CascadeResult.Steps)
+                {
+                    ct.ThrowIfCancellationRequested();
 
-            //_sessionService.ProcessMove(result.CascadeResult);
+                    await _boardAnimator.PlayAsync(
+                        stepResult.ChangeSet,
+                        ct);
+                }
+            }
+            else
+            {
+                await _boardAnimator.PlayInvalidSwapAsync(
+                        a,
+                        b,
+                        ct);
+            }
         }
-        else
+        catch (OperationCanceledException)
         {
-            await _boardAnimator.PlayInvalidSwapAsync(a, b);
         }
-        _isBusy = false;
+        finally
+        {
+            _isBusy = false;
+        }
     }
     public bool IsInside(TilePosition position)
     {
         return _puzzleService.IsInside(position);
     }
+    private void ResetRuntimeToken()
+    {
+        _runtimeCts?.Cancel();
 
+        _runtimeCts?.Dispose();
+
+        _runtimeCts =
+            new CancellationTokenSource();
+    }
+    void OnDestroy()
+    {
+        _runtimeCts?.Cancel();
+
+        _runtimeCts?.Dispose();
+    }
 }

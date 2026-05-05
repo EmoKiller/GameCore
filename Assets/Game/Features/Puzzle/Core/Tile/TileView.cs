@@ -1,3 +1,4 @@
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -33,7 +34,7 @@ public sealed class TileView : MonoBehaviour
     {
         transform.position = position;
     }
-    public async UniTask MoveToAsync(Vector3 target, float duration)
+    public async UniTask MoveToAsync(Vector3 target, float duration, CancellationToken ct)
     {
         Vector3 start =
             transform.position;
@@ -42,6 +43,11 @@ public sealed class TileView : MonoBehaviour
 
         while (elapsed < duration)
         {
+            ct.ThrowIfCancellationRequested();
+            if (this == null)
+            {
+                return;
+            }
             elapsed += Time.deltaTime;
 
             float progress = Mathf.Clamp01(
@@ -61,7 +67,7 @@ public sealed class TileView : MonoBehaviour
         }
         transform.position = target;
     }
-    public async UniTask ScaleToAsync( Vector3 target, float duration)
+    public async UniTask ScaleToAsync( Vector3 target, float duration, CancellationToken ct)
     {
         Vector3 start =
             transform.localScale;
@@ -70,6 +76,11 @@ public sealed class TileView : MonoBehaviour
 
         while (time < duration)
         {
+            ct.ThrowIfCancellationRequested();
+            if (this == null)
+            {
+                return;
+            }
             time += Time.deltaTime;
 
             float t = time / duration;

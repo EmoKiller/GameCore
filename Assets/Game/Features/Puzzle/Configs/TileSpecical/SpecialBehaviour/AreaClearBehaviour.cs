@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Bomb",menuName = "Puzzle/Special/Special Behaviours/Bomb")]
-public sealed class BombSpecialBehaviour : SpecialTileBehaviour
+[CreateAssetMenu(fileName = "Area Clear",menuName = "Puzzle/Special/Special Behaviours/Area Clear")]
+public sealed class AreaClearBehaviour : SpecialTileBehaviour
 {
     [SerializeField]
     private int _radius = 1;

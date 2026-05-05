@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "ColorBomb",menuName = "Puzzle/Special/Special Behaviours/ColorBomb")]
-public sealed class ColorBombBehaviour : SpecialTileBehaviour
+[CreateAssetMenu(fileName = "Color Match Clear",menuName = "Puzzle/Special/Special Behaviours/Color Match Clear")]
+public sealed class ColorMatchClearBehaviour : SpecialTileBehaviour
 {
     public override SpecialActivationResult Activate(
         PuzzleBoard board,

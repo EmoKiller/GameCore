@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79e9fd64b51615d41afa14467a09cb39, type: 3}
-  m_Name: HorizontalLineData
+  m_Name: Coin_Line4Vertical
   m_EditorClassIdentifier: Project.Feature.Puzzle::TileSpecialData
-  <Id>k__BackingField: HorizontalLine
-  <Icon>k__BackingField: {fileID: -2137694403, guid: efeca123e18ccd647b28666e19390cbe, type: 3}
-  <Behaviour>k__BackingField: {fileID: 11400000, guid: bde4bf7c981da3f4690f755912f6405b, type: 2}
+  <Id>k__BackingField: VerticalLine
+  <Icon>k__BackingField: {fileID: -1910150465, guid: efeca123e18ccd647b28666e19390cbe, type: 3}
+  <Behaviour>k__BackingField: {fileID: 11400000, guid: 6d197c1217112c64ab7fa96eb9b7633f, type: 2}

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -20,32 +21,34 @@ public sealed class PuzzleBoardAnimator
     {
         _boardView = boardView;
     }
-    public async UniTask PlayAsync(
-        BoardChangeSet changeSet)
+    public async UniTask PlayAsync(BoardChangeSet changeSet, CancellationToken ct)
     {
-        await PlaySwaps(changeSet);
+        ct.ThrowIfCancellationRequested();
+        await PlaySwaps(changeSet, ct);
 
-        await PlayCreateSpecials(changeSet);
+        ct.ThrowIfCancellationRequested();
+        await PlayCreateSpecials(changeSet, ct);
 
-        await PlayRemoves(changeSet);
+        ct.ThrowIfCancellationRequested();
+        await PlayRemoves(changeSet, ct);
 
-        await PlayFalls(changeSet);
+        ct.ThrowIfCancellationRequested();
+        await PlayFalls(changeSet, ct);
 
-        await PlaySpawns(changeSet);
+        ct.ThrowIfCancellationRequested();
+        await PlaySpawns(changeSet, ct);
     }
 
-    private async UniTask PlaySwaps(BoardChangeSet changeSet)
+    private async UniTask PlaySwaps(BoardChangeSet changeSet, CancellationToken ct)
     {
         var swaps = changeSet.Transitions.OfType<SwapTransition>();
         
-        var tasks = swaps.Select(PlaySwapAsync);
+        var tasks = swaps.Select(swap => PlaySwapAsync(swap,ct));
+
         await UniTask.WhenAll(tasks);
     }
-    private void CommitSwapViews( TilePosition from, TilePosition to)
-    {
-        _boardView.SwapViews(from, to);
-    }
-    private async UniTask PlaySwapAsync(SwapTransition transition)
+    
+    private async UniTask PlaySwapAsync(SwapTransition transition, CancellationToken ct)
     {
         TileView fromView = _boardView.GetTileView(transition.From);
 
@@ -60,7 +63,8 @@ public sealed class PuzzleBoardAnimator
             fromView,
             toView,
             transition.From,
-            transition.To);
+            transition.To,
+            ct);
 
         CommitSwapViews(
             transition.From,
@@ -68,7 +72,8 @@ public sealed class PuzzleBoardAnimator
     }
     public async UniTask PlayInvalidSwapAsync(
         TilePosition from,
-        TilePosition to)
+        TilePosition to,
+        CancellationToken ct)
     {
         TileView fromView = _boardView.GetTileView(from);
 
@@ -83,7 +88,8 @@ public sealed class PuzzleBoardAnimator
             fromView,
             toView,
             from,
-            to);
+            to,
+            ct);
 
         await UniTask.Delay(40);
 
@@ -91,7 +97,8 @@ public sealed class PuzzleBoardAnimator
             fromView,
             toView,
             to,
-            from);
+            from,
+            ct);
 
         fromView.SetInstantPosition(
             _boardView.Layout.GetWorldPosition(from));
@@ -99,11 +106,16 @@ public sealed class PuzzleBoardAnimator
         toView.SetInstantPosition(
             _boardView.Layout.GetWorldPosition(to));
     }
+    private void CommitSwapViews( TilePosition from, TilePosition to)
+    {
+        _boardView.SwapViews(from, to);
+    }
     private async UniTask AnimateSwapAsync(
         TileView fromView,
         TileView toView,
         TilePosition from,
-        TilePosition to)
+        TilePosition to,
+        CancellationToken ct)
     {
         Vector3 fromWorld = _boardView.Layout.GetWorldPosition(from);
 
@@ -112,16 +124,18 @@ public sealed class PuzzleBoardAnimator
         await UniTask.WhenAll(
             fromView.MoveToAsync(
                 toWorld,
-                _config.SwapDuration
+                _config.SwapDuration,
+                ct
             ),
 
             toView.MoveToAsync(
                 fromWorld,
-                _config.SwapDuration
+                _config.SwapDuration,
+                ct
             ));
     }
 
-    private async UniTask PlayCreateSpecials(BoardChangeSet changeSet)
+    private async UniTask PlayCreateSpecials(BoardChangeSet changeSet, CancellationToken ct)
     {
         var specials = changeSet.Transitions.OfType<CreateSpecialTransition>();
 
@@ -143,13 +157,13 @@ public sealed class PuzzleBoardAnimator
 
         view.SetSpecial(transition.Special);
     }
-    private async UniTask PlayRemoves(BoardChangeSet changeSet)
+    private async UniTask PlayRemoves(BoardChangeSet changeSet, CancellationToken ct)
     {
         var removes = changeSet.Transitions.OfType<RemoveTransition>();
 
-        await UniTask.WhenAll(removes.Select(PlayRemoveAsync));
+        await UniTask.WhenAll(removes.Select(remove => PlayRemoveAsync(remove,ct)));
     }
-    private async UniTask PlayRemoveAsync(RemoveTransition transition)
+    private async UniTask PlayRemoveAsync(RemoveTransition transition, CancellationToken ct)
     {
         var view = _boardView.GetTileView(transition.Position);
         if (view == null)
@@ -158,20 +172,23 @@ public sealed class PuzzleBoardAnimator
         }
         await view.ScaleToAsync(
             Vector3.zero,
-            _config.RemoveDuration
+            _config.RemoveDuration,
+            ct
         );
 
         _boardView.HideView(transition.Position);
     }
 
     private async UniTask PlayFalls(
-        BoardChangeSet changeSet)
+        BoardChangeSet changeSet,
+        CancellationToken ct
+        )
     {
         var falls = changeSet.Transitions.OfType<FallTransition>();
 
-        await UniTask.WhenAll(falls.Select(PlayFallAsync));
+        await UniTask.WhenAll(falls.Select(fall => PlayFallAsync(fall, ct)));
     }
-    private async UniTask PlayFallAsync(FallTransition transition)
+    private async UniTask PlayFallAsync(FallTransition transition, CancellationToken ct)
     {
         var view =
             _boardView.GetTileView(
@@ -191,23 +208,24 @@ public sealed class PuzzleBoardAnimator
 
         await view.MoveToAsync(
             target,
-            duration);
+            duration,
+            ct);
 
         _boardView.MoveView(
             transition.From,
             transition.To);
     }
 
-    private async UniTask PlaySpawns(BoardChangeSet changeSet)
+    private async UniTask PlaySpawns(BoardChangeSet changeSet, CancellationToken ct)
     {
         var spawns = changeSet.Transitions.OfType<SpawnTransition>();
 
         _spawnCountsPerColumn.Clear();
 
-        await UniTask.WhenAll(spawns.Select(PlaySpawnAsync));
+        await UniTask.WhenAll(spawns.Select(spawn => PlaySpawnAsync(spawn, ct)));
     }
 
-    private async UniTask PlaySpawnAsync(SpawnTransition transition)
+    private async UniTask PlaySpawnAsync(SpawnTransition transition, CancellationToken ct)
     {
         if (_spawnCountsPerColumn.TryGetValue(
                 transition.Position.X,
@@ -254,6 +272,7 @@ public sealed class PuzzleBoardAnimator
 
         await view.MoveToAsync(
             target,
-            duration);
+            duration,
+            ct);
     }
 }

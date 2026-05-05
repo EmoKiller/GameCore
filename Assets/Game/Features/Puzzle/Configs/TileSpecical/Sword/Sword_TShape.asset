@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 79e9fd64b51615d41afa14467a09cb39, type: 3}
-  m_Name: ColorBombData
+  m_Name: Sword_TShape
   m_EditorClassIdentifier: Project.Feature.Puzzle::TileSpecialData
-  <Id>k__BackingField: ColorBomb
-  <Icon>k__BackingField: {fileID: 501500560, guid: efeca123e18ccd647b28666e19390cbe, type: 3}
-  <Behaviour>k__BackingField: {fileID: 11400000, guid: 92ca3d309659b1c499eedef20b44a98d, type: 2}
+  <Id>k__BackingField: Bomb
+  <Icon>k__BackingField: {fileID: -1569024559, guid: efeca123e18ccd647b28666e19390cbe, type: 3}
+  <Behaviour>k__BackingField: {fileID: 11400000, guid: ab922c8d23d2af64e9dccdc3c455d442, type: 2}
