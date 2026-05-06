@@ -10,6 +10,7 @@ public sealed class ColorMatchClearBehaviour : SpecialTileBehaviour
         TilePosition position,
         BoardChangeSet changeSet)
     {
+        
         List<TilePosition> triggered =
             new List<TilePosition>();
 
@@ -27,10 +28,16 @@ public sealed class ColorMatchClearBehaviour : SpecialTileBehaviour
         {
             for (int y = 0; y < board.Height; y++)
             {
-                TilePosition target =
-                    new TilePosition(x, y);
-                    
-                if (tile.Type != targetType)
+                TilePosition target = new TilePosition(x, y);
+
+                TileData targetTile = board.Get(target);
+
+                if (targetTile.IsEmpty)
+                {
+                    continue;
+                }
+
+                if (targetTile.Type != targetType)
                 {
                     continue;
                 }

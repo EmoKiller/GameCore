@@ -18,7 +18,6 @@ public sealed class CascadeProcessor
     private readonly HashSet<TilePosition> _movedPositions = new();
     public HashSet<TilePosition> MovedPositions => _movedPositions;
 
-    private readonly List<SpecialActivationRequest> _persistentActivations = new();
 
     public CascadeProcessor(
         IMatchResolver matchResolver,
@@ -91,10 +90,10 @@ public sealed class CascadeProcessor
         List<SpecialActivationRequest> activations = matchResult.GetSpecialActivations(board);
 
         // 2. Inject persistent specials (auto retrigger)
-        if (_persistentActivations.Count > 0)
-        {
-            activations.AddRange(_persistentActivations);
-        }
+        // if (_persistentActivations.Count > 0)
+        // {
+        //     activations.AddRange(_persistentActivations);
+        // }
 
         // 3. Spawn new specials
         _specialTileProcessor.Process(
@@ -105,14 +104,14 @@ public sealed class CascadeProcessor
             _movedPositions);
 
         // 4. Activate chain
-        SpecialChainProcessResult chainResult =
-            _specialActivationChainProcessor.Process(
-                board,
-                activations,
-                changeSet);
+        
+        _specialActivationChainProcessor.Process(
+            board,
+            activations,
+            changeSet);
 
         // 5. CLEAR persistent list
-        _persistentActivations.Clear();
+        // _persistentActivations.Clear();
 
         // 6. REMOVE matched tiles
         _removeProcessor.Remove(
@@ -133,18 +132,18 @@ public sealed class CascadeProcessor
             _movedPositions);
 
         // 9. REBUILD persistent activations 
-        foreach (TileData tile in chainResult.PersistentTiles)
-        {
-            TilePosition pos = board.FindPosition(tile);
+        // foreach (TileData tile in chainResult.PersistentTiles)
+        // {
+        //     TilePosition pos = board.FindPosition(tile);
 
-            if (pos.IsValid == false)
-            {
-                continue;
-            }
+        //     if (pos.IsValid == false)
+        //     {
+        //         continue;
+        //     }
 
-            _persistentActivations.Add(
-                new SpecialActivationRequest(pos, tile));
-        }
+        //     _persistentActivations.Add(
+        //         new SpecialActivationRequest(pos, tile));
+        // }
     }
     
     public void Add(TilePosition position)

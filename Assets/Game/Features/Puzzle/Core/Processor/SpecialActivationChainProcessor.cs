@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public interface ISpecialActivationChainProcessor
 {
-    SpecialChainProcessResult  Process(
+    void  Process(
         PuzzleBoard board,
         IEnumerable<SpecialActivationRequest> activations,
         BoardChangeSet changeSet);
@@ -17,12 +17,11 @@ public sealed class SpecialActivationChainProcessor : ISpecialActivationChainPro
         _activationProcessor = activationProcessor;
     }
 
-    public SpecialChainProcessResult Process(
+    public void Process(
         PuzzleBoard board,
         IEnumerable<SpecialActivationRequest> activations,
         BoardChangeSet changeSet)
     {
-        List<TileData> persistentTiles = new();
 
         Queue<SpecialActivationRequest> queue = new();
 
@@ -50,12 +49,6 @@ public sealed class SpecialActivationChainProcessor : ISpecialActivationChainPro
                     current,
                     changeSet);
 
-            // 🔥 QUAN TRỌNG: lưu TILE, không lưu position
-            if (result.ReTriggerNextCascade)
-            {
-                persistentTiles.Add(current.Tile);
-            }
-
             foreach (TilePosition next in result.TriggeredSpecials)
             {
                 TileData tile = board.Get(next);
@@ -71,6 +64,5 @@ public sealed class SpecialActivationChainProcessor : ISpecialActivationChainPro
             }
         }
 
-        return new SpecialChainProcessResult(persistentTiles);
     }
 }
