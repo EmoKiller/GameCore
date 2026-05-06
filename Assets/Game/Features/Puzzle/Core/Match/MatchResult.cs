@@ -45,4 +45,5 @@ public sealed class MatchResult
             }
         }
     }
+    
 }

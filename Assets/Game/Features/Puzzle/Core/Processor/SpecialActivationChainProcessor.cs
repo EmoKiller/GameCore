@@ -2,44 +2,47 @@ using System.Collections.Generic;
 using UnityEngine;
 public interface ISpecialActivationChainProcessor
 {
-    void Process(
+    SpecialChainProcessResult  Process(
         PuzzleBoard board,
-        IEnumerable<TilePosition> positions,
+        IEnumerable<SpecialActivationRequest> activations,
         BoardChangeSet changeSet);
 }
 public sealed class SpecialActivationChainProcessor : ISpecialActivationChainProcessor
 {
     private readonly ISpecialActivationProcessor _activationProcessor;
 
-    public SpecialActivationChainProcessor(ISpecialActivationProcessor activationProcessor)
+    public SpecialActivationChainProcessor(
+        ISpecialActivationProcessor activationProcessor)
     {
         _activationProcessor = activationProcessor;
     }
 
-    public void Process(
+    public SpecialChainProcessResult Process(
         PuzzleBoard board,
-        IEnumerable<TilePosition> positions,
+        IEnumerable<SpecialActivationRequest> activations,
         BoardChangeSet changeSet)
     {
-        Queue<TilePosition> queue = new Queue<TilePosition>();
+        List<TileData> persistentTiles = new();
 
-        HashSet<TilePosition> visited = new HashSet<TilePosition>();
+        Queue<SpecialActivationRequest> queue = new();
 
-        foreach (TilePosition pos in positions)
+        HashSet<TilePosition> visited = new();
+
+        foreach (var activation in activations)
         {
-            queue.Enqueue(pos);
+            queue.Enqueue(activation);
         }
 
         while (queue.Count > 0)
         {
-            TilePosition current = queue.Dequeue();
+            SpecialActivationRequest current = queue.Dequeue();
 
-            if (visited.Contains(current))
+            if (visited.Contains(current.Position))
             {
                 continue;
             }
 
-            visited.Add(current);
+            visited.Add(current.Position);
 
             SpecialActivationResult result =
                 _activationProcessor.Activate(
@@ -47,11 +50,27 @@ public sealed class SpecialActivationChainProcessor : ISpecialActivationChainPro
                     current,
                     changeSet);
 
-            foreach (TilePosition next
-                in result.TriggeredSpecials)
+            // 🔥 QUAN TRỌNG: lưu TILE, không lưu position
+            if (result.ReTriggerNextCascade)
             {
-                queue.Enqueue(next);
+                persistentTiles.Add(current.Tile);
+            }
+
+            foreach (TilePosition next in result.TriggeredSpecials)
+            {
+                TileData tile = board.Get(next);
+
+                if (tile.HasSpecial == false)
+                {
+                    continue;
+                }
+
+                queue.Enqueue(new SpecialActivationRequest(
+                        next,
+                        tile));
             }
         }
+
+        return new SpecialChainProcessResult(persistentTiles);
     }
 }

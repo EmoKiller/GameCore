@@ -7,13 +7,29 @@ public sealed class AreaClearBehaviour : SpecialTileBehaviour
     [SerializeField]
     private int _radius = 1;
 
+    [SerializeField]
+    private int _charges = 2;
+
+
+    public int Radius => _radius;
+    public int Charges => _charges;
     public override SpecialActivationResult Activate(
         PuzzleBoard board,
+        TileData tile,
         TilePosition position,
         BoardChangeSet changeSet)
     {
-        List<TilePosition> triggered =
-            new List<TilePosition>();
+        
+        TileRuntimeSpecialState runtime = tile.RuntimeSpecialState;
+        if (runtime == null)
+        {
+            Debug.LogError( $"Missing RuntimeSpecialState at {position}");
+
+            return SpecialActivationResult.Empty();
+        }
+        runtime.RemainingCharges--;
+
+        List<TilePosition> triggered = new List<TilePosition>();
 
         for (int x = -_radius; x <= _radius; x++)
         {
@@ -31,7 +47,16 @@ public sealed class AreaClearBehaviour : SpecialTileBehaviour
                     triggered);
             }
         }
-
-        return new SpecialActivationResult(triggered);
+        Debug.Log("RemainingCharges " + runtime.RemainingCharges);
+        if (runtime.RemainingCharges <= 0)
+        {
+            return new SpecialActivationResult(triggered, ESpecialConsumePolicy.Destroy);
+        }
+        
+        return new SpecialActivationResult(triggered, ESpecialConsumePolicy.Keep, true);
+    }
+    public override TileRuntimeSpecialState CreateRuntimeState()
+    {
+        return new TileRuntimeSpecialState(_charges);
     }
 }

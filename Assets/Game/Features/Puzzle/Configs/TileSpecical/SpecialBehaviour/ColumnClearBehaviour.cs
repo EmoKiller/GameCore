@@ -6,6 +6,7 @@ public sealed class ColumnClearBehaviour : SpecialTileBehaviour
 {
     public override SpecialActivationResult Activate(
         PuzzleBoard board,
+        TileData tile,
         TilePosition position,
         BoardChangeSet changeSet)
     {
@@ -26,6 +27,6 @@ public sealed class ColumnClearBehaviour : SpecialTileBehaviour
                 triggered);
         }
 
-        return new SpecialActivationResult(triggered);
+        return new SpecialActivationResult(triggered, ESpecialConsumePolicy.Destroy);
     }
 }

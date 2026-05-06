@@ -6,6 +6,7 @@ public sealed class ColorMatchClearBehaviour : SpecialTileBehaviour
 {
     public override SpecialActivationResult Activate(
         PuzzleBoard board,
+        TileData tile,
         TilePosition position,
         BoardChangeSet changeSet)
     {
@@ -28,10 +29,7 @@ public sealed class ColorMatchClearBehaviour : SpecialTileBehaviour
             {
                 TilePosition target =
                     new TilePosition(x, y);
-
-                TileData tile =
-                    board.Get(target);
-
+                    
                 if (tile.Type != targetType)
                 {
                     continue;
@@ -45,8 +43,7 @@ public sealed class ColorMatchClearBehaviour : SpecialTileBehaviour
             }
         }
 
-        return new SpecialActivationResult(
-            triggered);
+        return new SpecialActivationResult(triggered, ESpecialConsumePolicy.Destroy);
     }
 
     private ETileType ResolveTargetType(

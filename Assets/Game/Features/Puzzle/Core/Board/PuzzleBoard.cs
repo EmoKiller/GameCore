@@ -62,4 +62,19 @@ public sealed class PuzzleBoard : IReadOnlyPuzzleBoard
     {
         Set(position,new TileData(ETileType.None));
     }
+    public TilePosition FindPosition(TileData target)
+    {
+        for (int x = 0; x < Width; x++)
+        {
+            for (int y = 0; y < Height; y++)
+            {
+                if (ReferenceEquals(_tiles[x, y], target))
+                {
+                    return new TilePosition(x, y);
+                }
+            }
+        }
+
+        return TilePosition.Invalid;
+    }
 }

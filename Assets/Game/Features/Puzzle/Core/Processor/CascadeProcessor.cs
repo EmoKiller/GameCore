@@ -6,7 +6,8 @@ public sealed class CascadeProcessor
     private readonly IMatchResolver _matchResolver;
 
     private readonly SpecialTileProcessor _specialTileProcessor;
-    private readonly ISpecialActivationChainProcessor _specialActivationProcessor;
+
+    private readonly ISpecialActivationChainProcessor _specialActivationChainProcessor;
 
     private readonly RemoveMatchedTilesProcessor _removeProcessor;
 
@@ -17,17 +18,19 @@ public sealed class CascadeProcessor
     private readonly HashSet<TilePosition> _movedPositions = new();
     public HashSet<TilePosition> MovedPositions => _movedPositions;
 
+    private readonly List<SpecialActivationRequest> _persistentActivations = new();
+
     public CascadeProcessor(
         IMatchResolver matchResolver,
         SpecialTileProcessor specialTileProcessor,
-        ISpecialActivationChainProcessor specialActivationProcessor,
+        ISpecialActivationChainProcessor specialActivationChainProcessor,
         RemoveMatchedTilesProcessor removeProcessor,
         GravityProcessor gravityProcessor,
         SpawnProcessor spawnProcessor)
     {
         _matchResolver = matchResolver;
         _specialTileProcessor = specialTileProcessor;
-        _specialActivationProcessor = specialActivationProcessor;
+        _specialActivationChainProcessor = specialActivationChainProcessor;
         _removeProcessor = removeProcessor;
         _gravityProcessor = gravityProcessor;
         _spawnProcessor = spawnProcessor;
@@ -77,15 +80,23 @@ public sealed class CascadeProcessor
         _movedPositions.Clear();
         return new CascadeResult(steps);
     }
+
     private void ProcessStep(
         PuzzleBoard board,
         MatchResult matchResult,
         BoardChangeSet changeSet,
-        SwapContext swapContext
-    )
+        SwapContext swapContext)
     {
-        IEnumerable<TilePosition> activatedSpecials = matchResult.GetSpecialPositions(board).ToList();
+        // 1. Collect match-triggered specials
+        List<SpecialActivationRequest> activations = matchResult.GetSpecialActivations(board);
 
+        // 2. Inject persistent specials (auto retrigger)
+        if (_persistentActivations.Count > 0)
+        {
+            activations.AddRange(_persistentActivations);
+        }
+
+        // 3. Spawn new specials
         _specialTileProcessor.Process(
             board,
             matchResult,
@@ -93,27 +104,49 @@ public sealed class CascadeProcessor
             swapContext,
             _movedPositions);
 
-        _specialActivationProcessor.Process(
-            board,
-            activatedSpecials,
-            changeSet);
+        // 4. Activate chain
+        SpecialChainProcessResult chainResult =
+            _specialActivationChainProcessor.Process(
+                board,
+                activations,
+                changeSet);
 
+        // 5. CLEAR persistent list
+        _persistentActivations.Clear();
+
+        // 6. REMOVE matched tiles
         _removeProcessor.Remove(
             board,
             matchResult,
             changeSet);
 
+        // 7. GRAVITY
         _gravityProcessor.Apply(
             board,
             changeSet,
             _movedPositions);
 
+        // 8. SPAWN
         _spawnProcessor.FillEmpty(
             board,
             changeSet,
             _movedPositions);
-    }
 
+        // 9. REBUILD persistent activations 
+        foreach (TileData tile in chainResult.PersistentTiles)
+        {
+            TilePosition pos = board.FindPosition(tile);
+
+            if (pos.IsValid == false)
+            {
+                continue;
+            }
+
+            _persistentActivations.Add(
+                new SpecialActivationRequest(pos, tile));
+        }
+    }
+    
     public void Add(TilePosition position)
     {
         _movedPositions.Add(position);
@@ -122,4 +155,5 @@ public sealed class CascadeProcessor
     {
         return _movedPositions.Contains(position);
     }
+    
 }

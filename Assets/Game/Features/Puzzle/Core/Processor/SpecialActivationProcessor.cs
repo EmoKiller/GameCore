@@ -1,32 +1,39 @@
 using UnityEngine;
 public interface ISpecialActivationProcessor
 {
-    SpecialActivationResult Activate(PuzzleBoard board, TilePosition position, BoardChangeSet changeSet);
+    SpecialActivationResult Activate(PuzzleBoard board, SpecialActivationRequest request, BoardChangeSet changeSet);
 }
 public sealed class SpecialActivationProcessor : ISpecialActivationProcessor
 {
     public SpecialActivationResult Activate(
         PuzzleBoard board,
-        TilePosition position,
+        SpecialActivationRequest request,
         BoardChangeSet changeSet)
     {
-        TileData tile = board.Get(position);
+        TileData tile = request.Tile;
 
-        if (tile.HasSpecial == false)
+        TilePosition position = request.Position;
+
+        TileSpecialData special = tile.Special;
+
+        if (special == null)
         {
             return SpecialActivationResult.Empty();
         }
-        
-        SpecialTileBehaviour behaviour =
-            tile.Special.Behaviour;
 
-        
-        changeSet.Add(new RemoveTransition(position));
-        board.Clear(position);
+        SpecialTileBehaviour behaviour = special.Behaviour;
 
-        return behaviour.Activate(
-            board,
-            position,
-            changeSet);
+        SpecialActivationResult result = behaviour.Activate(board, tile, position, changeSet);
+
+        if (result.ConsumePolicy == ESpecialConsumePolicy.Destroy)
+        {
+            changeSet.Add(new RemoveTransition(position));
+            board.Clear(position);
+        }
+        else
+        {
+            changeSet.Protect(position);
+        }
+        return result;
     }
 }

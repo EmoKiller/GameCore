@@ -10,8 +10,7 @@ public sealed class MatchResolver : IMatchResolver
 
     public MatchResult Resolve(PuzzleBoard board)
     {
-        var groups =
-            new List<MatchGroup>();
+        var groups = new List<MatchGroup>();
 
         ScanHorizontal(
             board,
@@ -23,8 +22,7 @@ public sealed class MatchResolver : IMatchResolver
 
         List<MatchCluster> clusters = BuildClusters(groups);
 
-        return new MatchResult(
-            clusters);
+        return new MatchResult(clusters);
     }
     private List<MatchCluster> BuildClusters(List<MatchGroup> groups)
     {

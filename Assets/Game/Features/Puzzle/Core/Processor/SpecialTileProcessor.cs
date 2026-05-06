@@ -55,6 +55,8 @@ public sealed class SpecialTileProcessor
                     result.Position,
                     specialTile.Special));
             changeSet.Protect(result.Position);
+            Debug.Log( "Protectspecial : "+ special);
         }
     }
+    
 }
