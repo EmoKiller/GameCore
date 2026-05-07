@@ -22,7 +22,6 @@ public sealed class SpecialActivationChainProcessor : ISpecialActivationChainPro
         IEnumerable<SpecialActivationRequest> activations,
         BoardChangeSet changeSet)
     {
-
         Queue<SpecialActivationRequest> queue = new();
 
         HashSet<TilePosition> visited = new();

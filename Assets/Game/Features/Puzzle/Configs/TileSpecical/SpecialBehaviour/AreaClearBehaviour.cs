@@ -9,10 +9,6 @@ public sealed class AreaClearBehaviour : SpecialTileBehaviour
 
     [SerializeField]
     private int _charges = 2;
-
-
-    public int Radius => _radius;
-    public int Charges => _charges;
     public override SpecialActivationResult Activate(
         PuzzleBoard board,
         TileData tile,
@@ -47,6 +43,7 @@ public sealed class AreaClearBehaviour : SpecialTileBehaviour
                     triggered);
             }
         }
+        
         Debug.Log("RemainingCharges " + runtime.RemainingCharges);
         if (runtime.RemainingCharges <= 0)
         {
