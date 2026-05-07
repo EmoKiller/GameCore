@@ -16,38 +16,16 @@ public static class SpecialActivationUtility
 
         TileData tile = board.Get(target);
 
-        if (tile.IsEmpty)
-        {
-            return;
-        }
-
-        // 🔥 DEBUG
-        Debug.Log($"[ProcessTarget] Hit: {target} | HasSpecial: {tile.HasSpecial}");
-
-        // ❗ FIX 1 — respect Protect
-        // if (changeSet.IsProtected(position))
-        // {
-        //     Debug.Log($"[ProcessTarget] SKIP Protected: {position}");
-        //     return;
-        // }
-
-        if (changeSet.IsRemoved(target))
+        if (tile.IsEmpty || changeSet.IsRemoved(target))
         {
             return;
         }
 
         if (tile.HasSpecial)
         {
-            Debug.Log($"[ProcessTarget] Chain Special: {target}");
-
             triggered.Add(target);
-
-            // ❗ KHÔNG remove ngay → để chain processor xử lý
             return;
         }
-
-        // 🔥 REMOVE NORMAL TILE
-        Debug.Log($"[ProcessTarget] Remove NORMAL: {target}");
 
         changeSet.MarkRemoved(target);
 

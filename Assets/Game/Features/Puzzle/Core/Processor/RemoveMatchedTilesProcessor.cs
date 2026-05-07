@@ -23,7 +23,7 @@ public sealed class RemoveMatchedTilesProcessor
 
                 TileData tile = board.Get(pos);
 
-                if (tile.IsEmpty || changeSet.IsProtected(pos))
+                if (tile.IsEmpty || changeSet.IsProtected(pos) || changeSet.IsRemoved(pos))
                 {
                     continue;
                 }
