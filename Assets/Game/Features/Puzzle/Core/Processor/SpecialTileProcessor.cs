@@ -25,6 +25,7 @@ public sealed class SpecialTileProcessor
         foreach (MatchCluster cluster in matchResult.Clusters)
         {
             SpecialSpawnResult result =_analyzer.Analyze(
+                    board,
                     cluster,
                     swapContext);
 

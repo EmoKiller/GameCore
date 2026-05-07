@@ -3,11 +3,12 @@ using System.Linq;
 
 public interface IMatchPatternAnalyzer
 {
-    SpecialSpawnResult Analyze(MatchCluster cluster,SwapContext swapContext);
+    SpecialSpawnResult Analyze(PuzzleBoard board, MatchCluster cluster,SwapContext swapContext);
 }
 public sealed class MatchPatternAnalyzer : IMatchPatternAnalyzer
 {
     public SpecialSpawnResult Analyze(
+        PuzzleBoard board,
         MatchCluster cluster,
         SwapContext swapContext)
     {
@@ -19,6 +20,7 @@ public sealed class MatchPatternAnalyzer : IMatchPatternAnalyzer
 
         TilePosition spawnPosition =
             ResolveSpawnPosition(
+                board,
                 cluster,
                 swapContext);
 
@@ -61,6 +63,7 @@ public sealed class MatchPatternAnalyzer : IMatchPatternAnalyzer
         return SpecialSpawnResult.None();
     }
     private TilePosition ResolveSpawnPosition(
+        PuzzleBoard board,
         MatchCluster cluster,
         SwapContext swapContext)
     {
@@ -68,19 +71,62 @@ public sealed class MatchPatternAnalyzer : IMatchPatternAnalyzer
         {
             return intersection;
         }
+
         if (cluster.Positions.Contains(swapContext.To))
         {
-            return swapContext.To;
+            TileData toTile = board.Get(swapContext.To);
+
+            if (toTile.HasSpecial == false)
+            {
+                return swapContext.To;
+            }
+
+            return ResolveFallbackPosition(
+                board,
+                cluster,
+                swapContext.To);
         }
 
         if (cluster.Positions.Contains(swapContext.From))
         {
-            return swapContext.From;
+            TileData fromTile = board.Get(swapContext.From);
+
+            if (fromTile.HasSpecial == false)
+            {
+                return swapContext.From;
+            }
+
+            return ResolveFallbackPosition(
+                board,
+                cluster,
+                swapContext.From);
         }
 
-        TilePosition center = GetClusterCenter(cluster);
+        return GetClusterCenter(cluster);
+    }
+    private TilePosition ResolveFallbackPosition(
+        PuzzleBoard board,
+        MatchCluster cluster,
+        TilePosition blocked)
+    {
+        foreach (TilePosition pos in cluster.Positions)
+        {
+            if (pos.Equals(blocked))
+            {
+                continue;
+            }
 
-        return center;
+            TileData tile = board.Get(pos);
+
+            if (tile.HasSpecial)
+            {
+                continue;
+            }
+
+            return pos;
+        }
+
+        return blocked;
     }
     private int GetMaxHorizontal(MatchCluster cluster)
     {
