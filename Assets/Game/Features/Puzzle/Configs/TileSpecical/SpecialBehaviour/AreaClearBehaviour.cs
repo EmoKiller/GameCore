@@ -41,9 +41,10 @@ public sealed class AreaClearBehaviour : SpecialTileBehaviour
 
         if (runtime.RemainingCharges <= 0)
         {
+            runtime.LifecycleState = ESpecialLifecycleState.Consumed;
             return new SpecialActivationResult(triggered, ESpecialConsumePolicy.Destroy);
         }
-        
+        runtime.LifecycleState = ESpecialLifecycleState.PendingRetrigger;
         return new SpecialActivationResult(triggered, ESpecialConsumePolicy.Keep);
     }
     public override TileRuntimeSpecialState CreateRuntimeState()

@@ -34,7 +34,6 @@ public sealed class SpecialActivationProcessor : ISpecialActivationProcessor
         }
         else 
         {
-            runtime.LifecycleState = ESpecialLifecycleState.PendingRetrigger;
             changeSet.Protect(position);
         }
         return result;

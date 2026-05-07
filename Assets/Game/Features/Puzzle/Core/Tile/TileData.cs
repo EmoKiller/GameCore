@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public struct TileData
+public sealed class TileData
 {
     public ETileType Type;
 

@@ -49,7 +49,8 @@ public sealed class SpecialActivationChainProcessor : ISpecialActivationChainPro
                     current,
                     changeSet);
 
-            if (result.ConsumePolicy == ESpecialConsumePolicy.Keep)
+            if (current.Tile.RuntimeSpecialState.LifecycleState ==
+                ESpecialLifecycleState.PendingRetrigger)
             {
                 persistentTiles.Add(current.Tile);
             }

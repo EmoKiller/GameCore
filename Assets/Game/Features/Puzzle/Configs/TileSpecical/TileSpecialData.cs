@@ -12,6 +12,9 @@ public sealed class TileSpecialData : ScriptableObject
 
     [field: SerializeField]
     public SpecialTileBehaviour Behaviour { get; private set; }
+    
+    [field: SerializeField]
+    public ESpecialTriggerMode TriggerMode { get; private set; }
 
     public TileSpecialData(SpecialTileBehaviour behaviour)
     {

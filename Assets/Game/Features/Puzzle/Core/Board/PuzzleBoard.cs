@@ -35,7 +35,10 @@ public sealed class PuzzleBoard : IReadOnlyPuzzleBoard
     public void Set(int x, int y, TileData tile)
     {
         _tiles[x, y] = tile;
-        tile.Position = new TilePosition(x, y);
+        if (tile != null)
+        {
+            tile.Position = new TilePosition(x, y);
+        }
     }
 
     public void Set(TilePosition position, TileData tile)
@@ -63,7 +66,10 @@ public sealed class PuzzleBoard : IReadOnlyPuzzleBoard
     {
         TileData current = Get(position);
 
-        current.Position = TilePosition.Invalid;
+        if (current != null)
+        {
+            current.Position = TilePosition.Invalid;
+        }
 
         Set(position, CreateEmptyTile());
     }

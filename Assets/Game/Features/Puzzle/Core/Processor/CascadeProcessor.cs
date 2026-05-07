@@ -35,46 +35,50 @@ public sealed class CascadeProcessor
     public CascadeResult Process(
         PuzzleBoard board,
         BoardChangeSet initialChangeSet,
-        SwapContext swapContext
-    )
+        SwapContext swapContext)
     {
+
         var steps = new List<CascadeStepResult>();
 
-        MatchResult initialMatch = _matchResolver.Resolve(board);
+        MatchResult match = _matchResolver.Resolve(board);
 
-        if (initialMatch.HasMatches)
-        {
-            ProcessStep(
-                board,
-                initialMatch,
-                initialChangeSet,
-                swapContext);
+        if (!match.HasMatches)
+            return new CascadeResult(steps);
 
-            steps.Add( new CascadeStepResult(initialMatch, initialChangeSet));
-        }
+        var changeSet = initialChangeSet;
+
+        ProcessStep(board, match, changeSet, swapContext);
+
+        steps.Add(new CascadeStepResult(match, changeSet));
 
         while (true)
         {
-            MatchResult matchResult = _matchResolver.Resolve(board);
+            MatchResult nextMatch = _matchResolver.Resolve(board);
 
-            if (matchResult.HasMatches == false)
-            {
+            if (!nextMatch.HasMatches && _persistentActivations.Count == 0)
                 break;
-            }
 
-            var changeSet = new BoardChangeSet();
+            var nextChangeSet = new BoardChangeSet();
+
+            // var activations = nextMatch.GetSpecialActivations(board);
+
+            // if (_persistentActivations.Count > 0)
+            // {
+            //     activations.AddRange(_persistentActivations);
+            // }
+
             ProcessStep(
                 board,
-                matchResult,
-                changeSet,
-                default
-            );
+                nextMatch,
+                nextChangeSet,
+                default);
 
-            steps.Add( new CascadeStepResult(matchResult, changeSet));
+            steps.Add(new CascadeStepResult(nextMatch, nextChangeSet));
         }
+
         return new CascadeResult(steps);
     }
-
+    
     private void ProcessStep(
         PuzzleBoard board,
         MatchResult matchResult,
@@ -82,7 +86,10 @@ public sealed class CascadeProcessor
         SwapContext swapContext)
     {
         List<SpecialActivationRequest> activations = matchResult.GetSpecialActivations(board);
-        
+        if (_persistentActivations.Count > 0)
+        {
+            activations.AddRange(_persistentActivations);
+        }
         // if (_persistentActivations.Count > 0)
         // {
         //     activations.AddRange(_persistentActivations);
@@ -102,6 +109,7 @@ public sealed class CascadeProcessor
             activations,
             changeSet);
 
+        
 
         // 6. REMOVE matched tiles
         _removeProcessor.Remove(
@@ -119,18 +127,19 @@ public sealed class CascadeProcessor
             board,
             changeSet);
 
-        // foreach (TileData tile in chainResult.PersistentTiles)
-        // {
-        //     if (tile.Position.IsValid == false)
-        //     {
-        //         continue;
-        //     }
-
-        //     _persistentActivations.Add(
-        //         new SpecialActivationRequest(
-        //             tile.Position,
-        //             tile));
-        // }
+        _persistentActivations.Clear();
+        foreach (TileData tile in chainResult.PersistentTiles)
+        {
+            if (tile.Position.IsValid == false)
+            {
+                continue;
+            }
+            tile.RuntimeSpecialState.LifecycleState = ESpecialLifecycleState.None;
+            _persistentActivations.Add(
+                new SpecialActivationRequest(
+                    tile.Position,
+                    tile));
+        }
     }
     
 }
