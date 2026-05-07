@@ -71,7 +71,7 @@ MonoBehaviour:
     Special: {fileID: 0}
   - Position: {x: 2, y: 2}
     TileType: 2
-    Special: {fileID: 0}
+    Special: {fileID: 11400000, guid: 78f0252df0856c940925bfb00742ed3f, type: 2}
   - Position: {x: 3, y: 2}
     TileType: 4
     Special: {fileID: 0}

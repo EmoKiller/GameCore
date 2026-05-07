@@ -15,7 +15,8 @@ public sealed class AreaClearBehaviour : SpecialTileBehaviour
         TilePosition position,
         BoardChangeSet changeSet)
     {
-        
+        TileSpecialData specialData = tile.Special;
+
         AreaClearRuntimeState runtime = tile.RuntimeSpecialState as AreaClearRuntimeState;
 
         runtime.RemainingCharges--;
@@ -43,8 +44,16 @@ public sealed class AreaClearBehaviour : SpecialTileBehaviour
         {
             runtime.LifecycleState = ESpecialLifecycleState.Consumed;
             return new SpecialActivationResult(triggered, ESpecialConsumePolicy.Destroy);
+
         }
-        runtime.LifecycleState = ESpecialLifecycleState.PendingRetrigger;
+        if (specialData.TriggerMode == ESpecialTriggerMode.AutoCascade)
+        {
+            runtime.LifecycleState = ESpecialLifecycleState.PendingRetrigger;
+        }
+        else
+        {
+            runtime.LifecycleState = ESpecialLifecycleState.WaitingForTrigger;
+        }
         return new SpecialActivationResult(triggered, ESpecialConsumePolicy.Keep);
     }
     public override TileRuntimeSpecialState CreateRuntimeState()
