@@ -33,4 +33,10 @@ public sealed class BoardChangeSet
     {
         _removedPositions.Add(position);
     }
+    public void Clear()
+    {
+        _transitions.Clear();
+        _protectedPositions.Clear();
+        _removedPositions.Clear();
+    }
 }

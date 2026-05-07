@@ -16,6 +16,8 @@ public sealed class SpecialActivationProcessor : ISpecialActivationProcessor
 
         TileSpecialData special = tile.Special;
 
+        TileRuntimeSpecialState runtime = tile.RuntimeSpecialState;
+
         if (special == null)
         {
             return SpecialActivationResult.Empty();
@@ -27,11 +29,12 @@ public sealed class SpecialActivationProcessor : ISpecialActivationProcessor
 
         if (result.ConsumePolicy == ESpecialConsumePolicy.Destroy)
         {
-            changeSet.Add(new RemoveTransition(position));
-            board.Clear(position);
+            runtime.LifecycleState = ESpecialLifecycleState.None;
+            changeSet.MarkRemoved(position);
         }
-        else
+        else 
         {
+            runtime.LifecycleState = ESpecialLifecycleState.PendingRetrigger;
             changeSet.Protect(position);
         }
         return result;

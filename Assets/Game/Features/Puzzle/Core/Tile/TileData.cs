@@ -4,22 +4,22 @@ public struct TileData
 {
     public ETileType Type;
 
-    public TileSpecialData Special;
-    public TileRuntimeSpecialState RuntimeSpecialState;
+    public TilePosition Position;
 
+    public TileSpecialData Special;
+
+    public TileRuntimeSpecialState RuntimeSpecialState;
+    public bool IsEmpty => Type == ETileType.None;
+    public bool HasSpecial => Special != null;
+    
     public TileData(
         ETileType type,
         TileSpecialData special = null
     )
     {
         Type = type;
-
+        Position = TilePosition.Invalid;
         Special = special;
         RuntimeSpecialState = special?.Behaviour?.CreateRuntimeState();
     }
-
-    public readonly bool IsEmpty => Type == ETileType.None;
-
-    public readonly bool HasSpecial => Special != null;
-    
 }

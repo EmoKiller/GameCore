@@ -16,13 +16,8 @@ public sealed class AreaClearBehaviour : SpecialTileBehaviour
         BoardChangeSet changeSet)
     {
         
-        TileRuntimeSpecialState runtime = tile.RuntimeSpecialState;
-        if (runtime == null)
-        {
-            Debug.LogError( $"Missing RuntimeSpecialState at {position}");
+        AreaClearRuntimeState runtime = tile.RuntimeSpecialState as AreaClearRuntimeState;
 
-            return SpecialActivationResult.Empty();
-        }
         runtime.RemainingCharges--;
 
         List<TilePosition> triggered = new List<TilePosition>();
@@ -44,7 +39,6 @@ public sealed class AreaClearBehaviour : SpecialTileBehaviour
             }
         }
 
-        Debug.Log("RemainingCharges " + runtime.RemainingCharges);
         if (runtime.RemainingCharges <= 0)
         {
             return new SpecialActivationResult(triggered, ESpecialConsumePolicy.Destroy);
@@ -54,6 +48,6 @@ public sealed class AreaClearBehaviour : SpecialTileBehaviour
     }
     public override TileRuntimeSpecialState CreateRuntimeState()
     {
-        return new TileRuntimeSpecialState(_charges);
+        return new AreaClearRuntimeState(_charges);
     }
 }

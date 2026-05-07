@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 public interface ISpecialActivationChainProcessor
 {
-    void  Process(
+    SpecialChainProcessResult  Process(
         PuzzleBoard board,
         IEnumerable<SpecialActivationRequest> activations,
         BoardChangeSet changeSet);
@@ -16,11 +16,13 @@ public sealed class SpecialActivationChainProcessor : ISpecialActivationChainPro
         _activationProcessor = activationProcessor;
     }
 
-    public void Process(
+    public SpecialChainProcessResult Process(
         PuzzleBoard board,
         IEnumerable<SpecialActivationRequest> activations,
         BoardChangeSet changeSet)
     {
+        List<TileData> persistentTiles = new();
+
         Queue<SpecialActivationRequest> queue = new();
 
         HashSet<TilePosition> visited = new();
@@ -47,6 +49,11 @@ public sealed class SpecialActivationChainProcessor : ISpecialActivationChainPro
                     current,
                     changeSet);
 
+            if (result.ConsumePolicy == ESpecialConsumePolicy.Keep)
+            {
+                persistentTiles.Add(current.Tile);
+            }
+            
             foreach (TilePosition next in result.TriggeredSpecials)
             {
                 TileData tile = board.Get(next);
@@ -61,6 +68,6 @@ public sealed class SpecialActivationChainProcessor : ISpecialActivationChainPro
                         tile));
             }
         }
-
+        return new SpecialChainProcessResult(persistentTiles);
     }
 }

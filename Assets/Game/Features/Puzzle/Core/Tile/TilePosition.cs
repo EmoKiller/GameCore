@@ -32,4 +32,7 @@ public readonly struct TilePosition : IEquatable<TilePosition>
     {
         return $"({X},{Y})";
     }
+    public static TilePosition Invalid => new TilePosition(-1, -1);
+
+    public bool IsValid => X >= 0 && Y >= 0;
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 public sealed class CascadeProcessor
 {
     private readonly IMatchResolver _matchResolver;
-    
+
     private readonly SpecialTileProcessor _specialTileProcessor;
 
     private readonly ISpecialActivationChainProcessor _specialActivationChainProcessor;
@@ -13,7 +13,9 @@ public sealed class CascadeProcessor
     private readonly GravityProcessor _gravityProcessor;
 
     private readonly SpawnProcessor _spawnProcessor;
-
+    
+    private List<SpecialActivationRequest> _persistentActivations = new();
+    
     public CascadeProcessor(
         IMatchResolver matchResolver,
         SpecialTileProcessor specialTileProcessor,
@@ -80,7 +82,11 @@ public sealed class CascadeProcessor
         SwapContext swapContext)
     {
         List<SpecialActivationRequest> activations = matchResult.GetSpecialActivations(board);
-
+        
+        // if (_persistentActivations.Count > 0)
+        // {
+        //     activations.AddRange(_persistentActivations);
+        // }
 
         // 3. Spawn new specials
         _specialTileProcessor.Process(
@@ -91,7 +97,7 @@ public sealed class CascadeProcessor
 
         // 4. Activate chain
         
-        _specialActivationChainProcessor.Process(
+        SpecialChainProcessResult chainResult =_specialActivationChainProcessor.Process(
             board,
             activations,
             changeSet);
@@ -112,6 +118,19 @@ public sealed class CascadeProcessor
         _spawnProcessor.FillEmpty(
             board,
             changeSet);
+
+        // foreach (TileData tile in chainResult.PersistentTiles)
+        // {
+        //     if (tile.Position.IsValid == false)
+        //     {
+        //         continue;
+        //     }
+
+        //     _persistentActivations.Add(
+        //         new SpecialActivationRequest(
+        //             tile.Position,
+        //             tile));
+        // }
     }
     
 }

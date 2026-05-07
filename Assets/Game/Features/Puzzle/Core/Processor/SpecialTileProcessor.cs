@@ -39,7 +39,7 @@ public sealed class SpecialTileProcessor
             TileSpecialData special = _resolver.Resolve(
                     original.Type,
                     result.Pattern);
-            Debug.Log( "special : "+ special);
+                    
             if (special == null)
             {
                 continue;
@@ -54,7 +54,6 @@ public sealed class SpecialTileProcessor
                     result.Position,
                     specialTile.Special));
             changeSet.Protect(result.Position);
-            Debug.Log( "Protectspecial : "+ special);
         }
     }
     

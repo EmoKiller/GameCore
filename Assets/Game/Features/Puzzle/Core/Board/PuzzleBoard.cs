@@ -35,11 +35,12 @@ public sealed class PuzzleBoard : IReadOnlyPuzzleBoard
     public void Set(int x, int y, TileData tile)
     {
         _tiles[x, y] = tile;
+        tile.Position = new TilePosition(x, y);
     }
 
     public void Set(TilePosition position, TileData tile)
     {
-        _tiles[position.X, position.Y] = tile;
+        Set(position.X, position.Y, tile);
     }
 
     public bool IsInside(int x, int y)
@@ -60,6 +61,14 @@ public sealed class PuzzleBoard : IReadOnlyPuzzleBoard
     }
     public void Clear(TilePosition position)
     {
-        Set(position,new TileData(ETileType.None));
+        TileData current = Get(position);
+
+        current.Position = TilePosition.Invalid;
+
+        Set(position, CreateEmptyTile());
+    }
+    private TileData CreateEmptyTile()
+    {
+        return new TileData(ETileType.None);
     }
 }
