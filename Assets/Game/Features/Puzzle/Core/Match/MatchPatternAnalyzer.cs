@@ -136,8 +136,7 @@ public sealed class MatchPatternAnalyzer : IMatchPatternAnalyzer
         {
             int count = 0;
 
-            foreach (TilePosition other
-                in cluster.Positions)
+            foreach (TilePosition other in cluster.Positions)
             {
                 if (other.Y == pivot.Y)
                 {

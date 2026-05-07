@@ -11,8 +11,7 @@ public sealed class SpecialActivationChainProcessor : ISpecialActivationChainPro
 {
     private readonly ISpecialActivationProcessor _activationProcessor;
 
-    public SpecialActivationChainProcessor(
-        ISpecialActivationProcessor activationProcessor)
+    public SpecialActivationChainProcessor(ISpecialActivationProcessor activationProcessor)
     {
         _activationProcessor = activationProcessor;
     }
