@@ -20,15 +20,13 @@ public sealed class SpecialTileProcessor
         PuzzleBoard board,
         MatchResult matchResult,
         BoardChangeSet changeSet,
-        SwapContext swapContext,
-        HashSet<TilePosition> movedPositions)
+        SwapContext swapContext)
     {
         foreach (MatchCluster cluster in matchResult.Clusters)
         {
             SpecialSpawnResult result =_analyzer.Analyze(
                     cluster,
-                    swapContext,
-                    movedPositions);
+                    swapContext);
 
             if (result.HasSpecial == false)
             {

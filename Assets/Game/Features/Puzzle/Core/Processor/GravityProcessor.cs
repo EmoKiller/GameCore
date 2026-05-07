@@ -3,15 +3,15 @@ using UnityEngine;
 
 public sealed class GravityProcessor
 {
-    public void Apply(PuzzleBoard board, BoardChangeSet changeSet, HashSet<TilePosition> movedPositions)
+    public void Apply(PuzzleBoard board, BoardChangeSet changeSet)
     {
         for (int x = 0; x < board.Width; x++)
         {
-            ApplyColumn(board, x, changeSet, movedPositions);
+            ApplyColumn(board, x, changeSet);
         }
     }
 
-    private void ApplyColumn( PuzzleBoard board, int x, BoardChangeSet changeSet, HashSet<TilePosition> movedPositions)
+    private void ApplyColumn( PuzzleBoard board, int x, BoardChangeSet changeSet)
     {
         int writeY = 0;
 
@@ -37,8 +37,6 @@ public sealed class GravityProcessor
                         from,
                         to,
                         tile.Type));
-
-                movedPositions.Add(to);
             }
 
             writeY++;

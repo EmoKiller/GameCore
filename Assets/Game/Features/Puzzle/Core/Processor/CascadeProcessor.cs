@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 
 public sealed class CascadeProcessor
 {
@@ -14,10 +13,6 @@ public sealed class CascadeProcessor
     private readonly GravityProcessor _gravityProcessor;
 
     private readonly SpawnProcessor _spawnProcessor;
-
-    private readonly HashSet<TilePosition> _movedPositions = new();
-    public HashSet<TilePosition> MovedPositions => _movedPositions;
-
 
     public CascadeProcessor(
         IMatchResolver matchResolver,
@@ -41,7 +36,6 @@ public sealed class CascadeProcessor
         SwapContext swapContext
     )
     {
-        _movedPositions.Clear();
         var steps = new List<CascadeStepResult>();
 
         MatchResult initialMatch = _matchResolver.Resolve(board);
@@ -76,7 +70,6 @@ public sealed class CascadeProcessor
 
             steps.Add( new CascadeStepResult(matchResult, changeSet));
         }
-        _movedPositions.Clear();
         return new CascadeResult(steps);
     }
 
@@ -94,8 +87,7 @@ public sealed class CascadeProcessor
             board,
             matchResult,
             changeSet,
-            swapContext,
-            _movedPositions);
+            swapContext);
 
         // 4. Activate chain
         
@@ -114,23 +106,12 @@ public sealed class CascadeProcessor
         // 7. GRAVITY
         _gravityProcessor.Apply(
             board,
-            changeSet,
-            _movedPositions);
+            changeSet);
 
         // 8. SPAWN
         _spawnProcessor.FillEmpty(
             board,
-            changeSet,
-            _movedPositions);
-    }
-    
-    public void Add(TilePosition position)
-    {
-        _movedPositions.Add(position);
-    }
-    public bool WasMoved(TilePosition position)
-    {
-        return _movedPositions.Contains(position);
+            changeSet);
     }
     
 }

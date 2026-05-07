@@ -3,14 +3,13 @@ using System.Linq;
 
 public interface IMatchPatternAnalyzer
 {
-    SpecialSpawnResult Analyze(MatchCluster cluster,SwapContext swapContext, HashSet<TilePosition> movedPositions);
+    SpecialSpawnResult Analyze(MatchCluster cluster,SwapContext swapContext);
 }
 public sealed class MatchPatternAnalyzer : IMatchPatternAnalyzer
 {
     public SpecialSpawnResult Analyze(
         MatchCluster cluster,
-        SwapContext swapContext,
-        HashSet<TilePosition> movedPositions)
+        SwapContext swapContext)
     {
         int horizontalLength =
             GetMaxHorizontal(cluster);
@@ -21,8 +20,7 @@ public sealed class MatchPatternAnalyzer : IMatchPatternAnalyzer
         TilePosition spawnPosition =
             ResolveSpawnPosition(
                 cluster,
-                swapContext,
-                movedPositions);
+                swapContext);
 
         if (horizontalLength >= 5 || verticalLength >= 5)
         {
@@ -64,8 +62,7 @@ public sealed class MatchPatternAnalyzer : IMatchPatternAnalyzer
     }
     private TilePosition ResolveSpawnPosition(
         MatchCluster cluster,
-        SwapContext swapContext,
-        HashSet<TilePosition> movedPositions)
+        SwapContext swapContext)
     {
         if (TryGetIntersection(cluster, out TilePosition intersection))
         {
@@ -82,43 +79,6 @@ public sealed class MatchPatternAnalyzer : IMatchPatternAnalyzer
         }
 
         TilePosition center = GetClusterCenter(cluster);
-
-        TilePosition? bestMoved =
-            null;
-
-        float bestDistance =
-            float.MaxValue;
-
-        foreach (TilePosition pos
-            in movedPositions)
-        {
-            if (cluster.Positions.Contains(pos)
-                == false)
-            {
-                continue;
-            }
-
-            float dx =
-                pos.X - center.X;
-
-            float dy =
-                pos.Y - center.Y;
-
-            float sqr =
-                dx * dx +
-                dy * dy;
-
-            if (sqr < bestDistance)
-            {
-                bestDistance = sqr;
-                bestMoved = pos;
-            }
-        }
-
-        if (bestMoved.HasValue)
-        {
-            return bestMoved.Value;
-        }
 
         return center;
     }

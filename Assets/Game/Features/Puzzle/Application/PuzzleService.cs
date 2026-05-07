@@ -89,8 +89,7 @@ public sealed class PuzzleService : MonoBehaviour, IPuzzleService
                 _board,
                 a,
                 b,
-                swapChangeSet,
-                _cascadeProcessor.MovedPositions);
+                swapChangeSet);
         
         if (success == false)
         {
