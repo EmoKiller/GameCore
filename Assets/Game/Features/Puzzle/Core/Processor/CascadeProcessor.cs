@@ -86,14 +86,8 @@ public sealed class CascadeProcessor
         BoardChangeSet changeSet,
         SwapContext swapContext)
     {
-        // 1. Collect match-triggered specials
         List<SpecialActivationRequest> activations = matchResult.GetSpecialActivations(board);
 
-        // 2. Inject persistent specials (auto retrigger)
-        // if (_persistentActivations.Count > 0)
-        // {
-        //     activations.AddRange(_persistentActivations);
-        // }
 
         // 3. Spawn new specials
         _specialTileProcessor.Process(
@@ -110,8 +104,6 @@ public sealed class CascadeProcessor
             activations,
             changeSet);
 
-        // 5. CLEAR persistent list
-        // _persistentActivations.Clear();
 
         // 6. REMOVE matched tiles
         _removeProcessor.Remove(
@@ -130,20 +122,6 @@ public sealed class CascadeProcessor
             board,
             changeSet,
             _movedPositions);
-
-        // 9. REBUILD persistent activations 
-        // foreach (TileData tile in chainResult.PersistentTiles)
-        // {
-        //     TilePosition pos = board.FindPosition(tile);
-
-        //     if (pos.IsValid == false)
-        //     {
-        //         continue;
-        //     }
-
-        //     _persistentActivations.Add(
-        //         new SpecialActivationRequest(pos, tile));
-        // }
     }
     
     public void Add(TilePosition position)

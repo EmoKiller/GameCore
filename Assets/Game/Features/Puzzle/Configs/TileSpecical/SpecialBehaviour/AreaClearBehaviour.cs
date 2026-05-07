@@ -53,7 +53,7 @@ public sealed class AreaClearBehaviour : SpecialTileBehaviour
             return new SpecialActivationResult(triggered, ESpecialConsumePolicy.Destroy);
         }
         
-        return new SpecialActivationResult(triggered, ESpecialConsumePolicy.Keep, true);
+        return new SpecialActivationResult(triggered, ESpecialConsumePolicy.Keep);
     }
     public override TileRuntimeSpecialState CreateRuntimeState()
     {

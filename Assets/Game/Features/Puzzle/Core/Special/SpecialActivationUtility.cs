@@ -5,16 +5,16 @@ public static class SpecialActivationUtility
 {
     public static void ProcessTarget(
         PuzzleBoard board,
-        TilePosition position,
+        TilePosition target,
         BoardChangeSet changeSet,
         List<TilePosition> triggered)
     {
-        if (board.IsInside(position) == false)
+        if (board.IsInside(target) == false)
         {
             return;
         }
 
-        TileData tile = board.Get(position);
+        TileData tile = board.Get(target);
 
         if (tile.IsEmpty)
         {
@@ -22,38 +22,38 @@ public static class SpecialActivationUtility
         }
 
         // 🔥 DEBUG
-        Debug.Log($"[ProcessTarget] Hit: {position} | HasSpecial: {tile.HasSpecial}");
+        Debug.Log($"[ProcessTarget] Hit: {target} | HasSpecial: {tile.HasSpecial}");
 
         // ❗ FIX 1 — respect Protect
-        if (changeSet.IsProtected(position))
-        {
-            Debug.Log($"[ProcessTarget] SKIP Protected: {position}");
-            return;
-        }
+        // if (changeSet.IsProtected(position))
+        // {
+        //     Debug.Log($"[ProcessTarget] SKIP Protected: {position}");
+        //     return;
+        // }
 
-        if (changeSet.IsRemoved(position))
+        if (changeSet.IsRemoved(target))
         {
             return;
         }
 
         if (tile.HasSpecial)
         {
-            Debug.Log($"[ProcessTarget] Chain Special: {position}");
+            Debug.Log($"[ProcessTarget] Chain Special: {target}");
 
-            triggered.Add(position);
+            triggered.Add(target);
 
             // ❗ KHÔNG remove ngay → để chain processor xử lý
             return;
         }
 
         // 🔥 REMOVE NORMAL TILE
-        Debug.Log($"[ProcessTarget] Remove NORMAL: {position}");
+        Debug.Log($"[ProcessTarget] Remove NORMAL: {target}");
 
-        changeSet.MarkRemoved(position);
+        changeSet.MarkRemoved(target);
 
-        changeSet.Add(new RemoveTransition(position));
+        changeSet.Add(new RemoveTransition(target));
 
-        board.Clear(position);
+        board.Clear(target);
     }
     public static List<SpecialActivationRequest> GetSpecialActivations(this MatchResult matchResult, PuzzleBoard board)
     {

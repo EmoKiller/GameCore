@@ -7,16 +7,12 @@ public readonly struct SpecialActivationResult
     private readonly List<TilePosition> _triggeredSpecials;
     public ESpecialConsumePolicy ConsumePolicy { get; }
 
-    public bool ReTriggerNextCascade { get; }
-
     public SpecialActivationResult(
         List<TilePosition> triggeredSpecials,
-        ESpecialConsumePolicy consumePolicy,
-        bool reTriggerNextCascade = false)
+        ESpecialConsumePolicy consumePolicy)
     {
         _triggeredSpecials = triggeredSpecials;
         ConsumePolicy = consumePolicy;
-        ReTriggerNextCascade = reTriggerNextCascade;
     }
 
     public static SpecialActivationResult Empty()
