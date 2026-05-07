@@ -3,7 +3,7 @@ using System.Collections.Generic;
 public sealed class CascadeProcessor
 {
     private readonly IMatchResolver _matchResolver;
-
+    
     private readonly SpecialTileProcessor _specialTileProcessor;
 
     private readonly ISpecialActivationChainProcessor _specialActivationChainProcessor;

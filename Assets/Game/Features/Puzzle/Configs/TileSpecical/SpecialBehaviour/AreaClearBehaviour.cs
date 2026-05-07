@@ -43,7 +43,7 @@ public sealed class AreaClearBehaviour : SpecialTileBehaviour
                     triggered);
             }
         }
-        
+
         Debug.Log("RemainingCharges " + runtime.RemainingCharges);
         if (runtime.RemainingCharges <= 0)
         {

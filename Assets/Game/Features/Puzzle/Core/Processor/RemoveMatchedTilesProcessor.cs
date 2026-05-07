@@ -8,32 +8,30 @@ public sealed class RemoveMatchedTilesProcessor
         MatchResult matchResult,
         BoardChangeSet changeSet)
     {
-        HashSet<TilePosition> removed = new();
-
         foreach (MatchCluster cluster in matchResult.Clusters)
         {
             foreach (TilePosition pos in cluster.Positions)
             {
-                if (removed.Contains(pos))
-                {
-                    continue;
-                }
-
-                removed.Add(pos);
-
-                TileData tile = board.Get(pos);
-
-                if (tile.IsEmpty || changeSet.IsProtected(pos) || changeSet.IsRemoved(pos))
+                if (changeSet.IsProtected(pos))
                 {
                     continue;
                 }
 
                 changeSet.MarkRemoved(pos);
-
-                changeSet.Add(new RemoveTransition(pos));
-
-                board.Clear(pos);
             }
+        }
+        foreach (TilePosition pos in changeSet.RemovedPositions)
+        {
+            TileData tile = board.Get(pos);
+
+            if (tile.IsEmpty || changeSet.IsProtected(pos))
+            {
+                continue;
+            }
+
+            changeSet.Add(new RemoveTransition(pos));
+
+            board.Clear(pos);
         }
     }
 }

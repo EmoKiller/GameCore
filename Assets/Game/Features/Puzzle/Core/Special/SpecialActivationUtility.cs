@@ -28,10 +28,6 @@ public static class SpecialActivationUtility
         }
 
         changeSet.MarkRemoved(target);
-
-        changeSet.Add(new RemoveTransition(target));
-
-        board.Clear(target);
     }
     public static List<SpecialActivationRequest> GetSpecialActivations(this MatchResult matchResult, PuzzleBoard board)
     {
