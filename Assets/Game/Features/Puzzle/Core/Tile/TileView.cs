@@ -27,6 +27,7 @@ public sealed class TileView : MonoBehaviour
     }
     public void SetSprite(Sprite sprite)
     {
+        _spriteRenderer.enabled = true;
         _spriteRenderer.sprite = sprite;
     }
 
@@ -118,8 +119,8 @@ public sealed class TileView : MonoBehaviour
             _specialRenderer.sprite = null;
             return;
         }
+        _spriteRenderer.enabled = false;
         _specialRenderer.sprite = special.Icon;
-
         _specialRenderer.enabled = special != null;
     }
 }

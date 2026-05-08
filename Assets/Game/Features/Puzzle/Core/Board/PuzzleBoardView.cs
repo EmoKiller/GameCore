@@ -91,7 +91,6 @@ public sealed class PuzzleBoardView : MonoBehaviour
     }
     private void CreateViews()
     {
-
         _cellLayer.Initialize(Board);
 
         _tileLayer.Initialize(Board);

@@ -20,7 +20,6 @@ public static class SpecialActivationUtility
         {
             return;
         }
-
         if (tile.HasSpecial)
         {
             triggered.Add(target);

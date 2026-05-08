@@ -8,7 +8,7 @@ public class MainMenuScreenViewModel : IViewModel
 {
     public RelayCommand PlayCommand { get; private set;}
     public RelayCommand OpenSettingsCommand { get; private set;}
-    public RelayCommand QuitCommand { get; private set;}
+    public RelayCommand SaveProgressCommand { get; private set;}
 
     public void SetPlayCommand(RelayCommand playCommand)
     {
@@ -18,9 +18,9 @@ public class MainMenuScreenViewModel : IViewModel
     {
         OpenSettingsCommand = openSettingsCommand;
     }
-    public void SetQuitCommand(RelayCommand quitCommand)
+    public void SetQuitCommand(RelayCommand saveProgress)
     {
-        QuitCommand = quitCommand;
+        SaveProgressCommand = saveProgress;
     }
 
     

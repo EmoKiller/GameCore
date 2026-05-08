@@ -571,6 +571,28 @@ TextureImporter:
       indices: 
       edges: []
       weights: []
+    - serializedVersion: 2
+      name: Option_Icon
+      rect:
+        serializedVersion: 2
+        x: 48
+        y: 287
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8fd18d92a7143cf41ae709ce59573e07
+      internalID: -1087992310
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     customData: 
     physicsShape: []
@@ -586,6 +608,7 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       BackGroundBoard_01: -526587412
+      Option_Icon: -1087992310
       Special_Tile_Coin_Bomb: -2139304758
       Special_Tile_Coin_ClorBomb: 1946342953
       Special_Tile_Coin_Horizontal: -893999540

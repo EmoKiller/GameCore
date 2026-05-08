@@ -10,7 +10,7 @@ public class MainMenuScreen : UIView
     public Button PlayButton => playButton;
     [SerializeField] private Button settingsButton;
     public Button SettingsButton => settingsButton;
-    [SerializeField] private Button quitButton;
-    public Button QuitButton => quitButton;
+    [SerializeField] private Button buttonSaveProgress;
+    public Button ButtonSaveProgress => buttonSaveProgress;
 
 }

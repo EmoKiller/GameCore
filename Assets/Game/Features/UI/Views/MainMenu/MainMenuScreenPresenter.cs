@@ -13,11 +13,11 @@ public class MainMenuScreenPresenter : UIViewPresenter<MainMenuScreen,MainMenuSc
 
         ViewModel.SetPlayCommand(new RelayCommand(Play)); 
         ViewModel.SetOpenSettingsCommand(new RelayCommand(OpenSettings)); 
-        ViewModel.SetQuitCommand(new RelayCommand(Quit));
+        ViewModel.SetQuitCommand(new RelayCommand(SaveProgress));
 
         AddDisposable(View.PlayButton.Command(ViewModel.PlayCommand));
         AddDisposable(View.SettingsButton.Command(ViewModel.OpenSettingsCommand));
-        AddDisposable(View.QuitButton.Command(ViewModel.QuitCommand));
+        AddDisposable(View.ButtonSaveProgress.Command(ViewModel.SaveProgressCommand));
         
     }
 
@@ -32,7 +32,7 @@ public class MainMenuScreenPresenter : UIViewPresenter<MainMenuScreen,MainMenuSc
         //Debug.Log("Setting");
     }
 
-    private void Quit()
+    private void SaveProgress()
     {
         UnityEngine.Application.Quit();
     }
