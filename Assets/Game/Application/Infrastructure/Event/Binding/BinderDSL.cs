@@ -2,11 +2,13 @@ using System;
 using UnityEngine.UI;
 using Game.Application.ReactiveProperty;
 using Game.Application.UI.Commands;
+using System.Collections.Generic;
 
 namespace Game.Presentation.UI.Binding
 {
     public static class BinderDSL
     {
+        
         // =============================
         // TOGGLE
         // =============================
@@ -38,6 +40,62 @@ namespace Game.Presentation.UI.Binding
             return property.Subscribe(v => toggle.isOn = v);
         }
 
+        public static IDisposable To<T>(
+            this Toggle toggle,
+            IReadOnlyReactiveProperty<T> property,
+            T targetValue)
+            where T : Enum
+        {
+            return property.Subscribe(value =>
+            {
+                bool isOn =
+                    EqualityComparer<T>.Default.Equals(
+                        value,
+                        targetValue);
+
+                toggle.SetIsOnWithoutNotify(isOn);
+            });
+        }
+        
+        public static IDisposable BindEnum<T>(
+            this Toggle toggle,
+            IReactiveProperty<T> property,
+            T targetValue)
+            where T : Enum
+        {
+            // =========================
+            // ViewModel -> Toggle
+            // =========================
+
+            var d1 = property.Subscribe(value =>
+            {
+                bool isOn =
+                    EqualityComparer<T>.Default.Equals(
+                        value,
+                        targetValue);
+
+                toggle.SetIsOnWithoutNotify(isOn);
+            });
+
+            // =========================
+            // Toggle -> ViewModel
+            // =========================
+
+            var d2 = toggle.Bind(isOn =>
+            {
+                if (!isOn)
+                    return;
+
+                if (EqualityComparer<T>.Default.Equals(
+                        property.Value,
+                        targetValue))
+                    return;
+
+                property.Value = targetValue;
+            });
+
+            return new CompositeDisposable(d1, d2);
+        }
         // =============================
         // SLIDER
         // =============================
@@ -144,23 +202,21 @@ namespace Game.Presentation.UI.Binding
 
     internal sealed class CompositeDisposable : IDisposable
     {
-        private readonly IDisposable _d1;
-        private readonly IDisposable _d2;
+        private readonly List<IDisposable> _disposables;
 
-        public CompositeDisposable(IDisposable d1, IDisposable d2)
+        public CompositeDisposable(params IDisposable[] disposables)
         {
-            _d1 = d1;
-            _d2 = d2;
+            _disposables = new List<IDisposable>(disposables);
         }
 
         public void Dispose()
         {
-            _d1.Dispose();
-            _d2.Dispose();
+            foreach (var disposable in _disposables)
+            {
+                disposable.Dispose();
+            }
+
+            _disposables.Clear();
         }
     }
-
-
-
-
 }

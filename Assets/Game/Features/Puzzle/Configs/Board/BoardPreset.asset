@@ -121,7 +121,7 @@ MonoBehaviour:
     TileType: 3
     Special: {fileID: 0}
   - Position: {x: 3, y: 4}
-    TileType: 4
+    TileType: 2
     Special: {fileID: 0}
   - Position: {x: 4, y: 4}
     TileType: 3
@@ -130,7 +130,7 @@ MonoBehaviour:
     TileType: 4
     Special: {fileID: 0}
   - Position: {x: 6, y: 4}
-    TileType: 3
+    TileType: 2
     Special: {fileID: 0}
   - Position: {x: 7, y: 4}
     TileType: 4
@@ -142,19 +142,19 @@ MonoBehaviour:
     TileType: 2
     Special: {fileID: 0}
   - Position: {x: 2, y: 5}
-    TileType: 1
+    TileType: 3
     Special: {fileID: 0}
   - Position: {x: 3, y: 5}
-    TileType: 2
+    TileType: 3
     Special: {fileID: 0}
   - Position: {x: 4, y: 5}
-    TileType: 1
-    Special: {fileID: 0}
-  - Position: {x: 5, y: 5}
     TileType: 2
+    Special: {fileID: 11400000, guid: 78f0252df0856c940925bfb00742ed3f, type: 2}
+  - Position: {x: 5, y: 5}
+    TileType: 3
     Special: {fileID: 0}
   - Position: {x: 6, y: 5}
-    TileType: 1
+    TileType: 3
     Special: {fileID: 0}
   - Position: {x: 7, y: 5}
     TileType: 2
@@ -166,10 +166,10 @@ MonoBehaviour:
     TileType: 4
     Special: {fileID: 0}
   - Position: {x: 2, y: 6}
-    TileType: 3
+    TileType: 4
     Special: {fileID: 0}
   - Position: {x: 3, y: 6}
-    TileType: 4
+    TileType: 2
     Special: {fileID: 0}
   - Position: {x: 4, y: 6}
     TileType: 3
@@ -178,7 +178,7 @@ MonoBehaviour:
     TileType: 4
     Special: {fileID: 0}
   - Position: {x: 6, y: 6}
-    TileType: 3
+    TileType: 2
     Special: {fileID: 0}
   - Position: {x: 7, y: 6}
     TileType: 4

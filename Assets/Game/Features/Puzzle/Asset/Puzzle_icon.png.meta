@@ -704,7 +704,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Puzzle_icon_5
+      name: Puzzle_icon_Coin
       rect:
         serializedVersion: 2
         x: 80
@@ -770,15 +770,15 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Puzzle_icon_7
+      name: Puzzle_icon_Live
       rect:
         serializedVersion: 2
-        x: 3
+        x: 0
         y: 416
-        width: 9
-        height: 9
+        width: 32
+        height: 16
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
@@ -787,6 +787,50 @@ TextureImporter:
       bones: []
       spriteID: 88cbc798e7dc9ac4ca14be3fa7476072
       internalID: 1569269744
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Puzzle_icon_Messenge
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 304
+        width: 16
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 859953d899a490b46b28877d7ae47d13
+      internalID: -775622472
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Puzzle_icon_CoinMoney
+      rect:
+        serializedVersion: 2
+        x: 32
+        y: 416
+        width: 32
+        height: 16
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ac8a368a1af0bc142ba8f16fb65c4ade
+      internalID: -2019098150
       vertices: []
       indices: 
       edges: []
@@ -812,9 +856,11 @@ TextureImporter:
       Puzzle_icon_2: -664359036
       Puzzle_icon_3: 1751141243
       Puzzle_icon_4: -2122519121
-      Puzzle_icon_5: 849846067
       Puzzle_icon_6: 1882433081
-      Puzzle_icon_7: 1569269744
+      Puzzle_icon_Coin: 849846067
+      Puzzle_icon_CoinMoney: -2019098150
+      Puzzle_icon_Live: 1569269744
+      Puzzle_icon_Messenge: -775622472
       Puzzle_icon_Shop: -12646460
       Special_Tile_Coin_Bomb: -2139304758
       Special_Tile_Coin_ClorBomb: 1946342953

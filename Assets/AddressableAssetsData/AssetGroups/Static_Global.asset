@@ -33,6 +33,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - staticglobal
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: a6aa034e7c59beb4bac7fc824656f2f0
+    m_Address: MainScreenOverlay
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - staticglobal
+    FlaggedDuringContentUpdateRestriction: 0
   - m_GUID: b6a22b17e2d83aa45ba9d6b992d13ad9
     m_Address: BoardCellView
     m_ReadOnly: 0

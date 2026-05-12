@@ -10,17 +10,11 @@ public class MainMenuScreenViewModel : IViewModel
     public RelayCommand OpenSettingsCommand { get; private set;}
     public RelayCommand SaveProgressCommand { get; private set;}
 
-    public void SetPlayCommand(RelayCommand playCommand)
+    public void MainScreenModelSetCommand(IMainScreenActions action)
     {
-        PlayCommand = playCommand;
-    }
-    public void SetOpenSettingsCommand(RelayCommand openSettingsCommand)
-    {
-        OpenSettingsCommand = openSettingsCommand;
-    }
-    public void SetQuitCommand(RelayCommand saveProgress)
-    {
-        SaveProgressCommand = saveProgress;
+        PlayCommand = new RelayCommand(action.Play);
+        OpenSettingsCommand = new RelayCommand(action.OpenSettings);
+        SaveProgressCommand = new RelayCommand(action.SaveProgress);
     }
 
     

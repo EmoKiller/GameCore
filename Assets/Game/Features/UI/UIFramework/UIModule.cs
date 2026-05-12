@@ -137,7 +137,6 @@ namespace Game.Application.Modules.UIModules
                     PresenterType = typeof(LoadingPresenter),
                     Layer = EUILayer.Overlay,
                     ReusePolicy = UIReusePolicy.Destroy,
-
                 },
 
                 new UIManifestEntry
@@ -152,10 +151,10 @@ namespace Game.Application.Modules.UIModules
                 
                 new UIManifestEntry
                 {
-                    AssetKey = "PlayerHUD",
-                    ViewType = typeof(PlayerHUDView),
-                    ViewModelType = typeof(PlayerHUDViewModel),
-                    PresenterType = typeof(PlayerHUDPresenter),
+                    AssetKey = "MainScreenOverlay",
+                    ViewType = typeof(MainScreen),
+                    ViewModelType = typeof(MainScreenModel),
+                    PresenterType = typeof(MainScreenPresenter),
                     Layer = EUILayer.Screen,
                     ReusePolicy = UIReusePolicy.Release,
                 },
