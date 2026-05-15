@@ -11,8 +11,6 @@ public interface IPuzzleService : IService
 
     event Action BoardChanged;
     event Action<CascadeResult> CascadeResolved;
-    
-    bool IsInside(TilePosition position);
     void LoadPreset(BoardPreset preset);
 }
 public sealed class PuzzleService : MonoBehaviour, IPuzzleService

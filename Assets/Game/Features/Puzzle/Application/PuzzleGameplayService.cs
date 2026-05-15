@@ -97,7 +97,7 @@ public sealed class PuzzleGameplayService : MonoBehaviour, IPuzzleGameplayServic
     }
     public bool IsInside(TilePosition position)
     {
-        return _puzzleService.IsInside(position);
+        return _puzzleService.Board.IsInside(position);
     }
     private void ResetRuntimeToken()
     {
