@@ -65,7 +65,7 @@ public abstract class GameBootstrap : MonoBehaviour
 ```
 
 
-2. Module Loader đảm nhiệm việc nạp tất cả các Module theo trình tự an toàn thông qua thuật toán đệ quy:
+2. Module Loader đảm nhiệm việc nạp tất cả các Module theo trình tự an toàn:
 - Trước khi khởi tạo hệ thống sẽ kiểm tra phụ thuộc qua GetDependencies() để tự động sắp xếp thứ tự khởi tạo
 - Tích hợp UniTask giúp việc nạp tài nguyên nặng (Assets/Data) không gây block luồng chính.
 
