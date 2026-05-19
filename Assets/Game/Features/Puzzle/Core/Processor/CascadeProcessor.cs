@@ -60,13 +60,6 @@ public sealed class CascadeProcessor
 
             var nextChangeSet = new BoardChangeSet();
 
-            // var activations = nextMatch.GetSpecialActivations(board);
-
-            // if (_persistentActivations.Count > 0)
-            // {
-            //     activations.AddRange(_persistentActivations);
-            // }
-
             ProcessStep(
                 board,
                 nextMatch,

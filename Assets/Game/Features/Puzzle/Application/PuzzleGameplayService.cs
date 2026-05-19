@@ -44,8 +44,7 @@ public sealed class PuzzleGameplayService : MonoBehaviour, IPuzzleGameplayServic
         _puzzleService.LoadPreset(
             preset);
 
-        _boardView.Rebuild(
-            _puzzleService.Board);
+        _boardView.Rebuild();
     }
     public async UniTask CreateRuntime(CancellationToken ct)
     {

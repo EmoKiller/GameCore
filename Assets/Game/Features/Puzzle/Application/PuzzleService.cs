@@ -16,7 +16,6 @@ public interface IPuzzleService : IService
 public sealed class PuzzleService : MonoBehaviour, IPuzzleService
 {
     public IReadOnlyPuzzleBoard Board => _board;
-
     public EPuzzleState State => _state;
     private EPuzzleState _state;
 
@@ -73,10 +72,7 @@ public sealed class PuzzleService : MonoBehaviour, IPuzzleService
     {
         if (_state != EPuzzleState.Idle)
         {
-            return new SwapResult(
-                false,
-                null
-            );
+            return new SwapResult(false, null);
         }
 
         _state = EPuzzleState.Busy;
@@ -93,10 +89,7 @@ public sealed class PuzzleService : MonoBehaviour, IPuzzleService
         {
             _state = EPuzzleState.Idle;
 
-            return new SwapResult(
-                false,
-                null
-                );
+            return new SwapResult(false, null);
         }
 
         var swapContext = new SwapContext(a, b);
@@ -107,13 +100,6 @@ public sealed class PuzzleService : MonoBehaviour, IPuzzleService
         
         _state = EPuzzleState.Idle;
 
-        return new SwapResult(
-            true,
-            cascadeResult
-        );
-    }
-    public bool IsInside(TilePosition position)
-    {
-        return _board.IsInside(position);
+        return new SwapResult(true, cascadeResult);
     }
 }

@@ -1,8 +1,17 @@
 using UnityEngine;
-
-public sealed class TileLayer
+using UnityEngine.Pool;
+public interface ITileLayer
 {
-    private readonly TileViewPool _pool;
+    TileView[,] TileViews { get; }
+    void Move(TilePosition from, TilePosition to);
+    void Swap(TilePosition a, TilePosition b);
+    void Hide(TilePosition position);
+    TileView CreateOrReuse(TilePosition position, ETileType tileType);
+    TileView Get(TilePosition position);
+}
+public sealed class TileLayer : ITileLayer
+{
+    private readonly IObjectPool<TileView> _pool;
 
     private readonly TileVisualDatabase _tileVisualDatabase;
     private readonly IReadOnlyBoardLayout _layout;
